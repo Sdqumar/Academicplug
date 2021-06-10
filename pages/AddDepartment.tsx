@@ -11,32 +11,27 @@ const firestore = firebase.firestore();
 export async function getStaticProps(context) {
   const dataref = await firestore.collection("Schools").get();
 
-  const data = dataref.docs.map((doc) =>JSON.stringify(doc.data())
- );
+  const data = dataref.docs.map((doc) => JSON.stringify(doc.data()));
   const id = dataref.docs.map((doc) => doc.id);
   return {
     props: {
       data,
       id,
     },
-
   };
-
 }
 
 function AddDepartment(props) {
   //
-const data= props.data.map(i  => JSON.parse(i))
+  const data = props.data.map((i) => JSON.parse(i));
 
-
-
+  console.log(props.id);
   let schoolOptions = [];
 
   props.id.forEach((id) => {
     schoolOptions.push({ key: id, value: id });
   });
 
-  
   //console.log(schoolOptions)
   interface values {
     department?: string;
@@ -51,7 +46,7 @@ const data= props.data.map(i  => JSON.parse(i))
   };
 
   let facultylOptions = [];
-// am using optional chaining to check if Facuties exisits and if if has values
+  // am using optional chaining to check if Facuties exisits and if if has values
   data.forEach((data) => {
     if (formikValue.school === data.Name) {
       data?.Facluties?.forEach((item) => {
@@ -59,8 +54,6 @@ const data= props.data.map(i  => JSON.parse(i))
       });
     }
   });
-
-  
 
   const initialValues = {
     departmentName: "",
@@ -72,23 +65,25 @@ const data= props.data.map(i  => JSON.parse(i))
     departmentName: Yup.mixed().required("Required"),
   });
 
-  const toast = useToast()
-  
-const displayToast = ()=>{ toast({
-  title: "Department created.",
-  position: "top",
-  status: "success",
-  duration: 3000,
-  isClosable: true,
-})}
+  const toast = useToast();
 
-  const onSubmit = (values,actions) => {
+  const displayToast = () => {
+    toast({
+      title: "Department created.",
+      position: "top",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
+  };
+
+  const onSubmit = (values, actions) => {
     const school = values.school;
-    const department =values.departmentName;
-    actions.setSubmitting(true)
+    const department = values.departmentName;
+    actions.setSubmitting(true);
 
-    //created a new courses array to the database for future adding of courses into the array 
-    const Courses = []
+    //created a new courses array to the database for future adding of courses into the array
+    const Courses = [];
     firestore
       .collection("Schools")
       .doc(school)
@@ -96,13 +91,13 @@ const displayToast = ()=>{ toast({
       .doc(department)
       .set({
         Courses,
-         createdAt: new Date()
+        createdAt: new Date(),
       })
       .then(() => {
-        displayToast()
-        actions.resetForm()
-        actions.setSubmitting(false)
-        console.log("Document successfully written!")
+        displayToast();
+        actions.resetForm();
+        actions.setSubmitting(false);
+        console.log("Document successfully written!");
       })
       .catch((error) => {
         console.error("Error writing document: ", error);
@@ -110,7 +105,7 @@ const displayToast = ()=>{ toast({
   };
 
   return (
-    <Flex align="center" justify="center" >
+    <Flex align="center" justify="center">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

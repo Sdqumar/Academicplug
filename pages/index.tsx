@@ -1,27 +1,39 @@
-import Link from 'next/link'
-import firebase from '../config/firebase-config';
+import { Flex, Container } from "@chakra-ui/react";
+import BannerHome from "../components/BannerHome";
+import CourseGridTwo from "../components/CourseGridTwo";
+import CoursesGrid from "../components/CoursesGrid";
+import Footer from "../components/Footer";
+import Hearder from "../components/Header";
+import SchoolGridList from "../components/SchoolGridList";
+import firebase from "../config/firebase-config";
 
- export async function getStaticProps(context){
- 
-  const dataref = await firebase.firestore().collection('Schools').get()
+const firestore = firebase.firestore();
 
-  const data = dataref.docs.map(doc=> doc.data()) 
-  const id = dataref.docs.map(doc=> doc.id) 
+export async function getStaticProps(context) {
+  const dataref = await firestore.collection("Schools").get();
+
+  const data = dataref.docs.map((doc) => JSON.stringify(doc.data()));
 
   return {
     props: {
       data,
-      id
     },
-  }
+  };
 }
-export default  function Home(props) {
-  console.log(props)
-  
+
+const Index = (props) => {
+  const data = props.data.map((i) => JSON.parse(i));
+
   return (
-    <div>
-        <h1>Homepage </h1>
-        {}       
-    </div>
-  )
-}
+    <>
+      <Hearder />
+      <Flex justifyContent="center" maxW="1500px" m="auto" direction="column">
+        <BannerHome />
+        <SchoolGridList schools={data} />
+      </Flex>
+      <Footer />
+    </>
+  );
+};
+
+export default Index;
