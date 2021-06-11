@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
@@ -21,13 +17,13 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-<<<<<<< HEAD
-    "**/*.tsx", "pages/_app.tsx", "config/firebase-config.js", "config/firebase-config.js", "config/firebaseAdmin.js", "pages/AddCourse.jsx", "pages/AddDepartment.tsx"
-=======
-    "**/*.tsx", "pages/_app.tsx", "config/firebase-config.js", "config/firebase-config.js", "config/firebaseAdmin.js", "pages/AddCourse.jsx", "pages/AddDepartment.tsx", "components/UploadSchoolImg.jsx"
->>>>>>> master
+    "pages/_app.tsx",
+    "config/firebase-config.js",
+    "config/firebase-config.js",
+    "config/firebaseAdmin.js",
+    "pages/AddCourse.jsx",
+    "pages/AddDepartment.tsx",
+    "components/UploadSchoolImg.jsx"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }
