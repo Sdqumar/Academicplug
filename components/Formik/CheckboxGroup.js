@@ -1,19 +1,19 @@
-import React from 'react'
-import { Field, ErrorMessage } from 'formik'
-import TextError from './TextError'
+import React from "react";
+import { Field, ErrorMessage } from "formik";
+import TextError from "./TextError";
 
-function CheckboxGroup (props) {
-  const { label, name, options, ...rest } = props
+function CheckboxGroup(props) {
+  const { label, name, options, ...rest } = props;
   return (
-    <div className='form-control'>
+    <div className="form-control">
       <label>{label}</label>
       <Field name={name}>
         {({ field }) => {
-          return options.map(option => {
+          return options.map((option) => {
             return (
               <React.Fragment key={option.key}>
                 <input
-                  type='checkbox'
+                  type="checkbox"
                   id={option.value}
                   {...field}
                   {...rest}
@@ -22,13 +22,13 @@ function CheckboxGroup (props) {
                 />
                 <label htmlFor={option.value}>{option.key}</label>
               </React.Fragment>
-            )
-          })
+            );
+          });
         }}
       </Field>
       <ErrorMessage component={TextError} name={name} />
     </div>
-  )
+  );
 }
 
-export default CheckboxGroup
+export default CheckboxGroup;

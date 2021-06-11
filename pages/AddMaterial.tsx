@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Formik, Form,  } from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import FormikControl from "../components/Formik/FormikControl";
 import { Flex, Spacer, Box, Button, useToast } from "@chakra-ui/react";
@@ -47,7 +47,7 @@ function AddMaterial(props) {
   const department = formikValue.department;
 
   let facultylOptions = [];
-// am using optional chaining to check if Facuties exisits and if if has values
+  // am using optional chaining to check if Facuties exisits and if if has values
   data.forEach((data) => {
     if (school === data.Name) {
       data?.Facluties?.forEach((item) => {
@@ -64,14 +64,12 @@ function AddMaterial(props) {
   const [courseOptions, setcourseOptions] = useState([
     { key: "Select your Course", value: "" },
   ]);
- 
 
   useEffect(() => {
     if (formikValue.faculty && formikValue.school) {
       const options = [];
       const getcourseoptions = [];
 
-     
       firestore
         .collection("Schools")
         .doc(school)
@@ -138,7 +136,7 @@ function AddMaterial(props) {
         console.log("Document successfully written!");
         actions.resetForm();
         displayToast();
-        actions.setSubmitting(false)
+        actions.setSubmitting(false);
       })
       .catch((error) => {
         console.error("Error writing document: ", error);
@@ -219,9 +217,7 @@ function AddMaterial(props) {
                   variant="outline"
                   type="submit"
                   disabled={
-                    pdfurl === null ||
-                    !formik.isValid ||
-                    formik.isSubmitting 
+                    pdfurl === null || !formik.isValid || formik.isSubmitting
                   }
                   onClick={formik.submitForm}
                 >

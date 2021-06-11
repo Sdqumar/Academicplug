@@ -6,9 +6,8 @@ import { Flex, Spacer, Box, Button, useToast } from "@chakra-ui/react";
 import firebase from "../config/firebase-config";
 import { initializeApp } from "firebase-admin";
 
-
-//initialize firestore 
-const firestore = firebase.firestore()
+//initialize firestore
+const firestore = firebase.firestore();
 
 export async function getStaticProps(context) {
   const schoolref = await firestore.collection("Schools").get();
@@ -34,23 +33,23 @@ function AddCourse(props) {
   });
 
   // select faculty option code
-interface  values{
-  department?: string,
-  school?: string,
-  faculty?: string,
-}
+  interface values {
+    department?: string;
+    school?: string;
+    faculty?: string;
+  }
 
-const [formikValue,setFormikValue] = useState<values>({})
-// this function is been passed to the render props formik component, which then call it and pass the state of formikvalues like method as props 
-const getFormikValue = (formikvalues:values) => {
-  setFormikValue(formikvalues)
-};
+  const [formikValue, setFormikValue] = useState<values>({});
+  // this function is been passed to the render props formik component, which then call it and pass the state of formikvalues like method as props
+  const getFormikValue = (formikvalues: values) => {
+    setFormikValue(formikvalues);
+  };
 
- const school = formikValue.school;
- const department = formikValue.department;
+  const school = formikValue.school;
+  const department = formikValue.department;
 
-let facultylOptions = [];
-// am using optional chaining to check if Facuties exisits and if if has values
+  let facultylOptions = [];
+  // am using optional chaining to check if Facuties exisits and if if has values
   data.forEach((data) => {
     if (school === data.Name) {
       data?.Facluties?.forEach((item) => {
@@ -93,7 +92,6 @@ let facultylOptions = [];
     courseName: Yup.mixed().required("Required"),
   });
 
-
   const toast = useToast();
 
   const displayToast = () => {
@@ -106,44 +104,43 @@ let facultylOptions = [];
     });
   };
 
-
-  const onSubmit = (values,actions) => {
+  const onSubmit = (values, actions) => {
     actions.setSubmitting(true);
-    firestore.collection("Schools")
-    .doc(school)
-    .collection("Department")
-    .doc(department)
-    
-    .update({Cources: firebase.firestore.FieldValue.arrayUnion(values.courseName)})
+    firestore
+      .collection("Schools")
+      .doc(school)
+      .collection("Department")
+      .doc(department)
+
+      .update({
+        Cources: firebase.firestore.FieldValue.arrayUnion(values.courseName),
+      })
       .then(() => {
-          console.log("Document successfully written!");
-          actions.resetForm()
-          displayToast();
-        actions.setSubmitting(false)
+        console.log("Document successfully written!");
+        actions.resetForm();
+        displayToast();
+        actions.setSubmitting(false);
       })
       .catch((error) => {
-          console.error("Error writing document: ", error);
+        console.error("Error writing document: ", error);
       });
   };
 
-  
   return (
-    <Flex align="center" justify="center" >
+    <Flex align="center" justify="center">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={onSubmit}
       >
         {(formik) => {
-         
-         const [formikState, setformikState] = useState({});
-            //this function send formikstate to the upper component like method as props
-         useEffect(() => {
+          const [formikState, setformikState] = useState({});
+          //this function send formikstate to the upper component like method as props
+          useEffect(() => {
             setformikState(formik.values);
             getFormikValue(formikState);
           }, [formik]);
 
-          
           return (
             <Form>
               <Box>
@@ -188,8 +185,7 @@ let facultylOptions = [];
                   colorScheme="teal"
                   variant="outline"
                   type="submit"
-                  disabled={!formik.isValid ||
-                    formik.isSubmitting}
+                  disabled={!formik.isValid || formik.isSubmitting}
                 >
                   Submit
                 </Button>
