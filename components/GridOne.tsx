@@ -1,12 +1,16 @@
 import { Box, Flex, Button, Heading, Image } from "@chakra-ui/react";
 import Link from "next/link";
-
+import { faculty } from "../pages/[School]";
 export interface GridProps {
-  data: [string];
-  url: string
+  data: {
+    Facluties: [faculty];
+    Name: string;
+    logourl: string;
+  };
 }
 
-const CoursesGrid: React.FC<GridProps> = ({ data, url}) => {
+const GridOne: React.FC<GridProps> = ({ data }) => {
+
   return (
     <>
       <Flex w="100%" justify="center">
@@ -16,11 +20,14 @@ const CoursesGrid: React.FC<GridProps> = ({ data, url}) => {
           wrap="wrap"
           justify={{ base: "center", sm: "space-between", md: "space-between" }}
         >
-          {data.map((item) => {
+          {data.Facluties.map((item) => {
             return (
               <Link
-                href={`${url}/${item.replace(/\s/g, "-")}`}
-                key={item}
+                href={`${data.Name.replace(/\s/g, "-")}/${item?.Name?.replace(
+                  /\s/g,
+                  "-"
+                )}`}
+                key={item?.Name}
               >
                 <Flex
                   w={["100%", "45%", "45%", "23%"]}
@@ -28,7 +35,7 @@ const CoursesGrid: React.FC<GridProps> = ({ data, url}) => {
                   padding="0.8rem"
                   flexDirection="column"
                   mb="1rem"
-                  key={item}
+                  key={item.Name}
                   cursor="pointer"
                 >
                   <Heading
@@ -38,7 +45,7 @@ const CoursesGrid: React.FC<GridProps> = ({ data, url}) => {
                     width="80%"
                     border="3px solid"
                   >
-                    {item}
+                    {item?.Name}
                   </Heading>
                 </Flex>
               </Link>
@@ -50,4 +57,4 @@ const CoursesGrid: React.FC<GridProps> = ({ data, url}) => {
   );
 };
 
-export default CoursesGrid;
+export default GridOne;

@@ -31,6 +31,7 @@ const Home: React.FC<HomeProps> = ({ data }) => {
       justify="space-around"
     >
       {res.map((school) => {
+        console.log(school.name.trim());
         return (
           <Link href={school.Name} key={school.Name}>
             <VStack boxShadow="base" p="6" rounded="md" bg="white">
