@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import FormikControl from "../components/Formik/FormikControl";
-import { Flex, Spacer, Box, Button } from "@chakra-ui/react";
+import { Flex, Spacer, Box, Button, Grid } from "@chakra-ui/react";
 import firebase from "../config/firebase-config";
 import UploadSchoolImg from "../components/UploadSchoolImg";
 
@@ -27,7 +27,6 @@ function AddSchool() {
   }
 
   const onSubmit = (values,actions) => {
-    console.log(values)
     const school = values.SchoolName;
     //created a new courses array to the database for future adding of courses into the array 
     const Courses = []
@@ -36,7 +35,8 @@ function AddSchool() {
       .doc(school)
       .set({
         logourl,
-         createdAt: new Date()
+        Name:school,
+        Facluties:[]
       })
       .then(() => {
         console.log("Document successfully written!")
@@ -50,7 +50,7 @@ function AddSchool() {
   
 
   return (
-    <Flex align="center" justify="center" >
+    <Grid align="center" justify="center" w='300px' m='auto'>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -88,7 +88,7 @@ function AddSchool() {
         }}
       </Formik>
       <UploadSchoolImg getfile={getfile}/>
-    </Flex>
+    </Grid>
   );
 }
 

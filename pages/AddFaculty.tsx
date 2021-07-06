@@ -21,68 +21,41 @@ export async function getStaticProps(context) {
   };
 }
 
-function AddDepartment(props) {
-  let schoolOptions  = [];
-
+function AddFaculty(props) {
+  let schoolOptions = [];
   const getSchoolOptions = props.id.forEach((id) => {
     schoolOptions.push({ key: id, value: id });
   });
 
-  
+ 
 
   interface values {
-    departmentName?: string;
     school?: string;
     faculty?: string;
   }
-  const [formikValue, setFormikValue] = useState<values>({});
-  // this function is been passed to the render props formik component, which then call it and pass the state of formikvalues like method as props
-
-  const getFormikValue = (value: values) => {
-    setFormikValue(value);
-  };
-
-  let facultylOptions = [];
-  props.data.forEach((data) => {
-    if (formikValue.school === data.Name) {
-      data.Facluties.forEach((item) => {
-        facultylOptions.push({ key: item.Name, value: item.Name });
-      });
-    }
-  });
-
-  let departmentList = []
-  props.data.forEach((data) => {
-    if (formikValue.school === data.Name) {
-      data.Facluties.forEach((item) => {
-          if (formikValue.faculty === item.Name  ){
-            departmentList.push([...item?.Department,formikValue.departmentName])
-          }
-      });
-    }
-  });
+ 
+  
 
   const initialValues = {
-    departmentName: "",
     school: "",
     faculty: "",
   };
+
   const validationSchema = Yup.object().shape({
-    departmentName: Yup.mixed().required("Required"),
+    faculty: Yup.mixed().required("Required"),
+    school: Yup.mixed().required("Required"),
   });
-  
+  console.log(props.data)
   const onSubmit = (values,actions) => {
-    const {school,faculty,departmentName} = values;
+      console.log(values)
+    const {school,faculty} = values;
+    
     //created a new courses array to the database for future adding of courses into the array 
-    const data = {
-      Name:faculty, 
-   departmentList
-    }
-    console.log(data)
+    const Courses = []
     firestore
       .collection("Schools")
       .doc(school)
-      .update({ Facluties: firebase.firestore.FieldValue.arrayUnion(data)})
+      .update({ Facluties: firebase.firestore.FieldValue.arrayUnion({Name:faculty, Department:[]})})
       .then(() => {
         console.log("Document successfully written!")
         actions.resetForm()
@@ -100,12 +73,7 @@ function AddDepartment(props) {
         onSubmit={onSubmit}
       >
         {(formik) => {
-          const [formikState, setformikState] = useState({});
-          //this function send formikstate to the upper component like method as props
-          useEffect(() => {
-            setformikState(formik.values);
-            getFormikValue(formikState);
-          }, [formik]);
+          
           return (
             <Form>
               <Box>
@@ -116,21 +84,13 @@ function AddDepartment(props) {
                   options={schoolOptions}
                 />
               </Box>
-              <Box>
-                <FormikControl
-                  control="Selectoption"
-                  label="Faculty"
-                  name="faculty"
-                  options={facultylOptions}
-                />
-              </Box>
+           
               <Box mt="20px">
                 <FormikControl
-                  //control='input'
                   control="chakraInput"
                   type="name"
-                  label="Department Name"
-                  name="departmentName"
+                  label="Faculty Name"
+                  name="faculty"
                 />
               </Box>
 
@@ -153,4 +113,4 @@ function AddDepartment(props) {
   );
 }
 
-export default AddDepartment;
+export default AddFaculty;

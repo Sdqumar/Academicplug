@@ -63,7 +63,7 @@ interface file {
       <FormControl isRequired  >
         <form onSubmit={onSubmit}>
           <FormLabel>Upload pdf</FormLabel>
-          <Box d='flex'  alignItems='center'>
+          <Box d='flex' flexDir='column'  alignItems='center'>
           <Input
             isRequired
             type="file"
@@ -81,11 +81,15 @@ interface file {
           >
             upload
           </Button>
-          </Box>
+          <Box d='block'>
           {fileTemp && 
-          <a href={fileTemp} target='_blank'>Click to preview</a>
+          <img src={fileTemp} />
           }
           {error && <p>{error}</p>}
+          </Box>
+         
+          </Box>
+          
         
         </form>
       </FormControl>

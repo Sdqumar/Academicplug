@@ -68,8 +68,9 @@ const School = ({ data }) => {
 
 
  
-  
-  
+ const list = Object.keys(data)
+ console.log(list.filter(item=> item !=='Name' && item !=='logourl')) 
+ 
 
 
   const url = `/${school.replace(/\s/g, "-")}/${faculty.replace(/\s/g, "-")}`   
