@@ -1,29 +1,21 @@
 import { Box, Flex, Button, Heading, Image } from "@chakra-ui/react";
 import Link from "next/link";
 
-export interface GridProps {
-  data: [string];
-  url: string
-}
-
-const CoursesGrid: React.FC<GridProps> = ({ data, url}) => {
+const CoursesGrid = ({ list, url }) => {
   return (
     <>
-      <Flex w="100%" justify="center">
+      <Flex m="auto" justify="center">
         <Flex
           mt="1rem"
-          width="75%"
           wrap="wrap"
-          justify={{ base: "center", sm: "space-between", md: "space-between" }}
+          justify={{ md: "space-between", sm: "center" }}
         >
-          {data.map((item) => {
+          {list?.map((item) => {
             return (
-              <Link
-                href={`${url}/${item.replace(/\s/g, "-")}`}
-                key={item}
-              >
+              <Link href={`${url}/${item.replace(/\s/g, "-")}`} key={item}>
                 <Flex
-                  w={["100%", "45%", "45%", "23%"]}
+                  w="14rem"
+                  mr="20px"
                   bg="rgb(251 174 23)"
                   padding="0.8rem"
                   flexDirection="column"

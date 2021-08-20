@@ -1,32 +1,25 @@
 import firebase from "../../../../config/firebase-config";
-import { Container, Heading, Flex, VStack, Box } from "@chakra-ui/react";
+import { Container, Heading, Flex, Box, Button } from "@chakra-ui/react";
 import CoursesGrid from "../../../../components/CoursesGrid";
 import { useRouter } from "next/router";
+import AddCourse from "../../../../components/AddCourse";
+import { useRef } from "react";
+import Link from "next/link";
+
 const firestore = firebase.firestore();
 
- 
 export async function getStaticPaths() {
-  const schoolref = await firestore
-    .collection("Schools")
-    .get();
-    const schoolRes =  schoolref.docs.map((doc) => doc.data());
+  const paths = [
+    {
+      params: {
+        School: "Federal-University-Minna",
+        Faculty: "Education",
+        Department: "Health-Education",
+      },
+    },
+  ];
 
-    const paths = [];
-    
-    
-    schoolRes.forEach((school) =>
-      school?.Facluties?.forEach((faculty) =>
-      faculty?.Department?.forEach(department=>
-        paths.push({
-          params: {
-            School: school.Name.replace(/\s/g, "-"),
-            Faculty: faculty?.Name.replace(/\s/g, "-"),
-            Department: department.replace(/\s/g, "-")
-          },
-        })
-      ))
-    );
-  return { paths, fallback: false };
+  return { paths, fallback: "blocking" };
 }
 
 export async function getStaticProps(context) {
@@ -39,9 +32,11 @@ export async function getStaticProps(context) {
     .doc(school.replace(/-/g, " "))
     .collection("Courses")
     .where("Department", "==", department.replace(/-/g, " "))
-    .get()
-    const data =  schoolref.docs.map(item => item.data().Name)
-    console.log(data)
+    .get();
+
+  const result = schoolref.docs.map((item) => item.id);
+  const data = result === undefined || result.length <= 0 ? null : result;
+
   return {
     props: {
       data,
@@ -49,33 +44,64 @@ export async function getStaticProps(context) {
   };
 }
 
-type data = {
-  Facluties: [string];
-  Name: string;
-  logourl: string;
-};
-const School = ({data}) => {
- 
-  const schooldata = async()=>{
-  
-}
-schooldata()
- const router = useRouter();
+const School = ({ data }) => {
+  const router = useRouter();
+  if (!data) {
+  }
 
   const school = router.query.School.toString().replace(/-/g, " ");
 
   const faculty = router.query.Faculty.toString().replace(/-/g, " ");
   const department = router.query.Department.toString().replace(/-/g, " ");
 
-  const url = `/${school.replace(/\s/g, "-")}/${faculty.replace(/\s/g, "-")}/${department.replace(/\s/g, "-")}`
+  const schoolUrl = `/${school.replace(/\s/g, "-")}`;
+  const facultyUrl = `/${faculty.replace(/\s/g, "-")}`;
+  const departmentUrl = `/${department.replace(/\s/g, "-")}`;
 
+  const url = schoolUrl + facultyUrl + departmentUrl;
+
+  const boxRef = useRef(null);
+
+  const onClick = () => {
+    boxRef.current.style.display = "block";
+  };
+  const closeBox = () => {
+    boxRef.current.style.display = "none";
+  };
 
   return (
     <Container maxW="90%">
+      <Button mt="1rem" onClick={onClick}>
+        Add Course
+      </Button>
+      <Box
+        d="none"
+        left="2rem"
+        boxShadow="base"
+        rounded="md"
+        ref={boxRef}
+        pos="absolute"
+        bg="#fff"
+        width="95vw"
+        top="6rem"
+      >
+        <Flex justify="space-between" mt="1rem">
+          <Heading size="lg" fontSize="30px" m="1rem">
+            Add Course
+          </Heading>
+          <Button color="red" float="right" m="1rem" onClick={closeBox}>
+            Close
+          </Button>
+        </Flex>
+
+        <AddCourse School={school} Faculty={faculty} Department={department} />
+      </Box>
+
       <Heading size="lg" fontSize="50px">
-        {school} - {faculty} - {department}
+        <Link href={schoolUrl}>{school}</Link> -{" "}
+        <Link href={schoolUrl + facultyUrl}>{faculty}</Link> - {department}
       </Heading>
-      <CoursesGrid data={data} url={url} />
+      <CoursesGrid list={data} url={url} />
     </Container>
   );
 };

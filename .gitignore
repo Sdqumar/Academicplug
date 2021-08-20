@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
+.vscode
 
 # testing
 /coverage
@@ -32,3 +33,14 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+#firebase
+/config
+/functions
+.firebaserc
+firebase.json
+firestore-debug.log
+firestore.indexes.json
+firestore.rules
+remoteconfig.template.json
+storage.rules

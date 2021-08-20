@@ -1,232 +1,254 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Formik, Form,  } from "formik";
-import * as Yup from "yup";
-import FormikControl from "../components/Formik/FormikControl";
-import { Flex, Spacer, Box, Button, useToast } from "@chakra-ui/react";
-import firebase from "../config/firebase-config";
-import UploadInput from "../components/UploadPdf";
+// import React, { useEffect, useRef, useState } from "react";
+// import { Formik, Form } from "formik";
+// import * as Yup from "yup";
+// import FormikControl from "../components/Formik/FormikControl";
+// import { Flex, Spacer, Box, Button, useToast } from "@chakra-ui/react";
+// import firebase from "../config/firebase-config";
+// import UploadInput from "../components/UploadPdf";
+// import { useRouter } from "next/router";
+import PrivateRoute from "../components/PrivateRoute";
 
-const firestore = firebase.firestore();
+// const firestore = firebase.firestore();
 
-export async function getStaticProps(context) {
-  const schoolref = await firestore.collection("Schools").get();
+// export async function getStaticProps(context) {
+//   const schoolref = await firestore.collection("Schools").get();
 
-  const data = schoolref.docs.map((doc) => JSON.stringify(doc.data()));
-  const id = schoolref.docs.map((doc) => doc.id);
+//   const data = schoolref.docs.map((doc) => JSON.stringify(doc.data()));
+//   const id = schoolref.docs.map((doc) => doc.id);
 
-  return {
-    props: {
-      data,
-      id,
-    },
-  };
-}
+//   return {
+//     props: {
+//       data,
+//       id,
+//     },
+//   };
+// }
 
 function AddMaterial(props) {
-  const data = props.data.map((i) => JSON.parse(i));
-  //select School options code
-  let schoolOptions = [];
+  // const data = props.data.map((i) => JSON.parse(i));
+  // //select School options code
+  // let schoolOptions = [];
 
-  props.id.forEach((id) => {
-    schoolOptions.push({ key: id, value: id });
-  });
+  // props.id.forEach((id) => {
+  //   schoolOptions.push({ key: id, value: id });
+  // });
 
-  // select faculty option code
-  interface values {
-    department?: string;
-    School?: string;
-    Faculty?: string;
-  }
-  const [formikValue, setFormikValue] = useState<values>({});
+  // // select faculty option code
+  // interface values {
+  //   Department?: string;
+  //   School?: string;
+  //   Faculty?: string;
+  //   Course?: string;
+  // }
+  // const [formikValue, setFormikValue] = useState<values>({});
 
-  // this function is been passed to the render props formik component, which then call it and pass the state of formikvalues like method as props
-  const getFormikValue = (formikvalues: values) => {
-    setFormikValue(formikvalues);
-  };
-  const {School,Faculty,} = formikValue;
-  let facultylOptions = [];
-// am using optional chaining to check if Facuties exisits and if if has values
-  data.forEach((data) => {
-    if (School === data.Name) {
-      data?.Facluties?.forEach((item) => {
-        facultylOptions.push({ key: item.Name, value: item.Name });
-      });
-    }
-  });
+  // // this function is been passed to the render props formik component, which then call it and pass the state of formikvalues like method as props
+  // const getFormikValue = (formikvalues: values) => {
+  //   setFormikValue(formikvalues);
+  // };
+  // const [departmentOptions, setdepartmentOptions] = useState([
+  //   { key: "Select your Department", value: "" },
+  // ]);
 
-  // select department and course option code
+  // const { School, Faculty } = formikValue;
+  // let facultylOptions = [];
+  // let departmentlist = [];
+  // // am using optional chaining to check if Facuties exisits and if if has values
+  // data.forEach((data) => {
+  //   if (School === data.Name) {
+  //     const list = Object.keys(data).filter(
+  //       (item) => item !== "Name" && item !== "logourl"
+  //     );
 
-  const [departmentOptions, setdepartmentOptions] = useState([
-    { key: "Select your Department", value: "" },
-  ]);
+  //     list.forEach((item) => {
+  //       facultylOptions.push({ key: item, value: item });
+  //       if (Faculty === item) {
+  //         data[item].forEach((item2) => {
+  //           departmentlist.push({ key: item2, value: item2 });
+  //         });
+  //       }
+  //     });
+  //   }
+  // });
 
-  useEffect(() => {
-    setdepartmentOptions([{ key: "Select your Department", value: "" }])
-    facultylOptions = []
-    
-  }, [School]);
+  // // select department option code
 
-  useEffect(() => {
-   
-    if (Faculty && School) {
-      const options = [];
-      setdepartmentOptions(options)
-    facultylOptions = []
-      data.forEach((data) => {
-        if (School === data.Name) {
-          data?.Facluties?.forEach((item) => {
-           if (Faculty === item?.Name ){
-              item?.Department?.forEach(department=>{
-                options.push({key: department, value: department})
-              })
-           }
-          });
-        }
-        setdepartmentOptions(options)
+  // const getCourse = async () => {
+  //   const schoolref = await firestore
+  //     .collection("Schools")
+  //     .doc(formikValue?.School)
+  //     .collection("Courses")
+  //     .where("Department", "==", formikValue?.Department)
+  //     .get();
+  //   const courseList = schoolref.docs
+  //     .map((doc) => doc.data())
+  //     .map((item) => item?.Name);
 
-      });
-     
-    }
-  }, [Faculty]);
+  //   return courseList;
+  // };
+  // const [courseOptions, setCourseOptions] = useState([]);
+  // let courseList = [];
 
-  const initialValues = {
-    Department: "",
-    School: "",
-    Faculty: "",
-    Name: "",
-    material: "",
-  };
-  const validationSchema = Yup.object().shape({
-    Department: Yup.mixed().required("Required"),
-    School: Yup.mixed().required("Required"),
-    Faculty: Yup.mixed().required("Required"),
-    Name: Yup.mixed().required("Required"),
-    material: Yup.mixed().required("Required"),
-  });
+  // useEffect(() => {
+  //   if (formikValue.Department !== "" && formikValue.Department !== undefined) {
+  //     getCourse().then(async (item) => {
+  //       item.forEach((item) => courseList.push({ key: item, value: item }));
+  //     });
+  //     setCourseOptions(courseList);
+  //   }
+  // }, [
+  //   formikValue.Department,
+  //   formikValue.Faculty,
+  //   formikValue.School,
+  //   formikValue.Course,
+  // ]);
+  // // select department and course option code
 
-  const toast = useToast();
+  // useEffect(() => {
+  //   setdepartmentOptions([{ key: "Select your Department", value: "" }]);
+  //   facultylOptions = [];
+  // }, [School]);
 
-  const displayToast = () => {
-    toast({
-      title: "Material created",
-      position: "top",
-      status: "success",
-      duration: 2000,
-      isClosable: true,
-    });
-  };
+  // const initialValues = {
+  //   Department: "",
+  //   School: "",
+  //   Faculty: "",
+  //   Course: "",
+  //   material: "",
+  // };
+  // const validationSchema = Yup.object().shape({
+  //   Department: Yup.mixed().required("Required"),
+  //   School: Yup.mixed().required("Required"),
+  //   Faculty: Yup.mixed().required("Required"),
+  //   Course: Yup.mixed().required("Required"),
+  //   material: Yup.mixed().required("Required"),
+  // });
 
-  const onSubmit = async (values, actions) => {
-    actions.setSubmitting(true);
+  // const toast = useToast();
 
-    firestore
-      .collection("Schools")
-      .doc(School)
-      .collection("Courses")
-      .doc(values.Name)
-      .set({
-        ...values,
-        pdfurl,
-      })
-      .then(() => {
-        console.log("Document successfully written!");
-        actions.resetForm();
-        displayToast();
-        actions.setSubmitting(false)
-      })
-      .catch((error) => {
-        console.error("Error writing document: ", error);
-      });
-  };
-  const [pdfurl, setPdfurl] = useState(null);
-  const getfile = (url) => {
-    setPdfurl(url);
-  };
+  // const displayToast = () => {
+  //   toast({
+  //     title: "Material created",
+  //     position: "top",
+  //     status: "success",
+  //     duration: 2000,
+  //     isClosable: true,
+  //   });
+  // };
+  // const router = useRouter();
+
+  // const onSubmit = async (values, actions) => {
+  //   actions.setSubmitting(true);
+
+  //   firestore
+  //     .collection("Schools")
+  //     .doc(School)
+  //     .collection("Courses")
+  //     .doc(values.Name)
+  //     .set({
+  //       ...values,
+  //       pdfurl,
+  //     })
+  //     .then(() => {
+  //       console.log("Document successfully written!");
+  //       actions.resetForm();
+  //       displayToast();
+  //       actions.setSubmitting(false);
+  //       setTimeout(() => router.reload(), 2500);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error writing document: ", error);
+  //     });
+  // };
+  // const [pdfurl, setPdfurl] = useState(null);
+  // const getfile = (url) => {
+  //   setPdfurl(url);
+  // };
   return (
-    <Flex align="center" justify="center">
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={onSubmit}
-      >
-        {(formik) => {
-          const [formikState, setformikState] = useState({});
+    <></>
+    // <Flex align="center" justify="center" m="2rem 0">
+    //   <Formik
+    //     initialValues={initialValues}
+    //     validationSchema={validationSchema}
+    //     onSubmit={onSubmit}
+    //   >
+    //     {(formik) => {
+    //       const [formikState, setformikState] = useState({});
 
-          useEffect(() => {
-            setformikState(formik.values);
-            //this function send formikstate to the upper component like method as props
-            getFormikValue(formikState);
-          }, [formik]);
-          return (
-            <Box>
-              <Form>
-                <Box>
-                  <FormikControl
-                    control="Selectoption"
-                    label="School"
-                    name="School"
-                    options={schoolOptions}
-                  />
-                </Box>
-                <Box>
-                  <FormikControl
-                    control="Selectoption"
-                    label="Faculty"
-                    name="Faculty"
-                    options={facultylOptions}
-                  />
-                </Box>
+    //       useEffect(() => {
+    //         setformikState(formik.values);
+    //         //this function send formikstate to the upper component like method as props
+    //         getFormikValue(formikState);
+    //       }, [formik]);
+    //       return (
+    //         <Box>
+    //           <Form>
+    //             <Box>
+    //               <FormikControl
+    //                 control="Selectoption"
+    //                 label="School"
+    //                 name="School"
+    //                 options={schoolOptions}
+    //               />
+    //             </Box>
+    //             <Box>
+    //               <FormikControl
+    //                 control="Selectoption"
+    //                 label="Faculty"
+    //                 name="Faculty"
+    //                 options={facultylOptions}
+    //               />
+    //             </Box>
 
-                <Box>
-                  <FormikControl
-                    control="Selectoption"
-                    label="Department"
-                    name="Department"
-                    options={departmentOptions}
-                    disabled={departmentOptions.length < 2}
-                  />
-                </Box>
-                <Box>
-                  <FormikControl
-                    control="chakraInput"
-                    label="Course"
-                    name="Name"
-                    
-                  />
-                </Box>
-                <Box mt="20px">
-                  <FormikControl
-                    control="chakraInput"
-                    type="name"
-                    label="Material Name"
-                    name="material"
-                  />
-                </Box>
+    //             <Box>
+    //               <FormikControl
+    //                 control="Selectoption"
+    //                 label="Department"
+    //                 name="Department"
+    //                 options={departmentlist}
+    //                 disabled={departmentOptions.length < 1}
+    //               />
+    //             </Box>
+    //             <Box>
+    //               <FormikControl
+    //                 control="Selectoption"
+    //                 label="Course"
+    //                 name="course"
+    //                 options={courseOptions}
+    //                 disabled={courseOptions.length < 1}
+    //               />
+    //             </Box>
+    //             <Box mt="20px">
+    //               <FormikControl
+    //                 control="chakraInput"
+    //                 type="name"
+    //                 label="Material Name"
+    //                 name="material"
+    //               />
+    //             </Box>
 
-                <Spacer />
-              </Form>
-              <UploadInput getfile={getfile} formik={formik.values} />
-              <Box mt={4} textAlign="center">
-                <Button
-                  colorScheme="teal"
-                  variant="outline"
-                  type="submit"
-                  disabled={
-                    pdfurl === null ||
-                    !formik.isValid ||
-                    formik.isSubmitting 
-                  }
-                  onClick={formik.submitForm}
-                >
-                  Submit
-                </Button>
-              </Box>
-            </Box>
-          );
-        }}
-      </Formik>
-    </Flex>
+    //             <Spacer />
+    //           </Form>
+    //           <UploadInput getfile={getfile} formik={formik.values} />
+    //           <Box mt={4} textAlign="center">
+    //             <Button
+    //               colorScheme="teal"
+    //               variant="outline"
+    //               type="submit"
+    //               disabled={
+    //                 pdfurl === null || !formik.isValid || formik.isSubmitting
+    //               }
+    //               onClick={formik.submitForm}
+    //             >
+    //               Submit
+    //             </Button>
+    //           </Box>
+    //         </Box>
+    //       );
+    //     }}
+    //   </Formik>
+    // </Flex>
   );
 }
 
-export default AddMaterial;
+export default PrivateRoute(AddMaterial);

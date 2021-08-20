@@ -10,42 +10,45 @@ export interface GridProps {
 }
 
 const GridOne: React.FC<GridProps> = ({ data }) => {
-
+  const list = Object.keys(data).filter(
+    (item) => item !== "Name" && item !== "logourl"
+  );
   return (
     <>
       <Flex w="100%" justify="center">
         <Flex
           mt="1rem"
-          width="75%"
+          width="100%"
           wrap="wrap"
-          justify={{ base: "center", sm: "space-between", md: "space-between" }}
+          justify={{ md: "flex-start", sm: "center" }}
         >
-          {data.Facluties.map((item) => {
+          {list.map((item) => {
             return (
               <Link
-                href={`${data.Name.replace(/\s/g, "-")}/${item?.Name?.replace(
+                href={`/${data.Name.replace(/\s/g, "-")}/${item?.replace(
                   /\s/g,
                   "-"
                 )}`}
-                key={item?.Name}
+                key={item}
               >
                 <Flex
-                  w={["100%", "45%", "45%", "23%"]}
+                  w="14rem"
+                  mr="20px"
                   bg="rgb(251 174 23)"
                   padding="0.8rem"
                   flexDirection="column"
                   mb="1rem"
-                  key={item.Name}
+                  key={item}
                   cursor="pointer"
                 >
                   <Heading
                     m="auto"
                     size="lg"
                     align="center"
-                    width="80%"
+                    width="10rem"
                     border="3px solid"
                   >
-                    {item?.Name}
+                    {item}
                   </Heading>
                 </Flex>
               </Link>

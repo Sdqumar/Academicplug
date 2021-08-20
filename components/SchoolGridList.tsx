@@ -1,5 +1,7 @@
-import { Box, Flex, Heading, Image } from "@chakra-ui/react";
+import { Box, Flex, Heading, Image, Text } from "@chakra-ui/react";
 import Link from "next/link";
+import { error } from "node:console";
+import { useState } from "react";
 
 export interface SchoolGridListProps {
   schools: [
@@ -12,13 +14,11 @@ export interface SchoolGridListProps {
 
 const SchoolGridList: React.FC<SchoolGridListProps> = ({ schools }) => {
   return (
-    <Flex w="100%" justify="center">
+    <Box maxW="60rem" m="auto" mt="2rem">
       <Flex
-        mt="1rem"
-        width="65%"
+        maxW="60rem"
         wrap="wrap"
-        justify={{ base: "center", sm: "space-between", md: "space-between" }}
-        mb="50rem"
+        justify={{ md: "space-evenly", sm: "center" }}
       >
         {schools.map((school) => {
           return (
@@ -27,19 +27,26 @@ const SchoolGridList: React.FC<SchoolGridListProps> = ({ schools }) => {
               key={school.Name}
             >
               <Box
-                w={["100%", "45%", "45%", "20%"]}
+                w="12rem"
                 key={school.Name}
                 boxShadow="base"
+                m="0 10px"
                 rounded="md"
                 bg="gray.20"
                 cursor="pointer"
-                mb="10px"
+                mb="2rem"
                 transition="all 0.4s"
                 _hover={{
                   boxShadow: "xl",
                 }}
               >
-                <Image src={school.logourl} w="100%" h="10rem" />
+                <Image
+                  src={school.logourl}
+                  onError={() => console.log("error")}
+                  w="100%"
+                  h="10rem"
+                />
+
                 <Heading size="sm" align="center">
                   {school.Name}
                 </Heading>
@@ -48,7 +55,7 @@ const SchoolGridList: React.FC<SchoolGridListProps> = ({ schools }) => {
           );
         })}
       </Flex>
-    </Flex>
+    </Box>
   );
 };
 

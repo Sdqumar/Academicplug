@@ -1,17 +1,8 @@
 import firebase from "config/firebase-config";
-import {
-  Container,
-  Heading,
-  useToast,
-  Button,
-  Box,
-  Flex,
-} from "@chakra-ui/react";
-import CoursesGrid from "components/CoursesGrid";
+import { Container, Heading, Flex, useToast } from "@chakra-ui/react";
 import DeleteButton from "components/DeleteButton";
 import { useRouter } from "next/router";
-import AddMaterial from "components/AddMaterial";
-import { useRef } from "react";
+import PDFViewer from "components/PDFViewer";
 import Link from "next/link";
 
 const firestore = firebase.firestore();
@@ -24,6 +15,7 @@ export async function getStaticPaths() {
         Faculty: "Education",
         Department: "Health-Education",
         Course: "HED-112",
+        Material: "Information-Tech",
       },
     },
   ];
@@ -42,31 +34,29 @@ export async function getStaticProps(context) {
     .where("Course", "==", course.replace(/-/g, " "))
     .get();
 
-  const [data] = schoolref.docs?.map((item) => item.data());
-  const result = data === undefined || data.length <= 0 ? data === null : data;
-
+  const [data] = schoolref.docs.map((item) => item.data());
   return {
     props: {
-      result,
+      data,
     },
   };
 }
 
-const School = ({ result }) => {
+const School = ({ data }) => {
   const router = useRouter();
 
-  const list = result?.Materials?.map((item) => item.Name);
   const school = router.query.School.toString().replace(/-/g, " ");
   const faculty = router.query.Faculty.toString().replace(/-/g, " ");
   const department = router.query.Department.toString().replace(/-/g, " ");
   const course = router.query.Course.toString().replace(/-/g, " ");
+  const material = router.query.Material.toString().replace(/-/g, " ");
 
   const schoolUrl = `/${school.replace(/\s/g, "-")}`;
   const facultyUrl = `/${faculty.replace(/\s/g, "-")}`;
   const departmentUrl = `/${department.replace(/\s/g, "-")}`;
   const courseUrl = `/${course.replace(/\s/g, "-")}`;
 
-  const url = schoolUrl + facultyUrl + departmentUrl + courseUrl;
+  const [{ pdfurl }] = data.Materials.filter((item) => item.Name == material);
 
   const toast = useToast();
   const displayToast = () => {
@@ -78,22 +68,21 @@ const School = ({ result }) => {
       isClosable: true,
     });
   };
-  const boxRef = useRef(null);
 
-  const onClick = () => {
-    boxRef.current.style.display = "block";
-  };
-  const closeBox = () => {
-    boxRef.current.style.display = "none";
-  };
   const handleDelete = async () => {
     firestore
       .collection("Schools")
       .doc(school)
       .collection("Courses")
       .doc(course)
-      .delete()
+      .update({
+        Materials: firebase.firestore.FieldValue.arrayRemove({
+          Name: material,
+          pdfurl,
+        }),
+      })
       .then(() => {
+        console.log("Document successfully deleted!");
         displayToast();
 
         setTimeout(() => router.back(), 2500);
@@ -106,32 +95,21 @@ const School = ({ result }) => {
   return (
     <Container maxW="90%">
       <Flex justify="space-between" mt="1rem">
-        <Button onClick={onClick}>Add Material</Button>
-        <DeleteButton deleteFuntion={handleDelete} name="Course" />
+        <Heading size="lg" fontSize="50px" w="95%">
+          <Link href={schoolUrl}>{school}</Link> -{" "}
+          <Link href={schoolUrl + facultyUrl}>{faculty}</Link> -{" "}
+          <Link href={schoolUrl + facultyUrl + departmentUrl}>
+            {department}
+          </Link>{" "}
+          -{" "}
+          <Link href={schoolUrl + facultyUrl + departmentUrl + courseUrl}>
+            {course}
+          </Link>
+          - {material}
+        </Heading>
+        <DeleteButton deleteFuntion={handleDelete} name="Material" />
       </Flex>
-      <Box
-        d="none"
-        left="2rem"
-        boxShadow="base"
-        rounded="md"
-        ref={boxRef}
-        pos="absolute"
-        bg="#fff"
-        width="95vw"
-        top="6rem"
-      >
-        <Button color="red" float="right" m="1rem" onClick={closeBox}>
-          Close
-        </Button>
-        <AddMaterial />
-      </Box>
-      <Heading size="lg" fontSize="50px" w="95%">
-        <Link href={schoolUrl}>{school}</Link> -{" "}
-        <Link href={schoolUrl + facultyUrl}>{faculty}</Link> -{" "}
-        <Link href={schoolUrl + facultyUrl + departmentUrl}>{department}</Link>{" "}
-        - {course}
-        <CoursesGrid list={list} url={url} />
-      </Heading>
+      <PDFViewer data={pdfurl} />
     </Container>
   );
 };

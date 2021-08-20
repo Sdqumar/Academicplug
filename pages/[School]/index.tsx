@@ -1,19 +1,19 @@
 import firebase from "../../config/firebase-config";
-import { Container, Heading, Flex, VStack, Box } from "@chakra-ui/react";
+import { Container, Heading } from "@chakra-ui/react";
 import GridOne from "../../components/GridOne";
+import { useRouter } from "next/router";
+import { GetStaticPaths } from "next";
 
 const firestore = firebase.firestore();
 
-export async function getStaticPaths() {
-  const schoolref = await firestore.collection("Schools").get();
-
-  const id = await schoolref.docs.map((doc) => doc.id);
-
-  const paths = id.map((school) => ({
-    params: { School: school.replace(/\s/g, "-") },
-  }));
-  return { paths, fallback: false };
-}
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths = [
+    {
+      params: { School: "Federal-University-Minna" },
+    },
+  ];
+  return { paths, fallback: "blocking" };
+};
 
 export async function getStaticProps(context) {
   const school = context.params.School;
@@ -21,31 +21,38 @@ export async function getStaticProps(context) {
     .collection("Schools")
     .doc(school.replace(/-/g, " "))
     .get();
-  const data = JSON.stringify(schoolref.data());
+  const result = schoolref.data();
+  const data = result === undefined ? result === null : result;
 
   return {
     props: {
       data,
     },
+    revalidate: 1,
   };
 }
-interface faculty {
-  Name:string
+export interface faculty {
+  Name: string;
 }
 
-interface result  {
+interface result {
   Facluties: [faculty];
   Name: string;
   logourl: string;
-};
+}
+
 const School = ({ data }) => {
-  const result: result = JSON.parse(data);
+  if (!data) {
+    const router = useRouter();
+    router.push("/404");
+  }
+
   return (
     <Container maxW="90%">
       <Heading size="lg" fontSize="50px">
-        {result.Name}
+        {data.Name}
       </Heading>
-      <GridOne data={result} />
+      <GridOne data={data} />
     </Container>
   );
 };

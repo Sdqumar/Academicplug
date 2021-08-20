@@ -2,32 +2,21 @@ import firebase from "../../../config/firebase-config";
 import { Container, Heading, Flex, VStack, Box } from "@chakra-ui/react";
 import CoursesGrid from "../../../components/CoursesGrid";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const firestore = firebase.firestore();
 
-
-
-
 export async function getStaticPaths() {
-  const schoolref = await firestore.collection("Schools").get();
+  const paths = [
+    {
+      params: {
+        School: "Federal-University-Minna",
+        Faculty: "Education",
+      },
+    },
+  ];
 
-  const id =  schoolref.docs.map((doc) => doc.data());
-
-  const paths = [];
-  
-  
-  id.forEach((x) =>
-    x?.Facluties?.forEach((y) =>
-      paths.push({
-        params: {
-          School: x.Name.replace(/\s/g, "-"),
-          Faculty: y?.Name.replace(/\s/g, "-"),
-        },
-      })
-    )
-  );
-
-  return { paths, fallback: false };
+  return { paths, fallback: "blocking" };
 }
 
 export async function getStaticProps(context) {
@@ -39,7 +28,10 @@ export async function getStaticProps(context) {
     .doc(school.replace(/-/g, " "))
     .get();
 
-  const data =  schoolref.data();
+  const result = schoolref.data();
+
+  const isFaculty = Object.keys(result).includes(Faculty);
+  const data = result === undefined || !isFaculty ? result === null : result;
   return {
     props: {
       data,
@@ -47,42 +39,47 @@ export async function getStaticProps(context) {
   };
 }
 
-
 interface faculty {
-  Name:string
+  Name: string;
 }
 
-interface result  {
+interface result {
   Facluties: [faculty];
   Name: string;
   logourl: string;
-};
+}
 const School = ({ data }) => {
   const router = useRouter();
 
+  if (!data) {
+    const router = useRouter();
+    router.push("/404");
+  }
   const school = router.query.School.toString().replace(/-/g, " ");
 
   const faculty = router.query.Faculty.toString().replace(/-/g, " ");
 
-  const [{Department}] = data.Facluties.filter(item => item.Name === faculty);
+  const list: string[] = Object.keys(data).filter(
+    (item) => item !== "Name" && item !== "logourl"
+  );
+  const departmentList = [];
+  list.forEach((item) => {
+    if (faculty === item) departmentList.push(...data[item]);
+  });
+  const schoolUrl = `/${school.replace(/\s/g, "-")}`;
+  const facultyUrl = `/${faculty.replace(/\s/g, "-")}`;
 
+  const url = schoolUrl + facultyUrl;
 
- 
- const list = Object.keys(data)
- console.log(list.filter(item=> item !=='Name' && item !=='logourl')) 
- 
-
-
-  const url = `/${school.replace(/\s/g, "-")}/${faculty.replace(/\s/g, "-")}`   
-    
-   
   return (
-    <Container maxW="90%">
-      <Heading size="lg" fontSize="50px">
-        {school} - {faculty}
-      </Heading>
-      <CoursesGrid data={Department} url={url} />
-    </Container>
+    data && (
+      <Container maxW="90%">
+        <Heading size="lg" fontSize="50px">
+          <Link href={schoolUrl}>{school}</Link> - {faculty}
+        </Heading>
+        <CoursesGrid list={departmentList} url={url} />
+      </Container>
+    )
   );
 };
 
