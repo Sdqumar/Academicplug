@@ -21,12 +21,7 @@ const Hearder = () => {
 	};
 
 	return (
-		<Flex
-			background="#fbae17"
-			maxw="100%"
-			justify="space-around"
-			alignItems="center"
-		>
+		<Flex background="#fbae17" maxw="100%" justify="space-around">
 			<Link href="/">
 				<Box ml="10" alignItems="center" pb="15px" cursor="pointer">
 					<Icon
