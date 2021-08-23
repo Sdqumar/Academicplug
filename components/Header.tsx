@@ -19,7 +19,6 @@ const Hearder = () => {
 			})
 			.catch((error) => {});
 	};
-	let list = ['HOME', 'SCHOOLS', 'COURSES', 'ABOUT'];
 
 	return (
 		<Flex
@@ -46,19 +45,6 @@ const Hearder = () => {
 					</Heading>
 				</Box>
 			</Link>
-			<Flex
-				fontWeight="600"
-				justify="space-evenly"
-				w="50%"
-				d={{ md: 'flex', sm: 'none' }}
-				cursor="pointer"
-			>
-				{list.map((list) => (
-					<Box key={list} _hover={{ color: 'gray.400' }} cursor="pointer">
-						{list}
-					</Box>
-				))}
-			</Flex>
 
 			<Flex className="log-reg">
 				{user === null || undefined ? (

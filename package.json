@@ -1,34 +1,33 @@
 {
-  "name": "unied",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
-  },
-  "dependencies": {
-    "@chakra-ui/icons": "^1.0.13",
-    "@chakra-ui/react": "^1.6.6",
-    "@emotion/react": "^11.4.1",
-    "@emotion/styled": "^11.3.0",
-    "@phuocng/react-pdf-viewer": "^1.7.0",
-    "firebase": "^8.4.1",
-    "firebase-admin": "^9.6.0",
-    "formik": "^2.2.6",
-    "framer-motion": "^4.1.17",
-    "next": "^10.2.3",
-    "pdfjs-dist": "^2.4.456",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
-    "react-firebase-hooks": "^3.0.4",
-    "react-icons": "^4.2.0",
-    "react-query": "^3.13.8",
-    "yup": "^0.32.9"
-  },
-  "devDependencies": {
-    "@types/node": "^14.14.39",
-    "@types/react": "^17.0.3",
-    "typescript": "^4.2.4"
-  }
+	"name": "unied",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start"
+	},
+	"dependencies": {
+		"@chakra-ui/icons": "^1.0.13",
+		"@chakra-ui/react": "^1.6.6",
+		"@emotion/react": "^11.4.1",
+		"@emotion/styled": "^11.3.0",
+		"@phuocng/react-pdf-viewer": "^1.7.0",
+		"firebase": "^8.4.1",
+		"firebase-admin": "^9.6.0",
+		"formik": "^2.2.6",
+		"framer-motion": "^4.1.17",
+		"next": "^10.2.3",
+		"pdfjs-dist": "^2.4.456",
+		"react": "17.0.2",
+		"react-dom": "17.0.2",
+		"react-firebase-hooks": "^3.0.4",
+		"react-icons": "^4.2.0",
+		"react-query": "^3.13.8",
+		"yup": "^0.32.9"
+	},
+	"devDependencies": {
+		"@types/react": "^17.0.3",
+		"typescript": "^4.2.4"
+	}
 }
