@@ -8,7 +8,7 @@ import { Box } from '@chakra-ui/react';
 export default function PDFViewer({ data }) {
 	return (
 		<Box mt={10}>
-			<Worker workerUrl="https://unpkg.com/pdfjs-dist@2.6.347/build/pdf.worker.min.js">
+			<Worker workerUrl="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.9.359/build/pdf.min.js">
 				<Viewer fileUrl={data} />
 			</Worker>
 		</Box>
