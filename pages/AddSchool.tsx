@@ -32,9 +32,9 @@ function AddSchool({ admin }) {
 		Slug: Yup.mixed().required('Required'),
 	});
 
-	const [logourl, setLogourl] = useState(null);
+	const [logoUrl, setLogoUrl] = useState(null);
 	const getFile = (url) => {
-		setLogourl(url);
+		setLogoUrl(url);
 	};
 	const toast = useToast();
 
@@ -61,7 +61,7 @@ function AddSchool({ admin }) {
 			.collection('schools')
 			.doc(slug)
 			.set({
-				logourl,
+				logourl: logoUrl,
 				name: school,
 				slug,
 			})
@@ -120,7 +120,7 @@ function AddSchool({ admin }) {
 										variant="outline"
 										onClick={formik.submitForm}
 										type="submit"
-										disabled={!formik.isValid || logourl === null}
+										disabled={!formik.isValid || logoUrl === null}
 									>
 										Submit
 									</Button>

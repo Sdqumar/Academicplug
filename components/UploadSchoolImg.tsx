@@ -36,7 +36,7 @@ const UploadSchoolImg = ({ getFile, formik }) => {
 			seterror('*Please Upload a png or jpeg image');
 		} else if (file.type !== 'image/png' && file.type !== 'image/jpeg') {
 			seterror('*Please Upload a png or jpeg image');
-		} else if (file.size > 100200) {
+		} else if (file.size > 500000) {
 			seterror('*Upload file less than 100kb file');
 		} else {
 			seterror(false);

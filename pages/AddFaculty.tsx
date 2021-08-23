@@ -8,7 +8,7 @@ import PrivateRoute from '../components/PrivateRoute';
 //initialize firestore
 const firestore = firebase.firestore();
 
-export async function getStaticProps(context) {
+export async function getServerSideProps(context) {
 	const dataref = await firestore.collection('schools').get();
 
 	const id = dataref.docs.map((doc) => doc.id);

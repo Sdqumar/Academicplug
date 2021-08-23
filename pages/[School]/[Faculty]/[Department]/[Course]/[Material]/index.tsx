@@ -118,7 +118,6 @@ const School = ({ data, admins }) => {
 				console.error('Error removing document: ', error);
 			});
 	};
-	console.log(isAdmin);
 
 	return (
 		<Container maxW="90%">
