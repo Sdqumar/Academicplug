@@ -1,60 +1,50 @@
-import firebase from "../../config/firebase-config";
-import { Container, Heading } from "@chakra-ui/react";
-import GridOne from "../../components/GridOne";
-import { useRouter } from "next/router";
-import { GetStaticPaths } from "next";
+import firebase from '../../config/firebase-config';
+import { Container, Heading } from '@chakra-ui/react';
+import GridOne from '../../components/GridOne';
+import { GetStaticPaths } from 'next';
+import { useRouter } from 'next/router';
 
 const firestore = firebase.firestore();
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = [
-    {
-      params: { School: "Federal-University-Minna" },
-    },
-  ];
-  return { paths, fallback: "blocking" };
+	const paths = [
+		{
+			params: { School: 'Futminna' },
+		},
+	];
+	return { paths, fallback: 'blocking' };
 };
 
 export async function getStaticProps(context) {
-  const school = context.params.School;
-  const schoolref = await firestore
-    .collection("Schools")
-    .doc(school.replace(/-/g, " "))
-    .get();
-  const result = schoolref.data();
-  const data = result === undefined ? result === null : result;
+	const school = context.params.School;
 
-  return {
-    props: {
-      data,
-    },
-    revalidate: 1,
-  };
-}
-export interface faculty {
-  Name: string;
-}
+	const dataRef = await firestore
+		.collection('schools')
+		.doc(school)
+		.collection('faculty')
+		.get();
+	const result = dataRef.docs.map((doc) => doc.data());
+	const data = result === undefined ? result === null : result;
 
-interface result {
-  Facluties: [faculty];
-  Name: string;
-  logourl: string;
+	return {
+		props: {
+			data,
+		},
+		revalidate: 10,
+	};
 }
 
 const School = ({ data }) => {
-  if (!data) {
-    const router = useRouter();
-    router.push("/404");
-  }
-
-  return (
-    <Container maxW="90%">
-      <Heading size="lg" fontSize="50px">
-        {data.Name}
-      </Heading>
-      <GridOne data={data} />
-    </Container>
-  );
+	const router = useRouter();
+	const school = router.query.school;
+	return (
+		<>
+			<Heading d="block" size="lg" fontSize="50px">
+				{school}
+			</Heading>
+			<GridOne data={data} />
+		</>
+	);
 };
 
 export default School;

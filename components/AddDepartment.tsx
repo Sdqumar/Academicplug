@@ -9,42 +9,40 @@ import { useRouter } from 'next/router';
 //initialize firestore
 const firestore = firebase.firestore();
 
-function AddCourse({ School, Faculty, Department }) {
+function AddDepartment() {
 	const router = useRouter();
 
 	const initialValues = {
-		Course: '',
+		department: '',
 	};
 	const validationSchema = Yup.object().shape({
-		Course: Yup.mixed().required('Required'),
+		department: Yup.mixed().required('Required'),
 	});
 
 	const toast = useToast();
 	const displayToast = () => {
 		toast({
-			title: 'Course Added Successfully',
+			title: 'Department Added Successfully',
 			position: 'top',
 			status: 'success',
 			duration: 5000,
 			isClosable: true,
 		});
 	};
+	const school: string = router.query.School;
+	const faculty: string = router.query.Faculty;
 
 	const onSubmit = (values, actions) => {
-		const Course = values.Course;
+		const department = values.department;
 		actions.setSubmitting(true);
 
 		firestore
 			.collection('schools')
-			.doc(School)
-			.collection('courses')
-			.doc(Course)
-			.set({
-				Course,
-				School,
-				Faculty,
-				Department,
-				Materials: [],
+			.doc(school)
+			.collection('faculty')
+			.doc(faculty)
+			.update({
+				department: firebase.firestore.FieldValue.arrayUnion(department),
 			})
 			.then(() => {
 				displayToast();
@@ -71,8 +69,8 @@ function AddCourse({ School, Faculty, Department }) {
 								<FormikControl
 									control="chakraInput"
 									type="name"
-									label="Course Name"
-									name="Course"
+									label="Department Name"
+									name="department"
 								/>
 							</Box>
 
@@ -94,4 +92,4 @@ function AddCourse({ School, Faculty, Department }) {
 		</Flex>
 	);
 }
-export default AddCourse;
+export default AddDepartment;

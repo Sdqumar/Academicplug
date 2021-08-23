@@ -1,109 +1,130 @@
-import firebase from "../../../../config/firebase-config";
-import { Container, Heading, Flex, Box, Button } from "@chakra-ui/react";
-import CoursesGrid from "../../../../components/CoursesGrid";
-import { useRouter } from "next/router";
-import AddCourse from "../../../../components/AddCourse";
-import { useRef } from "react";
-import Link from "next/link";
+import firebase from '../../../../config/firebase-config';
+import { Container, Heading, Flex, Box, Button } from '@chakra-ui/react';
+import CoursesGrid from '../../../../components/CoursesGrid';
+import { useRouter } from 'next/router';
+import AddCourse from '../../../../components/AddCourse';
+import { useRef } from 'react';
+import Link from 'next/link';
 
 const firestore = firebase.firestore();
 
 export async function getStaticPaths() {
-  const paths = [
-    {
-      params: {
-        School: "Federal-University-Minna",
-        Faculty: "Education",
-        Department: "Health-Education",
-      },
-    },
-  ];
+	const paths = [
+		{
+			params: {
+				School: 'Futminna',
+				Faculty: 'Education',
+				Department: 'Health-Education',
+			},
+		},
+	];
 
-  return { paths, fallback: "blocking" };
+	return { paths, fallback: 'blocking' };
 }
 
 export async function getStaticProps(context) {
-  const school = context.params.School;
-  const faculty = context.params.Faculty;
-  const department = context.params.Department;
+	const school = context.params.School;
+	const faculty = context.params.Faculty;
+	const department = context.params.Department;
 
-  const schoolref = await firestore
-    .collection("Schools")
-    .doc(school.replace(/-/g, " "))
-    .collection("Courses")
-    .where("Department", "==", department.replace(/-/g, " "))
-    .get();
+	const schoolRef = await firestore
+		.collection('schools')
+		.doc(school.replace(/-/g, ' '))
+		.collection('courses')
+		.where('Department', '==', department.replace(/-/g, ' '))
+		.get();
 
-  const result = schoolref.docs.map((item) => item.id);
-  const data = result === undefined || result.length <= 0 ? null : result;
+	const adminRef = await firestore
+		.collection('schools')
+		.doc(school.replace(/-/g, ' '))
+		.collection('admin')
+		.doc('admin')
+		.get();
 
-  return {
-    props: {
-      data,
-    },
-  };
+	const admins = adminRef.data().admins;
+
+	const data = schoolRef.docs.map((item) => item.id);
+
+	if (!data) {
+		return {
+			notFound: true,
+		};
+	}
+	return {
+		props: {
+			data,
+			admins,
+		},
+		revalidate: 10,
+	};
 }
 
-const School = ({ data }) => {
-  const router = useRouter();
-  if (!data) {
-  }
+const School = ({ data, admins }) => {
+	const auth = firebase.auth();
 
-  const school = router.query.School.toString().replace(/-/g, " ");
+	const uid = auth?.currentUser?.uid;
 
-  const faculty = router.query.Faculty.toString().replace(/-/g, " ");
-  const department = router.query.Department.toString().replace(/-/g, " ");
+	let isAdmin = admins.some(
+		(item) => item == uid || uid == process.env.NEXT_PUBLIC_SUPER_ADMIN
+	);
 
-  const schoolUrl = `/${school.replace(/\s/g, "-")}`;
-  const facultyUrl = `/${faculty.replace(/\s/g, "-")}`;
-  const departmentUrl = `/${department.replace(/\s/g, "-")}`;
+	const router = useRouter();
 
-  const url = schoolUrl + facultyUrl + departmentUrl;
+	const school = router.query.School.toString().replace(/-/g, ' ');
 
-  const boxRef = useRef(null);
+	const faculty = router.query.Faculty.toString().replace(/-/g, ' ');
+	const department = router.query.Department.toString().replace(/-/g, ' ');
 
-  const onClick = () => {
-    boxRef.current.style.display = "block";
-  };
-  const closeBox = () => {
-    boxRef.current.style.display = "none";
-  };
+	const schoolUrl = `/${school.replace(/\s/g, '-')}`;
+	const facultyUrl = `/${faculty.replace(/\s/g, '-')}`;
+	const departmentUrl = `/${department.replace(/\s/g, '-')}`;
 
-  return (
-    <Container maxW="90%">
-      <Button mt="1rem" onClick={onClick}>
-        Add Course
-      </Button>
-      <Box
-        d="none"
-        left="2rem"
-        boxShadow="base"
-        rounded="md"
-        ref={boxRef}
-        pos="absolute"
-        bg="#fff"
-        width="95vw"
-        top="6rem"
-      >
-        <Flex justify="space-between" mt="1rem">
-          <Heading size="lg" fontSize="30px" m="1rem">
-            Add Course
-          </Heading>
-          <Button color="red" float="right" m="1rem" onClick={closeBox}>
-            Close
-          </Button>
-        </Flex>
+	const url = schoolUrl + facultyUrl + departmentUrl;
 
-        <AddCourse School={school} Faculty={faculty} Department={department} />
-      </Box>
+	const boxRef = useRef(null);
 
-      <Heading size="lg" fontSize="50px">
-        <Link href={schoolUrl}>{school}</Link> -{" "}
-        <Link href={schoolUrl + facultyUrl}>{faculty}</Link> - {department}
-      </Heading>
-      <CoursesGrid list={data} url={url} />
-    </Container>
-  );
+	const onClick = () => {
+		boxRef.current.style.display = 'block';
+	};
+	const closeBox = () => {
+		boxRef.current.style.display = 'none';
+	};
+
+	return (
+		<>
+			<Button mt="1rem" onClick={onClick} d={isAdmin ? 'block' : 'none'}>
+				Add Course
+			</Button>
+			<Box
+				d="none"
+				left="2rem"
+				boxShadow="base"
+				rounded="md"
+				ref={boxRef}
+				pos="absolute"
+				bg="#fff"
+				width="95vw"
+				top="6rem"
+			>
+				<Flex justify="space-between" mt="1rem">
+					<Heading size="lg" fontSize="30px" m="1rem">
+						Add Course
+					</Heading>
+					<Button color="red" float="right" m="1rem" onClick={closeBox}>
+						Close
+					</Button>
+				</Flex>
+
+				<AddCourse School={school} Faculty={faculty} Department={department} />
+			</Box>
+
+			<Heading size="lg" fontSize="50px">
+				<Link href={schoolUrl}>{school}</Link> -{' '}
+				<Link href={schoolUrl + facultyUrl}>{faculty}</Link> - {department}
+			</Heading>
+			<CoursesGrid list={data} url={url} />
+		</>
+	);
 };
 
 export default School;

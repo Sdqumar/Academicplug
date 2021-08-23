@@ -1,86 +1,109 @@
-import firebase from "../../../config/firebase-config";
-import { Container, Heading, Flex, VStack, Box } from "@chakra-ui/react";
-import CoursesGrid from "../../../components/CoursesGrid";
-import { useRouter } from "next/router";
-import Link from "next/link";
+import firebase from '../../../config/firebase-config';
+import { Container, Heading, Flex, Button, Box } from '@chakra-ui/react';
+import CoursesGrid from '../../../components/CoursesGrid';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+import { useRef } from 'react';
+import AddDepartment from 'components/AddDepartment';
 
 const firestore = firebase.firestore();
 
 export async function getStaticPaths() {
-  const paths = [
-    {
-      params: {
-        School: "Federal-University-Minna",
-        Faculty: "Education",
-      },
-    },
-  ];
+	const paths = [
+		{
+			params: {
+				School: 'Futminna',
+				Faculty: 'Education',
+			},
+		},
+	];
 
-  return { paths, fallback: "blocking" };
+	return { paths, fallback: 'blocking' };
 }
 
 export async function getStaticProps(context) {
-  const school = context.params.School;
-  const Faculty = context.params.Faculty;
+	const school = context.params.School;
+	const faculty = context.params.Faculty;
 
-  const schoolref = await firestore
-    .collection("Schools")
-    .doc(school.replace(/-/g, " "))
-    .get();
+	const dataRef = await firestore
+		.collection('schools')
+		.doc(school)
+		.collection('faculty')
+		.doc(faculty)
+		.get();
 
-  const result = schoolref.data();
+	const data = dataRef.data();
 
-  const isFaculty = Object.keys(result).includes(Faculty);
-  const data = result === undefined || !isFaculty ? result === null : result;
-  return {
-    props: {
-      data,
-    },
-  };
+	return {
+		props: {
+			data,
+		},
+		revalidate: 10,
+	};
 }
 
-interface faculty {
-  Name: string;
-}
-
-interface result {
-  Facluties: [faculty];
-  Name: string;
-  logourl: string;
-}
 const School = ({ data }) => {
-  const router = useRouter();
+	const router = useRouter();
 
-  if (!data) {
-    const router = useRouter();
-    router.push("/404");
-  }
-  const school = router.query.School.toString().replace(/-/g, " ");
+	// if (!data) {
+	// 	const router = useRouter();
+	// 	router.push('/404');
+	// }
+	const school = router.query.School.toString().replace(/-/g, ' ');
 
-  const faculty = router.query.Faculty.toString().replace(/-/g, " ");
+	const faculty = router.query.Faculty.toString().replace(/-/g, ' ');
 
-  const list: string[] = Object.keys(data).filter(
-    (item) => item !== "Name" && item !== "logourl"
-  );
-  const departmentList = [];
-  list.forEach((item) => {
-    if (faculty === item) departmentList.push(...data[item]);
-  });
-  const schoolUrl = `/${school.replace(/\s/g, "-")}`;
-  const facultyUrl = `/${faculty.replace(/\s/g, "-")}`;
+	const schoolUrl = `/${school.replace(/\s/g, '-')}`;
+	const facultyUrl = `/${faculty.replace(/\s/g, '-')}`;
 
-  const url = schoolUrl + facultyUrl;
+	const url = schoolUrl + facultyUrl;
+	const boxRef = useRef(null);
 
-  return (
-    data && (
-      <Container maxW="90%">
-        <Heading size="lg" fontSize="50px">
-          <Link href={schoolUrl}>{school}</Link> - {faculty}
-        </Heading>
-        <CoursesGrid list={departmentList} url={url} />
-      </Container>
-    )
-  );
+	const onClick = () => {
+		boxRef.current.style.display = 'block';
+	};
+	const closeBox = () => {
+		boxRef.current.style.display = 'none';
+	};
+
+	const auth = firebase.auth();
+
+	const uid = auth?.currentUser?.uid;
+	const isAdmin = uid == process.env.NEXT_PUBLIC_SUPER_ADMIN;
+	return (
+		data && (
+			<>
+				<Button mt="1rem" onClick={onClick} d={isAdmin ? 'block' : 'none'}>
+					Add Department
+				</Button>
+				<Box
+					d="none"
+					left="2rem"
+					boxShadow="base"
+					rounded="md"
+					ref={boxRef}
+					pos="absolute"
+					bg="#fff"
+					width="95vw"
+					top="6rem"
+				>
+					<Flex justify="space-between" mt="1rem">
+						<Heading size="lg" fontSize="30px" m="1rem">
+							Add Department
+						</Heading>
+						<Button color="red" float="right" m="1rem" onClick={closeBox}>
+							Close
+						</Button>
+					</Flex>
+					<AddDepartment />
+				</Box>
+				<Heading size="lg" fontSize="50px">
+					<Link href={schoolUrl}>{school}</Link> - {faculty}
+				</Heading>
+				<CoursesGrid list={data?.department} url={url} />
+			</>
+		)
+	);
 };
 
 export default School;
