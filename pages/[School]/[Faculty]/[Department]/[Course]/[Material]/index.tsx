@@ -14,7 +14,7 @@ export async function getStaticPaths() {
 				School: 'Futminna',
 				Faculty: 'Education',
 				Department: 'Health-Education',
-				Course: 'HED-112',
+				Course: 'HED-211',
 				Material: 'Human Biology',
 			},
 		},
