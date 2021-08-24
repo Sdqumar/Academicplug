@@ -26,9 +26,8 @@ function RegistrationForm() {
 		password: Yup.string()
 			.required('Required')
 			.matches(lowercaseRegex, 'One lowercase required!')
-			.matches(uppercaseRegex, 'One uppercase required!')
 			.matches(numericRegex, 'One number required!')
-			.min(8, 'Minimum 8 character required!'),
+			.min(4, 'Minimum 4 character required!'),
 		confirmPassword: Yup.string()
 			.oneOf([Yup.ref('password'), ''], 'Passwords must match')
 			.required('Required'),
@@ -87,8 +86,14 @@ function RegistrationForm() {
 		>
 			{(formik) => {
 				return (
-					<Flex align="center" justify="center" h="content-fit" m="2rem 0">
-						<Text align="center" fontSize="2rem" m="0 2rem">
+					<Flex
+						align="center"
+						flex-wrap="wrap"
+						justify="center"
+						h="content-fit"
+						m="2rem 0"
+					>
+						<Text align="center" fontSize="2rem" m="0 2rem" mb="2rem">
 							REGISTER
 						</Text>
 						<Form>
