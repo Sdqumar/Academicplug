@@ -4,18 +4,19 @@ import Link from 'next/link';
 const CoursesGrid = ({ list, url }) => {
 	return (
 		<>
-			<Flex m="auto" justify="center">
+			<Flex>
 				<Flex
 					mt="1rem"
+					flexDir="column"
 					wrap="wrap"
-					justify={{ md: 'space-between', base: 'center' }}
+					justify="start"
+					w="fit-content"
 				>
 					{list?.map((item) => {
 						return (
 							<Link href={`${url}/${item.replace(/\s/g, '-')}`} key={item}>
 								<Flex
-									w="14rem"
-									mr="20px"
+									m="0 5px"
 									bg="rgb(251 174 23)"
 									padding="0.8rem"
 									flexDirection="column"
@@ -27,7 +28,7 @@ const CoursesGrid = ({ list, url }) => {
 										m="auto"
 										size="lg"
 										align="center"
-										width="80%"
+										w="80%"
 										border="3px solid"
 									>
 										{item}

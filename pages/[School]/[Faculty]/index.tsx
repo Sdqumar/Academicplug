@@ -97,7 +97,7 @@ const School = ({ data }) => {
 					</Flex>
 					<AddDepartment />
 				</Box>
-				<Heading size="lg" fontSize="50px">
+				<Heading size="lg" fontSize="47px" m="auto">
 					<Link href={schoolUrl}>{school}</Link> - {faculty}
 				</Heading>
 				<CoursesGrid list={data?.department} url={url} />

@@ -121,8 +121,11 @@ const School = ({ data, admins }) => {
 
 	return (
 		<Container maxW="90%">
-			<Flex justify="space-between" mt="1rem">
-				<Heading size="lg" fontSize="50px" w="95%">
+			<Box mt="1rem">
+				<Box d={isAdmin ? 'block' : 'none'}>
+					<DeleteButton deleteFunction={handleDelete} name="Material" />
+				</Box>
+				<Heading size="lg" fontSize="47px" w="95%" m="auto" mt="1rem">
 					<Link href={schoolUrl}>{school}</Link> -{' '}
 					<Link href={schoolUrl + facultyUrl}>{faculty}</Link> -{' '}
 					<Link href={schoolUrl + facultyUrl + departmentUrl}>
@@ -134,11 +137,7 @@ const School = ({ data, admins }) => {
 					</Link>
 					- {material}
 				</Heading>
-
-				<Box d={isAdmin ? 'flex' : 'none'}>
-					<DeleteButton deleteFunction={handleDelete} name="Material" />
-				</Box>
-			</Flex>
+			</Box>
 			<PDFViewer data={pdfurl} />
 		</Container>
 	);

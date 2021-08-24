@@ -88,10 +88,10 @@ function RegistrationForm() {
 				return (
 					<Flex
 						align="center"
-						flex-wrap="wrap"
 						justify="center"
 						h="content-fit"
 						m="2rem 0"
+						flex-wrap="wrap"
 					>
 						<Text align="center" fontSize="2rem" m="0 2rem" mb="2rem">
 							REGISTER

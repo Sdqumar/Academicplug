@@ -118,8 +118,8 @@ const School = ({ data, admins }) => {
 				<AddCourse School={school} Faculty={faculty} Department={department} />
 			</Box>
 
-			<Heading size="lg" fontSize="50px">
-				<Link href={schoolUrl}>{school}</Link> -{' '}
+			<Heading size="lg" fontSize="47px" m="auto">
+				<Link href={schoolUrl}>{school}</Link> -
 				<Link href={schoolUrl + facultyUrl}>{faculty}</Link> - {department}
 			</Heading>
 			<CoursesGrid list={data} url={url} />

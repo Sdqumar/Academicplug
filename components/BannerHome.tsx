@@ -20,7 +20,9 @@ const BannerHome: React.FC<BannerHomeProps> = () => {
 					color="rgb(251 174 23)"
 					width={{ base: '100%', md: '27rem' }}
 				>
-					<Heading size="2xl">Courses for Nigerian Students</Heading>
+					<Heading size="2xl" fontSize={{ base: '2.8rem', md: '3rem' }}>
+						Courses for Nigerian Students
+					</Heading>
 				</Box>
 			</Box>
 		</Flex>

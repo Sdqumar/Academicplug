@@ -23,7 +23,7 @@ const Hearder = () => {
 	return (
 		<Flex background="#fbae17" w="100%" justify="space-between" align="center">
 			<Link href="/">
-				<Box ml="10px" alignItems="center" pb="15px" cursor="pointer">
+				<Box alignItems="center" pb="15px" cursor="pointer" ml="5rem">
 					<Icon
 						as={IoSchoolSharp}
 						position="relative"
@@ -45,7 +45,7 @@ const Hearder = () => {
 				{user === null || undefined ? (
 					<Flex
 						w="7rem"
-						justify="flex-end"
+						justify="space-around"
 						align-items="center"
 						fontWeight="600"
 					>
@@ -53,7 +53,7 @@ const Hearder = () => {
 						<Link href="/RegistrationForm">Register</Link>
 					</Flex>
 				) : (
-					<Flex align="center" w="13.5rem" justify="flex-end">
+					<Flex align="center" w="13.5rem" justify="space-around">
 						<Flex d={{ sm: 'flex', base: 'none' }}>
 							<Text mr="5px">Welcome</Text>
 							<Text fontWeight="600">{user?.displayName}</Text>

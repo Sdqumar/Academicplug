@@ -37,10 +37,11 @@ export async function getStaticProps(context) {
 const School = ({ data }) => {
 	const router = useRouter();
 	const school = router.query.school;
+	const School = router.query.School;
 	return (
 		<>
-			<Heading d="block" size="lg" fontSize="4vw">
-				{school}
+			<Heading d="block" size="lg" fontSize="47px">
+				{school ? school : School}
 			</Heading>
 			<GridOne data={data} />
 		</>

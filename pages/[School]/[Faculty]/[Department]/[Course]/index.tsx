@@ -123,7 +123,7 @@ const School = ({ result, admins }) => {
 
 	return (
 		<>
-			<Flex justify="space-between" mt="1rem" d={isAdmin ? 'flex' : 'none'}>
+			<Flex justify="space-evenly" mt="1rem" d={isAdmin ? 'flex' : 'none'}>
 				<Button onClick={onClick}>Add Material</Button>
 				<DeleteButton deleteFunction={handleDelete} name="Course" />
 			</Flex>
@@ -143,13 +143,14 @@ const School = ({ result, admins }) => {
 				</Button>
 				<AddMaterial />
 			</Box>
-			<Heading size="lg" fontSize="50px" w="95%">
+			<Heading size="lg" fontSize="47px" w="95%">
 				<Link href={schoolUrl}>{school}</Link> -{' '}
 				<Link href={schoolUrl + facultyUrl}>{faculty}</Link> -{' '}
 				<Link href={schoolUrl + facultyUrl + departmentUrl}>{department}</Link>{' '}
 				- {course}
-				<CoursesGrid list={list} url={url} />
 			</Heading>
+
+			<CoursesGrid list={list} url={url} />
 		</>
 	);
 };
