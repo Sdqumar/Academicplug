@@ -37,9 +37,11 @@ function MyApp({ Component, pageProps }) {
 						justify="space-between"
 						maxW="100vw"
 						height="100vh"
+						minW="fit-content"
 					>
 						<Hearder />
-						<Box flex="auto" w="92vw" m="auto">
+
+						<Box flex="auto" w="92vw" m="auto" mt="1rem">
 							<Component {...pageProps} />
 						</Box>
 						<Footer />

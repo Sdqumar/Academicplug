@@ -21,7 +21,7 @@ const Hearder = () => {
 	};
 
 	return (
-		<Flex background="#fbae17" maxw="100%" justify="space-around">
+		<Flex background="#fbae17" w="100%" justify="space-around" align="center">
 			<Link href="/">
 				<Box ml="10" alignItems="center" pb="15px" cursor="pointer">
 					<Icon
@@ -43,7 +43,12 @@ const Hearder = () => {
 
 			<Flex className="log-reg">
 				{user === null || undefined ? (
-					<Flex w="7rem" justify="space-between" fontWeight="600">
+					<Flex
+						w="7rem"
+						justify="space-between"
+						align-items="center"
+						fontWeight="600"
+					>
 						<Link href="/LoginForm">Login</Link>
 						<Link href="/RegistrationForm">Register</Link>
 					</Flex>

@@ -69,7 +69,7 @@ const School = ({ data }) => {
 	const auth = firebase.auth();
 
 	const uid = auth?.currentUser?.uid;
-	const isAdmin = uid == process.env.NEXT_PUBLIC_SUPER_ADMIN;
+	const isAdmin = uid == 'x1Fnwo5WimP9MwIjx4EWeQlyXpE3';
 	return (
 		data && (
 			<>

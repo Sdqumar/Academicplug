@@ -59,7 +59,7 @@ const School = ({ data, admins }) => {
 	const uid = auth?.currentUser?.uid;
 
 	const isAdmin = admins.some(
-		(item) => item == uid || uid == process.env.NEXT_PUBLIC_SUPER_ADMIN
+		(item) => item == uid || uid == 'x1Fnwo5WimP9MwIjx4EWeQlyXpE3'
 	);
 
 	const router = useRouter();

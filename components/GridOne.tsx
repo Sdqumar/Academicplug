@@ -17,7 +17,7 @@ const GridOne: React.FC<GridProps> = ({ data }) => {
 					mt="1rem"
 					width="100%"
 					wrap="wrap"
-					justify={{ md: 'flex-start', sm: 'center' }}
+					justify={{ md: 'flex-start', base: 'center' }}
 				>
 					{data.map(({ name }) => {
 						return (

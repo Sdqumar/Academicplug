@@ -8,7 +8,7 @@ const PrivateRoute = (WrappedComponent) => {
 		const Router = useRouter();
 		const user = useContext(AuthContext);
 
-		const isAdmin = user.uid == process.env.NEXT_PUBLIC_SUPER_ADMIN;
+		const isAdmin = user.uid == ' x1Fnwo5WimP9MwIjx4EWeQlyXpE3';
 
 		if (typeof window !== 'undefined') {
 			// If there is no access token we redirect to "/" page.

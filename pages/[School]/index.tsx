@@ -39,7 +39,7 @@ const School = ({ data }) => {
 	const school = router.query.school;
 	return (
 		<>
-			<Heading d="block" size="lg" fontSize="50px">
+			<Heading d="block" size="lg" fontSize="4vw">
 				{school}
 			</Heading>
 			<GridOne data={data} />

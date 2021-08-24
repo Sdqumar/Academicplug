@@ -4,15 +4,7 @@ export interface FooterProps {}
 
 const Footer: React.FC<FooterProps> = () => {
 	return (
-		<Flex
-			w="100%"
-			position="sticky"
-			bottom="0"
-			bg="#000"
-			color="#fbae17"
-			justify="space-around"
-			p="0.7rem"
-		>
+		<Flex w="100%" bg="#000" color="#fbae17" justify="space-around" p="0.7rem">
 			<Text>ACADEMIC PLUG</Text>
 			<Text>2021</Text>
 		</Flex>

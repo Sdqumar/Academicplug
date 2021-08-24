@@ -17,7 +17,7 @@ const SchoolGridList: React.FC<SchoolGridListProps> = ({ schools }) => {
 			<Flex
 				maxW="60rem"
 				wrap="wrap"
-				justify={{ md: 'space-evenly', sm: 'center' }}
+				justify={{ md: 'space-evenly', base: 'center' }}
 			>
 				{schools.map((school) => {
 					return (
