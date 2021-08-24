@@ -21,7 +21,7 @@ const Hearder = () => {
 	};
 
 	return (
-		<Flex background="#fbae17" w="100%" justify="space-around" align="center">
+		<Flex background="#fbae17" w="100%" justify="space-between" align="center">
 			<Link href="/">
 				<Box ml="10" alignItems="center" pb="15px" cursor="pointer">
 					<Icon
@@ -54,7 +54,7 @@ const Hearder = () => {
 					</Flex>
 				) : (
 					<Flex align="center" w="13.5rem" justify="space-between">
-						<Flex>
+						<Flex d={{ sm: 'flex', base: 'none' }}>
 							<Text mr="5px">Welcome</Text>
 							<Text fontWeight="600">{user?.displayName}</Text>
 						</Flex>

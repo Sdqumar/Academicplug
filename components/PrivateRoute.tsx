@@ -8,7 +8,7 @@ const PrivateRoute = (WrappedComponent) => {
 		const Router = useRouter();
 		const user = useContext(AuthContext);
 
-		const isAdmin = user.uid == ' x1Fnwo5WimP9MwIjx4EWeQlyXpE3';
+		const isAdmin = user?.uid == 'x1Fnwo5WimP9MwIjx4EWeQlyXpE3';
 
 		if (typeof window !== 'undefined') {
 			// If there is no access token we redirect to "/" page.
@@ -23,7 +23,7 @@ const PrivateRoute = (WrappedComponent) => {
 
 			// If this is an accessToken we just render the component that was passed with all its props
 
-			return isAdmin && <WrappedComponent {...props} />;
+			return <WrappedComponent {...props} />;
 		}
 
 		// If we are on server, return null
