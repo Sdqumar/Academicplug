@@ -7,11 +7,11 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 
 export default function PDFViewer({ data }) {
 	const [width, setWidth] = useState(window.innerWidth);
-	const [scale, setScale] = useState(0.8);
+	const [scale, setScale] = useState(0.75);
 
-	console.log(width);
 	useEffect(() => {
 		width > 1200 && setScale(2);
+		width > 800 && setScale(1);
 	}, []);
 	const [numPages, setNumPages] = useState(null);
 	const [pageNumber, setPageNumber] = useState(1);
@@ -34,7 +34,7 @@ export default function PDFViewer({ data }) {
 	}
 
 	return (
-		<Box width="100vw" m="auto">
+		<Box width="100vw">
 			<Document file={data} onLoadSuccess={onDocumentLoadSuccess}>
 				<Page
 					scale={scale}

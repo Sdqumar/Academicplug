@@ -18,6 +18,7 @@ a:hover {
 	box-sizing: border-box;
 }
 .react-pdf__Page__canvas {
-	margin: 0 -1rem;
+	width: fit-content;
+	margin-left: -2rem;
 	overflow: hidden;
 }

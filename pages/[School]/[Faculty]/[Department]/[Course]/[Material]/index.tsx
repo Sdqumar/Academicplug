@@ -118,12 +118,12 @@ const School = ({ data, admins }) => {
 	};
 
 	return (
-		<Container maxW="95%" overflow="hidden">
+		<Container mw={{ base: '98vw', md: '92vw' }} overflow="hidden">
 			<Box mt="1rem">
 				<Box d={isAdmin ? 'block' : 'none'}>
 					<DeleteButton deleteFunction={handleDelete} name="Material" />
 				</Box>
-				<Heading size="lg" fontSize="47px" w="95%" m="auto" mt="1rem">
+				<Heading size="lg" fontSize="47px" mt="1rem">
 					<Link href={schoolUrl}>{school}</Link> -{' '}
 					<Link href={schoolUrl + facultyUrl}>{faculty}</Link> -{' '}
 					<Link href={schoolUrl + facultyUrl + departmentUrl}>

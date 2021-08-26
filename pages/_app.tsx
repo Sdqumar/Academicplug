@@ -42,7 +42,12 @@ function MyApp({ Component, pageProps }) {
 					>
 						<Hearder />
 
-						<Box flex="auto" w="92vw" m="auto" mt="1rem">
+						<Box
+							flex="auto"
+							w={{ base: '100vw', md: '92vw' }}
+							m="auto"
+							mt="1rem"
+						>
 							<Component {...pageProps} />
 						</Box>
 						<Footer />
