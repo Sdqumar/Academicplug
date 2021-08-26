@@ -29,27 +29,27 @@ export async function getStaticProps(context) {
 
 	const schoolRef = await firestore
 		.collection('schools')
-		.doc(school.replace(/-/g, ' '))
+		.doc(school)
 		.collection('courses')
 		.where('Department', '==', department.replace(/-/g, ' '))
 		.get();
 
 	const adminRef = await firestore
 		.collection('schools')
-		.doc(school.replace(/-/g, ' '))
+		.doc(school)
 		.collection('admin')
 		.doc('admin')
 		.get();
 
-	const admins = adminRef.data().admins;
+	let admins = adminRef?.data()?.admins;
 
-	const data = schoolRef.docs.map((item) => item.id);
+	let data = schoolRef.docs.map((item) => item.id);
 
-	if (!data) {
-		return {
-			notFound: true,
-		};
-	}
+	// if (data === [] && !admins) {
+	// 	return {
+	// 		notFound: true,
+	// 	};
+	// }
 	return {
 		props: {
 			data,
@@ -64,9 +64,7 @@ const School = ({ data, admins }) => {
 
 	const uid = auth?.currentUser?.uid;
 
-	let isAdmin = admins.some(
-		(item) => item == uid || uid == 'x1Fnwo5WimP9MwIjx4EWeQlyXpE3'
-	);
+	let isAdmin = admins?.some((item) => item == uid);
 
 	const router = useRouter();
 
@@ -122,7 +120,7 @@ const School = ({ data, admins }) => {
 				<Link href={schoolUrl}>{school}</Link> -
 				<Link href={schoolUrl + facultyUrl}>{faculty}</Link> - {department}
 			</Heading>
-			<CoursesGrid list={data} url={url} />
+			<CoursesGrid flexDir="row" list={data} url={url} />
 		</>
 	);
 };

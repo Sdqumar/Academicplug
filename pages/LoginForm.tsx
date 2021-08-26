@@ -83,7 +83,13 @@ function LoginForm() {
 				</Button>
 				<ForgetPassword />
 			</Box>
-			<Flex align="center" justify="center" h="content-fit" m="2rem 0">
+			<Box
+				align="center"
+				justify="center"
+				maxW="18rem"
+				h="content-fit"
+				m="auto"
+			>
 				<Text align="center" fontSize="2rem" m="0 2rem">
 					LOGIN
 				</Text>
@@ -132,7 +138,7 @@ function LoginForm() {
 						);
 					}}
 				</Formik>
-			</Flex>
+			</Box>
 		</>
 	);
 }

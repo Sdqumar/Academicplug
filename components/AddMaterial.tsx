@@ -15,6 +15,7 @@ function AddMaterial() {
 
 	const [pdfurl, setPdfurl] = useState(null);
 
+	const slug = router.query.School;
 	const school = router.query.School.toString().replace(/-/g, ' ');
 	const faculty = router.query.Faculty.toString().replace(/-/g, ' ');
 	const department = router.query.Department.toString().replace(/-/g, ' ');
@@ -48,7 +49,7 @@ function AddMaterial() {
 		actions.setSubmitting(true);
 		firestore
 			.collection('schools')
-			.doc(school)
+			.doc(slug)
 			.collection('courses')
 			.doc(course)
 			.update({

@@ -5,6 +5,7 @@ import firebase from '../config/firebase-config';
 import Hearder from '../components/Header';
 import AuthContext from '../components/AuthContext';
 import Footer from '../components/Footer';
+import '../styles/globals.css';
 
 import { extendTheme } from '@chakra-ui/react';
 const colors = {

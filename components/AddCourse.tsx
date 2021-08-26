@@ -11,7 +11,7 @@ const firestore = firebase.firestore();
 
 function AddCourse({ School, Faculty, Department }) {
 	const router = useRouter();
-
+	const slug = router.query.School;
 	const initialValues = {
 		Course: '',
 	};
@@ -36,7 +36,7 @@ function AddCourse({ School, Faculty, Department }) {
 
 		firestore
 			.collection('schools')
-			.doc(School)
+			.doc(slug)
 			.collection('courses')
 			.doc(Course)
 			.set({

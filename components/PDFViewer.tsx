@@ -1,14 +1,70 @@
-import { Worker, Viewer } from '@react-pdf-viewer/core';
-import '@phuocng/react-pdf-viewer/cjs/react-pdf-viewer.css';
+import { Document, Page } from 'react-pdf';
+import { pdfjs } from 'react-pdf';
+import { Box, Button, Flex } from '@chakra-ui/react';
+import React, { useState, useEffect } from 'react';
 
-import { Box } from '@chakra-ui/react';
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 export default function PDFViewer({ data }) {
+	const [width, setWidth] = useState(window.innerWidth);
+	const [scale, setScale] = useState(0.8);
+
+	console.log(width);
+	useEffect(() => {
+		width > 1200 && setScale(2);
+	}, []);
+	const [numPages, setNumPages] = useState(null);
+	const [pageNumber, setPageNumber] = useState(1);
+
+	function onDocumentLoadSuccess({ numPages }) {
+		setNumPages(numPages);
+		setPageNumber(1);
+	}
+
+	function changePage(offset) {
+		setPageNumber((prevPageNumber) => prevPageNumber + offset);
+	}
+
+	function previousPage() {
+		changePage(-1);
+	}
+
+	function nextPage() {
+		changePage(1);
+	}
+
 	return (
-		<Box mt={10}>
-			<Worker workerUrl="https://unpkg.com/pdfjs-dist@2.4.456/build/pdf.worker.min.js">
-				<Viewer fileUrl={data} />
-			</Worker>
+		<Box width="100vw" m="auto">
+			<Document file={data} onLoadSuccess={onDocumentLoadSuccess}>
+				<Page
+					scale={scale}
+					className="react-pdf__Page__canvas"
+					pageNumber={pageNumber}
+				/>
+			</Document>
+			<Flex flexDir="column" align="center" mb="2rem">
+				<Box d="block">
+					Page {pageNumber || (numPages ? 1 : '--')} of {numPages || '--'}
+				</Box>
+				<Box>
+					<Button
+						type="button"
+						color="red"
+						disabled={pageNumber <= 1}
+						onClick={previousPage}
+					>
+						Previous
+					</Button>
+					<Button
+						type="button"
+						disabled={pageNumber >= numPages}
+						onClick={nextPage}
+						ml="1rem"
+					>
+						Next
+					</Button>
+				</Box>
+			</Flex>
 		</Box>
 	);
 }

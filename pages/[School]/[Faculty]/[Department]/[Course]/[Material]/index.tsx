@@ -29,19 +29,19 @@ export async function getStaticProps(context) {
 
 	const schoolRef = await firestore
 		.collection('schools')
-		.doc(school.replace(/-/g, ' '))
+		.doc(school)
 		.collection('courses')
 		.where('Course', '==', course.replace(/-/g, ' '))
 		.get();
 
 	const adminRef = await firestore
 		.collection('schools')
-		.doc(school.replace(/-/g, ' '))
+		.doc(school)
 		.collection('admin')
 		.doc('admin')
 		.get();
 
-	const admins = adminRef.data().admins;
+	const admins = adminRef.data()?.admins;
 
 	const [data] = schoolRef.docs.map((item) => item.data());
 	return {
@@ -58,9 +58,7 @@ const School = ({ data, admins }) => {
 
 	const uid = auth?.currentUser?.uid;
 
-	const isAdmin = admins.some(
-		(item) => item == uid || uid == 'x1Fnwo5WimP9MwIjx4EWeQlyXpE3'
-	);
+	let isAdmin = admins?.some((item) => item == uid);
 
 	const router = useRouter();
 
@@ -120,7 +118,7 @@ const School = ({ data, admins }) => {
 	};
 
 	return (
-		<Container maxW="90%">
+		<Container maxW="95%" overflow="hidden">
 			<Box mt="1rem">
 				<Box d={isAdmin ? 'block' : 'none'}>
 					<DeleteButton deleteFunction={handleDelete} name="Material" />

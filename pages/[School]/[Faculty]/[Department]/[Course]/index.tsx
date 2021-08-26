@@ -36,14 +36,14 @@ export async function getStaticProps(context) {
 
 	const schoolRef = await firestore
 		.collection('schools')
-		.doc(school.replace(/-/g, ' '))
+		.doc(school)
 		.collection('courses')
 		.where('Course', '==', course.replace(/-/g, ' '))
 		.get();
 
 	const adminRef = await firestore
 		.collection('schools')
-		.doc(school.replace(/-/g, ' '))
+		.doc(school)
 		.collection('admin')
 		.doc('admin')
 		.get();
@@ -67,9 +67,7 @@ const School = ({ result, admins }) => {
 
 	const uid = auth?.currentUser?.uid;
 
-	const isAdmin = admins.some(
-		(item) => item == uid || uid == 'x1Fnwo5WimP9MwIjx4EWeQlyXpE3'
-	);
+	let isAdmin = admins?.some((item) => item == uid);
 
 	const router = useRouter();
 

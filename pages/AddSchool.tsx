@@ -54,16 +54,22 @@ function AddSchool({ admin }) {
 		const school = values.SchoolName.trim();
 		let slug = values.Slug.trim();
 		slug = slug.charAt(0).charAt(0).toUpperCase() + slug.slice(1);
-
+		slug = slug.replace(/\s/g, '-');
 		//created a new courses array to the database for future adding of courses into the array
 		const Courses = [];
+		firestore.collection('schools').doc(slug).set({
+			logourl: logoUrl,
+			name: school,
+			slug,
+		});
+
 		firestore
 			.collection('schools')
 			.doc(slug)
+			.collection('admin')
+			.doc('admin')
 			.set({
-				logourl: logoUrl,
-				name: school,
-				slug,
+				admins: ['x1Fnwo5WimP9MwIjx4EWeQlyXpE3'],
 			})
 			.then(() => {
 				actions.resetForm();

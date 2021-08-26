@@ -3,7 +3,7 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import FormikControl from '../components/Formik/FormikControl';
 import { Button } from '@chakra-ui/react';
-import { Flex, Spacer, Text, useToast } from '@chakra-ui/react';
+import { Box, Text, useToast } from '@chakra-ui/react';
 import firebase from '../config/firebase-config';
 import { useRouter } from 'next/router';
 
@@ -86,14 +86,14 @@ function RegistrationForm() {
 		>
 			{(formik) => {
 				return (
-					<Flex
+					<Box
 						align="center"
 						justify="center"
+						maxW="18rem"
 						h="content-fit"
-						m="2rem 0"
-						flex-wrap="wrap"
+						m="auto"
 					>
-						<Text align="center" fontSize="2rem" m="0 2rem" mb="2rem">
+						<Text align="center" fontSize="2rem" m="0 2rem" mb="1rem">
 							REGISTER
 						</Text>
 						<Form>
@@ -132,7 +132,7 @@ function RegistrationForm() {
 								Submit
 							</Button>
 						</Form>
-					</Flex>
+					</Box>
 				);
 			}}
 		</Formik>

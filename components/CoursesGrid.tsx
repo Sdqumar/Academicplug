@@ -1,13 +1,13 @@
 import { Box, Flex, Button, Heading, Image } from '@chakra-ui/react';
 import Link from 'next/link';
 
-const CoursesGrid = ({ list, url }) => {
+const CoursesGrid = ({ list, url, flexDir }) => {
 	return (
 		<>
 			<Flex>
 				<Flex
 					mt="1rem"
-					flexDir="column"
+					flexDir={flexDir ? flexDir : 'column'}
 					wrap="wrap"
 					justify="start"
 					w="fit-content"
