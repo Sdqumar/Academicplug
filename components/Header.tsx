@@ -3,9 +3,9 @@ import firebase from '../config/firebase-config';
 import AuthContext from '../components/AuthContext';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
-import NextLink from 'next/link';
-import { Link } from '@chakra-ui/react';
+import Link from 'next/link';
 import { IoSchoolSharp } from 'react-icons/io5';
+import { LinkOverlay, LinkBox } from '@chakra-ui/react';
 
 const Hearder = () => {
 	const user = useContext(AuthContext);
@@ -23,28 +23,30 @@ const Hearder = () => {
 
 	return (
 		<Flex background="primary" w="100%" justify="space-between" align="center">
-			<Box
-				alignItems="center"
-				cursor="pointer"
-				ml={{ md: '5rem', base: '3rem' }}
-			>
-				<NextLink href="/">
-					<Icon
-						as={IoSchoolSharp}
-						position="relative"
-						left="-47px"
-						bottom="-35px"
-						w="2rem"
-						h="2rem"
-					/>
+			<LinkBox>
+				<Box mt="-20px" cursor="pointer" ml={{ md: '5rem', base: '3rem' }}>
+					<Link href="/">
+						<LinkOverlay>
+							<Icon
+								as={IoSchoolSharp}
+								position="relative"
+								left="-47px"
+								bottom="-35px"
+								w="2rem"
+								h="2rem"
+							/>
+						</LinkOverlay>
+					</Link>
 					<Heading as="h3" size="lg">
 						ACADEMIC
 					</Heading>
 					<Heading as="h6" size="sm" letterSpacing={10} mt="-7px">
-						PLUG
+						<Link href="/">
+							<LinkOverlay>PLUG</LinkOverlay>
+						</Link>
 					</Heading>
-				</NextLink>
-			</Box>
+				</Box>
+			</LinkBox>
 
 			<Flex
 				className="log-reg"
@@ -60,8 +62,8 @@ const Hearder = () => {
 						fontWeight="600"
 						align="center"
 					>
-						<NextLink href="/LoginForm">Login</NextLink>
-						<NextLink href="/RegistrationForm">Register</NextLink>
+						<Link href="/LoginForm">Login</Link>
+						<Link href="/RegistrationForm">Register</Link>
 					</Flex>
 				) : (
 					<Flex align="center" justify="space-around">

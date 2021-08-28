@@ -2,8 +2,7 @@ import firebase from '../../../config/firebase-config';
 import { Container, Heading, Flex, Button, Box } from '@chakra-ui/react';
 import CoursesGrid from '../../../components/CoursesGrid';
 import { useRouter } from 'next/router';
-import { Link as _Link } from 'next/link';
-import { Link } from '@chakra-ui/react';
+import Link from 'next/link';
 import { useRef } from 'react';
 import AddDepartment from 'components/AddDepartment';
 
@@ -100,10 +99,7 @@ const School = ({ data }) => {
 					<AddDepartment />
 				</Box>
 				<Heading size="lg" fontSize="47px" m="auto">
-					<Link as={_Link} href={schoolUrl}>
-						{school}
-					</Link>{' '}
-					- {faculty}
+					<Link href={schoolUrl}>{school}</Link> - {faculty}
 				</Heading>
 				<CoursesGrid list={data?.department} url={url} />
 			</Box>

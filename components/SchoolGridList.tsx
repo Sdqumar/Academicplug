@@ -21,21 +21,21 @@ const SchoolGridList: React.FC<SchoolGridListProps> = ({ schools }) => {
 			>
 				{schools.map((school) => {
 					return (
-						<LinkBox key={school?.name}>
-							<Box
-								w="12rem"
-								boxShadow="base"
-								m="0 10px"
-								rounded="md"
-								bg="gray.20"
-								cursor="pointer"
-								transition="all 0.4s"
-								_hover={{
-									boxShadow: 'xl',
-								}}
-								h="13rem"
-								mb="2rem"
-							>
+						<Box
+							w="12rem"
+							boxShadow="base"
+							m="0 10px"
+							rounded="md"
+							bg="gray.20"
+							cursor="pointer"
+							transition="all 0.4s"
+							_hover={{
+								boxShadow: 'xl',
+							}}
+							h="13rem"
+							mb="2rem"
+						>
+							<LinkBox key={school?.name}>
 								<Image
 									src={school?.logourl}
 									onError={() => console.log('error')}
@@ -54,8 +54,8 @@ const SchoolGridList: React.FC<SchoolGridListProps> = ({ schools }) => {
 										<LinkOverlay>{school?.name}</LinkOverlay>
 									</Link>
 								</Heading>
-							</Box>
-						</LinkBox>
+							</LinkBox>
+						</Box>
 					);
 				})}
 			</Flex>
