@@ -54,13 +54,14 @@ function AddFaculty(props) {
 	const onSubmit = (values, actions) => {
 		actions.setSubmitting(true);
 
-		const { school, faculty } = values;
+		const faculty = values.faculty.trim();
+		const school = values.school;
 
 		firestore
 			.collection('schools')
 			.doc(school)
 			.collection('faculty')
-			.doc(faculty)
+			.doc(faculty.replace(/\s/g, '-'))
 			.set({
 				name: faculty,
 			})
@@ -75,11 +76,11 @@ function AddFaculty(props) {
 	};
 
 	return (
-		<>
+		<Box d="block" m="auto" mt="1rem">
 			<Heading size="lg" fontSize="50px" m="1rem">
 				Add Faculty
 			</Heading>
-			<Flex align="center" justify="center" h="50vw">
+			<Flex align="center" justify="center">
 				<Formik
 					initialValues={initialValues}
 					validationSchema={validationSchema}
@@ -125,7 +126,7 @@ function AddFaculty(props) {
 					}}
 				</Formik>
 			</Flex>
-		</>
+		</Box>
 	);
 }
 

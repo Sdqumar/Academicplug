@@ -118,12 +118,12 @@ const School = ({ data, admins }) => {
 	};
 
 	return (
-		<Container mw={{ base: '98vw', md: '92vw' }} overflow="hidden">
+		<Box>
 			<Box mt="1rem">
-				<Box d={isAdmin ? 'block' : 'none'}>
+				<Box ml="1rem" d={isAdmin ? 'block' : 'none'}>
 					<DeleteButton deleteFunction={handleDelete} name="Material" />
 				</Box>
-				<Heading size="lg" fontSize="47px" mt="1rem">
+				<Heading ml="1rem" size="lg" fontSize="47px" mt="1rem">
 					<Link href={schoolUrl}>{school}</Link> -{' '}
 					<Link href={schoolUrl + facultyUrl}>{faculty}</Link> -{' '}
 					<Link href={schoolUrl + facultyUrl + departmentUrl}>
@@ -137,7 +137,7 @@ const School = ({ data, admins }) => {
 				</Heading>
 			</Box>
 			<PDFViewer data={pdfurl} />
-		</Container>
+		</Box>
 	);
 };
 

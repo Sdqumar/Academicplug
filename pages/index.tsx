@@ -33,7 +33,13 @@ export async function getStaticProps() {
 const Index = ({ data }) => {
 	return (
 		<>
-			<Flex justifyContent="center" direction="column">
+			<Flex
+				justifyContent="center"
+				direction="column"
+				width={{ md: '95%', base: '100%' }}
+				mt={{ base: '0px', sm: '1rem' }}
+				m="auto"
+			>
 				<BannerHome />
 				<SchoolGridList schools={data} />
 			</Flex>

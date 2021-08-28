@@ -1,21 +1,24 @@
-import { Flex, ChakraProvider, Box } from '@chakra-ui/react';
+import { Flex, Grid, ChakraProvider, Box } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import firebase from '../config/firebase-config';
-import Hearder from '../components/Header';
+import Header from '../components/Header';
 import AuthContext from '../components/AuthContext';
 import Footer from '../components/Footer';
 import '../styles/globals.css';
 
 import { extendTheme } from '@chakra-ui/react';
-const colors = {
-	brand: {
-		900: '#1a365d',
-		800: '#153e75',
-		700: '#2a69ac',
+
+const Link = {
+	baseStyle: {
+		textDecoration: 'none',
 	},
 };
-const theme = extendTheme({ colors });
+
+const colors = {
+	primary: '#fbae17',
+};
+const theme = extendTheme({ colors, Link });
 
 function MyApp({ Component, pageProps }) {
 	const [currentUser, setCurrentUser] = useState<undefined | {}>(undefined);
@@ -33,25 +36,24 @@ function MyApp({ Component, pageProps }) {
 		!loading && (
 			<ChakraProvider theme={theme}>
 				<AuthContext.Provider value={currentUser}>
-					<Flex
-						flexDir="column"
-						justify="space-between"
-						maxW="100vw"
+					<Grid
+						templateRows="6rem auto 4rem"
+						templateColumns="auto"
 						height="100vh"
-						minW="fit-content"
+						maxW="100vw"
 					>
-						<Hearder />
+						<Header />
 
-						<Box
-							flex="auto"
-							w={{ base: '100vw', md: '92vw' }}
-							m="auto"
-							mt="1rem"
+						<Flex
+							w="100%"
+							m={{ base: 'auto', md: '1px' }}
+							mt={{ base: '0', md: '0rem' }}
+							position="relative"
 						>
 							<Component {...pageProps} />
-						</Box>
+						</Flex>
 						<Footer />
-					</Flex>
+					</Grid>
 				</AuthContext.Provider>
 			</ChakraProvider>
 		)

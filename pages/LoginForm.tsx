@@ -89,6 +89,7 @@ function LoginForm() {
 				maxW="18rem"
 				h="content-fit"
 				m="auto"
+				mt="1rem"
 			>
 				<Text align="center" fontSize="2rem" m="0 2rem">
 					LOGIN

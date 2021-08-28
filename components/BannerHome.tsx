@@ -4,7 +4,7 @@ export interface BannerHomeProps {}
 
 const BannerHome: React.FC<BannerHomeProps> = () => {
 	return (
-		<Flex w="100%" h="20rem" justify="center">
+		<Flex w="100%" h="20rem" justify="center" mt={{ base: 0, md: '1rem' }}>
 			<Box position="relative" w="100vw">
 				<Image
 					w="100%"
@@ -20,7 +20,11 @@ const BannerHome: React.FC<BannerHomeProps> = () => {
 					color="rgb(251 174 23)"
 					width={{ base: '100%', md: '27rem' }}
 				>
-					<Heading size="2xl" fontSize={{ base: '2.8rem', md: '3rem' }}>
+					<Heading
+						size="2xl"
+						ml="1rem"
+						fontSize={{ base: '2.8rem', md: '3rem' }}
+					>
 						Courses for Nigerian Students
 					</Heading>
 				</Box>

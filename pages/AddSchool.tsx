@@ -83,11 +83,11 @@ function AddSchool({ admin }) {
 	};
 
 	return (
-		<>
-			<Heading size="lg" fontSize="50px" m="1rem">
+		<Box d="block" m="auto" mt="1rem">
+			<Heading size="lg" fontSize="50px">
 				Add School
 			</Heading>
-			<Grid align="center" justify="center" w="300px" m="auto" mb="10">
+			<Box align="center" justify="center" w="300px" mb="10">
 				<Formik
 					initialValues={initialValues}
 					validationSchema={validationSchema}
@@ -135,8 +135,8 @@ function AddSchool({ admin }) {
 						);
 					}}
 				</Formik>
-			</Grid>
-		</>
+			</Box>
+		</Box>
 	);
 }
 

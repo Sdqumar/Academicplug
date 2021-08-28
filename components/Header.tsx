@@ -3,7 +3,9 @@ import firebase from '../config/firebase-config';
 import AuthContext from '../components/AuthContext';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
-import Link from 'next/link';
+import { Link as _Link } from 'next/link';
+import NextLink from 'next/link';
+import { Link } from '@chakra-ui/react';
 import { IoSchoolSharp } from 'react-icons/io5';
 
 const Hearder = () => {
@@ -21,13 +23,17 @@ const Hearder = () => {
 	};
 
 	return (
-		<Flex background="#fbae17" w="100%" justify="space-between" align="center">
-			<Link href="/">
-				<Box alignItems="center" pb="15px" cursor="pointer" ml="5rem">
+		<Flex background="primary" w="100%" justify="space-between" align="center">
+			<Box
+				alignItems="center"
+				cursor="pointer"
+				ml={{ md: '5rem', base: '3rem' }}
+			>
+				<Link as={_Link} href="/">
 					<Icon
 						as={IoSchoolSharp}
 						position="relative"
-						left="-40px"
+						left="-47px"
 						bottom="-35px"
 						w="2rem"
 						h="2rem"
@@ -38,23 +44,29 @@ const Hearder = () => {
 					<Heading as="h6" size="sm" letterSpacing={10} mt="-7px">
 						PLUG
 					</Heading>
-				</Box>
-			</Link>
+				</Link>
+			</Box>
 
-			<Flex className="log-reg" m="0 10px">
+			<Flex
+				className="log-reg"
+				mr={{ md: '2rem', base: '1rem' }}
+				w="fit-content"
+				h="fit-content"
+			>
 				{user === null || undefined ? (
 					<Flex
 						w="7rem"
 						justify="space-around"
 						align-items="center"
 						fontWeight="600"
+						align="center"
 					>
-						<Link href="/LoginForm">Login</Link>
-						<Link href="/RegistrationForm">Register</Link>
+						<NextLink href="/LoginForm">Login</NextLink>
+						<NextLink href="/RegistrationForm">Register</NextLink>
 					</Flex>
 				) : (
-					<Flex align="center" w="13.5rem" justify="space-around">
-						<Flex d={{ sm: 'flex', base: 'none' }}>
+					<Flex align="center" justify="space-around">
+						<Flex d={{ sm: 'flex', base: 'none' }} mr="1rem">
 							<Text mr="5px">Welcome</Text>
 							<Text fontWeight="600">{user?.displayName}</Text>
 						</Flex>

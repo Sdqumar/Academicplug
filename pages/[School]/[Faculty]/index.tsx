@@ -2,7 +2,8 @@ import firebase from '../../../config/firebase-config';
 import { Container, Heading, Flex, Button, Box } from '@chakra-ui/react';
 import CoursesGrid from '../../../components/CoursesGrid';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
+import { Link as _Link } from 'next/link';
+import { Link } from '@chakra-ui/react';
 import { useRef } from 'react';
 import AddDepartment from 'components/AddDepartment';
 
@@ -72,20 +73,21 @@ const School = ({ data }) => {
 	const isAdmin = uid == 'x1Fnwo5WimP9MwIjx4EWeQlyXpE3';
 	return (
 		data && (
-			<>
+			<Box mt="1rem" pl="1rem">
 				<Button mt="1rem" onClick={onClick} d={isAdmin ? 'block' : 'none'}>
 					Add Department
 				</Button>
 				<Box
 					d="none"
-					left="2rem"
 					boxShadow="base"
 					rounded="md"
 					ref={boxRef}
-					pos="absolute"
-					bg="#fff"
-					width="95vw"
+					pos="fixed"
+					left="1px"
 					top="6rem"
+					bg="#fff"
+					width="100%"
+					zIndex={1}
 				>
 					<Flex justify="space-between" mt="1rem">
 						<Heading size="lg" fontSize="30px" m="1rem">
@@ -98,10 +100,13 @@ const School = ({ data }) => {
 					<AddDepartment />
 				</Box>
 				<Heading size="lg" fontSize="47px" m="auto">
-					<Link href={schoolUrl}>{school}</Link> - {faculty}
+					<Link as={_Link} href={schoolUrl}>
+						{school}
+					</Link>{' '}
+					- {faculty}
 				</Heading>
 				<CoursesGrid list={data?.department} url={url} />
-			</>
+			</Box>
 		)
 	);
 };

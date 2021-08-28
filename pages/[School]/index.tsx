@@ -1,8 +1,9 @@
 import firebase from '../../config/firebase-config';
-import { Container, Heading } from '@chakra-ui/react';
+import { Container, Heading, Box } from '@chakra-ui/react';
 import GridOne from '../../components/GridOne';
 import { GetStaticPaths } from 'next';
 import { useRouter } from 'next/router';
+import CoursesGrid from 'components/CoursesGrid';
 
 const firestore = firebase.firestore();
 
@@ -38,13 +39,15 @@ const School = ({ data }) => {
 	const router = useRouter();
 	const school = router.query.school;
 	const School = router.query.School;
+	const list = data.map((item) => item?.name);
+
 	return (
-		<>
+		<Box mt="1rem" pl="1rem">
 			<Heading d="block" size="lg" fontSize="47px">
 				{school ? school : School}
 			</Heading>
-			<GridOne data={data} />
-		</>
+			<CoursesGrid list={list} url={School} />
+		</Box>
 	);
 };
 

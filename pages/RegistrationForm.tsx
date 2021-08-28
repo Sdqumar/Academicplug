@@ -89,9 +89,10 @@ function RegistrationForm() {
 					<Box
 						align="center"
 						justify="center"
-						maxW="18rem"
+						maxW="20rem"
 						h="content-fit"
 						m="auto"
+						mt="1rem"
 					>
 						<Text align="center" fontSize="2rem" m="0 2rem" mb="1rem">
 							REGISTER

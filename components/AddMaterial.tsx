@@ -45,13 +45,13 @@ function AddMaterial() {
 	};
 
 	const onSubmit = (values, actions) => {
-		const material = values.Material;
+		const material = values.Material.trim();
 		actions.setSubmitting(true);
 		firestore
 			.collection('schools')
 			.doc(slug)
 			.collection('courses')
-			.doc(course)
+			.doc(course.replace(/\s/g, '-'))
 			.update({
 				Materials: firebase.firestore.FieldValue.arrayUnion({
 					Name: material,
@@ -70,7 +70,7 @@ function AddMaterial() {
 	};
 
 	return (
-		<Flex align="center" justify="center" m="2rem 0">
+		<Flex>
 			<Formik
 				initialValues={initialValues}
 				validationSchema={validationSchema}
@@ -78,10 +78,9 @@ function AddMaterial() {
 			>
 				{(formik) => {
 					return (
-						<Box>
-							{' '}
+						<Box m="auto" maxW="30rem" mb="1rem">
 							<Form>
-								<Box mt="20px">
+								<Box>
 									<FormikControl
 										control="chakraInput"
 										type="name"

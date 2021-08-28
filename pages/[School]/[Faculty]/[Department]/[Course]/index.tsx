@@ -32,6 +32,7 @@ export async function getStaticPaths() {
 }
 export async function getStaticProps(context) {
 	const school = context.params.School;
+	const department = context.params.Department;
 	const course = context.params.Course;
 
 	const schoolRef = await firestore
@@ -39,6 +40,7 @@ export async function getStaticProps(context) {
 		.doc(school)
 		.collection('courses')
 		.where('Course', '==', course.replace(/-/g, ' '))
+		.where('Department', '==', department.replace(/-/g, ' '))
 		.get();
 
 	const adminRef = await firestore
@@ -47,22 +49,22 @@ export async function getStaticProps(context) {
 		.collection('admin')
 		.doc('admin')
 		.get();
+	console.log(school, course);
 
 	const admins = adminRef.data().admins;
 
-	const [data] = schoolRef.docs?.map((item) => item.data());
-	const result = data === undefined || data.length <= 0 ? data === null : data;
+	const [data] = schoolRef.docs.map((item) => item.data());
 
 	return {
 		props: {
-			result,
+			data,
 			admins,
 		},
 		revalidate: 10,
 	};
 }
 
-const School = ({ result, admins }) => {
+const School = ({ data: result, admins }) => {
 	const auth = firebase.auth();
 
 	const uid = auth?.currentUser?.uid;
@@ -120,25 +122,31 @@ const School = ({ result, admins }) => {
 	};
 
 	return (
-		<>
+		<Box mt="1rem" pl="1rem">
 			<Flex justify="space-evenly" mt="1rem" d={isAdmin ? 'flex' : 'none'}>
 				<Button onClick={onClick}>Add Material</Button>
 				<DeleteButton deleteFunction={handleDelete} name="Course" />
 			</Flex>
 			<Box
 				d="none"
-				left="2rem"
 				boxShadow="base"
 				rounded="md"
 				ref={boxRef}
-				pos="absolute"
-				bg="#fff"
-				width="95vw"
+				pos="fixed"
+				left="1px"
 				top="6rem"
+				bg="#fff"
+				width="100%"
+				zIndex={1}
 			>
-				<Button color="red" float="right" m="1rem" onClick={closeBox}>
-					Close
-				</Button>
+				<Flex justify="space-between" m="2rem 1rem" mb="0px">
+					<Heading size="lg" fontSize="30px">
+						Add Material
+					</Heading>
+					<Button color="red" float="right" onClick={closeBox}>
+						Close
+					</Button>
+				</Flex>
 				<AddMaterial />
 			</Box>
 			<Heading size="lg" fontSize="47px" w="95%">
@@ -149,7 +157,7 @@ const School = ({ result, admins }) => {
 			</Heading>
 
 			<CoursesGrid list={list} url={url} />
-		</>
+		</Box>
 	);
 };
 

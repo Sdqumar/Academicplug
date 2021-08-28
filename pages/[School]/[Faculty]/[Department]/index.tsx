@@ -31,6 +31,7 @@ export async function getStaticProps(context) {
 		.collection('schools')
 		.doc(school)
 		.collection('courses')
+		.where('School', '==', school)
 		.where('Department', '==', department.replace(/-/g, ' '))
 		.get();
 
@@ -43,7 +44,7 @@ export async function getStaticProps(context) {
 
 	let admins = adminRef?.data()?.admins;
 
-	let data = schoolRef.docs.map((item) => item.id);
+	let data = schoolRef.docs.map((item) => item.id.replace(/-/g, ' '));
 
 	// if (data === [] && !admins) {
 	// 	return {
@@ -89,20 +90,21 @@ const School = ({ data, admins }) => {
 	};
 
 	return (
-		<>
+		<Box mt="1rem" pl="1rem">
 			<Button mt="1rem" onClick={onClick} d={isAdmin ? 'block' : 'none'}>
 				Add Course
 			</Button>
 			<Box
 				d="none"
-				left="2rem"
 				boxShadow="base"
 				rounded="md"
 				ref={boxRef}
-				pos="absolute"
-				bg="#fff"
-				width="95vw"
+				pos="fixed"
+				left="1px"
 				top="6rem"
+				bg="#fff"
+				width="100%"
+				zIndex={1}
 			>
 				<Flex justify="space-between" mt="1rem">
 					<Heading size="lg" fontSize="30px" m="1rem">
@@ -121,7 +123,7 @@ const School = ({ data, admins }) => {
 				<Link href={schoolUrl + facultyUrl}>{faculty}</Link> - {department}
 			</Heading>
 			<CoursesGrid flexDir="row" list={data} url={url} />
-		</>
+		</Box>
 	);
 };
 

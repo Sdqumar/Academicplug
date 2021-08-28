@@ -31,14 +31,14 @@ function AddCourse({ School, Faculty, Department }) {
 	};
 
 	const onSubmit = (values, actions) => {
-		const Course = values.Course;
+		const Course = values.Course.trim();
 		actions.setSubmitting(true);
 
 		firestore
 			.collection('schools')
 			.doc(slug)
 			.collection('courses')
-			.doc(Course)
+			.doc(Course.replace(/\s/g, '-'))
 			.set({
 				Course,
 				School,

@@ -1,6 +1,6 @@
 import { Box, Flex, Heading, Image } from '@chakra-ui/react';
 import Link from 'next/link';
-
+import { LinkBox, LinkOverlay } from '@chakra-ui/react';
 export interface SchoolGridListProps {
 	schools: [
 		{
@@ -21,26 +21,20 @@ const SchoolGridList: React.FC<SchoolGridListProps> = ({ schools }) => {
 			>
 				{schools.map((school) => {
 					return (
-						<Link
-							href={{
-								pathname: `/${school.slug}`,
-								query: { school: school?.name },
-							}}
-							key={school?.slug}
-						>
+						<LinkBox key={school?.name}>
 							<Box
 								w="12rem"
-								key={school?.name}
 								boxShadow="base"
 								m="0 10px"
 								rounded="md"
 								bg="gray.20"
 								cursor="pointer"
-								mb="2rem"
 								transition="all 0.4s"
 								_hover={{
 									boxShadow: 'xl',
 								}}
+								h="13rem"
+								mb="2rem"
 							>
 								<Image
 									src={school?.logourl}
@@ -48,12 +42,20 @@ const SchoolGridList: React.FC<SchoolGridListProps> = ({ schools }) => {
 									w="100%"
 									h="10rem"
 								/>
-
 								<Heading size="sm" align="center">
-									{school?.name}
+									<Link
+										href={{
+											pathname: school?.slug,
+											query: { school: school?.name },
+										}}
+										passHref
+										key={school?.slug}
+									>
+										<LinkOverlay>{school?.name}</LinkOverlay>
+									</Link>
 								</Heading>
 							</Box>
-						</Link>
+						</LinkBox>
 					);
 				})}
 			</Flex>
