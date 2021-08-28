@@ -11,9 +11,6 @@
 		"@chakra-ui/react": "^1.6.6",
 		"@emotion/react": "^11.4.1",
 		"@emotion/styled": "^11.3.0",
-		"@phuocng/react-pdf-viewer": "^1.7.0",
-		"@react-pdf-viewer/core": "^2.7.2",
-		"@react-pdf/renderer": "^2.0.19",
 		"firebase": "^8.4.1",
 		"firebase-admin": "^9.6.0",
 		"formik": "^2.2.6",
@@ -26,7 +23,6 @@
 		"react-firebase-hooks": "^3.0.4",
 		"react-icons": "^4.2.0",
 		"react-pdf": "^5.3.2",
-		"react-query": "^3.13.8",
 		"yup": "^0.32.9"
 	},
 	"devDependencies": {
