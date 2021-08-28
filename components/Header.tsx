@@ -3,7 +3,6 @@ import firebase from '../config/firebase-config';
 import AuthContext from '../components/AuthContext';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
-import { Link as _Link } from 'next/link';
 import NextLink from 'next/link';
 import { Link } from '@chakra-ui/react';
 import { IoSchoolSharp } from 'react-icons/io5';
@@ -29,7 +28,7 @@ const Hearder = () => {
 				cursor="pointer"
 				ml={{ md: '5rem', base: '3rem' }}
 			>
-				<Link as={_Link} href="/">
+				<NextLink href="/">
 					<Icon
 						as={IoSchoolSharp}
 						position="relative"
@@ -44,7 +43,7 @@ const Hearder = () => {
 					<Heading as="h6" size="sm" letterSpacing={10} mt="-7px">
 						PLUG
 					</Heading>
-				</Link>
+				</NextLink>
 			</Box>
 
 			<Flex
