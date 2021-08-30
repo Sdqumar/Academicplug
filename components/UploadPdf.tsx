@@ -54,8 +54,8 @@ const UploadInput = ({ getfile, data, formik }) => {
 			seterror('Please Upload a pdf file');
 		} else if (file.type != 'application/pdf') {
 			seterror('Please Upload a pdf file');
-		} else if (file.size > 100253998) {
-			seterror('Upload file less than 10MB file');
+		} else if (file.size > 15000000) {
+			seterror('Upload file less than 15MB file');
 		} else {
 			seterror(false);
 			setFile(file);

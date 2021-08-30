@@ -40,7 +40,8 @@ function MyApp({ Component, pageProps }) {
 						templateRows="6rem auto 4rem"
 						templateColumns="auto"
 						height="100vh"
-						maxW="100vw"
+						maxW="100%"
+						overflow-x="hidden"
 					>
 						<Header />
 
@@ -49,6 +50,7 @@ function MyApp({ Component, pageProps }) {
 							m={{ base: 'auto', md: '1px' }}
 							mt={{ base: '0', md: '0rem' }}
 							position="relative"
+							overflow-x="hidden"
 						>
 							<Component {...pageProps} />
 						</Flex>

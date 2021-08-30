@@ -6,13 +6,19 @@ import { Flex, Spacer, Box, Button, useToast } from '@chakra-ui/react';
 import firebase from '../config/firebase-config';
 import { useRouter } from 'next/router';
 import UploadInput from './UploadPdf';
+import { useContext } from 'react';
+import AuthContext from '/components/AuthContext';
 
 //initialize firestore
 const firestore = firebase.firestore();
 
 function AddMaterial() {
 	const router = useRouter();
-
+	let user: { displayName: String; uid: String } = useContext(AuthContext);
+	user = {
+		displayName: user.displayName,
+		uid: user.uid,
+	};
 	const [pdfurl, setPdfurl] = useState(null);
 
 	const slug = router.query.School;
@@ -56,6 +62,7 @@ function AddMaterial() {
 				Materials: firebase.firestore.FieldValue.arrayUnion({
 					Name: material,
 					pdfurl,
+					user,
 				}),
 			})
 			.then(() => {

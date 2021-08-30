@@ -62,8 +62,13 @@ const Header = () => {
 						fontWeight="600"
 						align="center"
 					>
-						<Link href="/LoginForm">Login</Link>
-						<Link href="/RegistrationForm">Register</Link>
+						<Box border=" 1px solid" p="3px" borderRadius="3px">
+							<Link href="/LoginForm">Login</Link>
+						</Box>
+
+						<Box border=" 1px solid" p="3px" borderRadius="3px" ml="10px">
+							<Link href="/RegistrationForm">Register</Link>
+						</Box>
 					</Flex>
 				) : (
 					<Flex align="center" justify="space-around">

@@ -12,6 +12,8 @@ import {
 } from '@chakra-ui/react';
 import firebase from '../config/firebase-config';
 import moment from 'moment';
+import { useContext, useState, useEffect } from 'react';
+import AuthContext from '/components/AuthContext';
 
 //initialize firestore
 const firestore = firebase.firestore();
@@ -44,6 +46,9 @@ function Suggestion({ data: result, id }) {
 		suggestion?: string;
 		name?: string;
 	}
+	let loginUser: { displayName: String } = useContext(AuthContext);
+
+	let user = loginUser?.displayName;
 
 	const initialValues = {
 		suggestion: '',
@@ -69,14 +74,14 @@ function Suggestion({ data: result, id }) {
 	const onSubmit = (values, actions) => {
 		actions.setSubmitting(true);
 
-		const { name, suggestion } = values;
+		let { name, suggestion } = values;
 
 		firestore
 			.collection('suggestions')
 			.add({
 				name,
 				suggestion,
-				timestamp: moment().format('MMMM Do YYYY, h a'),
+				timestamp: moment().format('MMMM Do YYYY, h:mm a'),
 			})
 			.then(() => {
 				actions.resetForm();
@@ -109,34 +114,42 @@ function Suggestion({ data: result, id }) {
 					onSubmit={onSubmit}
 				>
 					{(formik) => {
+						if (user !== undefined) {
+							useEffect(() => {
+								formik.setFieldValue('name', user);
+							}, []);
+						}
 						return (
 							<Form>
-								<Box mt="20px" mb="10px">
-									<FormikControl
-										control="chakraInput"
-										type="name"
-										label="Name"
-										name="name"
-									/>
-								</Box>
-								<Box w={{ md: '30rem', base: '17rem' }} h="10rem">
-									<FormikControl
-										control="textarea"
-										label="Suggestion"
-										name="suggestion"
-									/>
-								</Box>
-								<Spacer />
-								<Box mt={4} textAlign="center">
-									<Button
-										colorScheme="teal"
-										variant="outline"
-										type="submit"
-										disabled={!formik.isValid}
-									>
-										Submit
-									</Button>
-								</Box>
+								<Flex flexDir="column" mt="20px">
+									{user === undefined && (
+										<Box mb="10px">
+											<FormikControl
+												control="chakraInput"
+												type="name"
+												label="Name"
+												name="name"
+											/>
+										</Box>
+									)}
+									<Box w={{ md: '50vw', base: '80vw' }} pos="relative">
+										<FormikControl
+											control="textarea"
+											label="Suggestion"
+											name="suggestion"
+										/>
+									</Box>
+									<Box mt={2} textAlign="center">
+										<Button
+											colorScheme="teal"
+											variant="outline"
+											type="submit"
+											disabled={!formik.isValid}
+										>
+											Submit
+										</Button>
+									</Box>
+								</Flex>
 							</Form>
 						);
 					}}
@@ -155,7 +168,7 @@ function Suggestion({ data: result, id }) {
 								p="0.3rem"
 								bg="#d4d2cd1c"
 								mb="1rem"
-								key={item.id}
+								key={item.name}
 							>
 								<Flex>
 									<Heading fontSize="1rem" m="0 10px">

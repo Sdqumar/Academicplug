@@ -20,9 +20,11 @@ const SchoolGridList: React.FC<SchoolGridListProps> = ({ schools }) => {
 				justify={{ md: 'space-evenly', base: 'space-evenly' }}
 			>
 				{schools.map((school) => {
+					const imgSrc = `logo/${school.slug}.png`;
+
 					return (
 						<Box
-							w={{ base: '10rem', md: '11.5rem' }}
+							w={{ base: '9rem', md: '11.5rem' }}
 							boxShadow="base"
 							m="0 10px"
 							rounded="md"
@@ -32,15 +34,16 @@ const SchoolGridList: React.FC<SchoolGridListProps> = ({ schools }) => {
 							_hover={{
 								boxShadow: 'xl',
 							}}
-							h="14rem"
+							h={{ base: '12rem', md: '14rem' }}
 							mb="2rem"
 							key={school?.slug}
 						>
 							<LinkBox key={school?.name}>
 								<Image
-									src={school?.logourl}
-									onError={() => console.log('error')}
+									src={imgSrc}
+									fallbackSrc={school.logourl}
 									w="100%"
+									h={{ base: '8rem', md: '11rem' }}
 								/>
 								<Heading size="sm" align="center">
 									<Link

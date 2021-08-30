@@ -5,7 +5,7 @@ export interface BannerHomeProps {}
 const BannerHome: React.FC<BannerHomeProps> = () => {
 	return (
 		<Flex w="100%" h="20rem" justify="center" mt={{ base: 0, md: '1rem' }}>
-			<Box position="relative" w="100vw">
+			<Box position="relative" w={{ base: '100%', md: '90%' }}>
 				<Image
 					w="100%"
 					h="100%"

@@ -1,4 +1,4 @@
-import { Heading } from '@chakra-ui/react';
+import { Heading, Box } from '@chakra-ui/react';
 import { ListItem, UnorderedList } from '@chakra-ui/react';
 import Link from 'next/link';
 
@@ -6,7 +6,7 @@ import PrivateRoute from '../components/PrivateRoute';
 
 const Admin = (props) => {
 	return (
-		<>
+		<Box>
 			<Heading m="1rem" size="2xl">
 				Admin Panel
 			</Heading>
@@ -19,7 +19,7 @@ const Admin = (props) => {
 					<Link href="/AddFaculty">Add Faculty</Link>
 				</ListItem>
 			</UnorderedList>
-		</>
+		</Box>
 	);
 };
 
