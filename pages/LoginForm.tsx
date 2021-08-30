@@ -47,8 +47,9 @@ function LoginForm() {
 		firebase
 			.auth()
 			.signInWithEmailAndPassword(values.email, values.password)
-			.then((userCredential) => {
+			.then(({ user }) => {
 				displayToast('Login Sucessful', 'success');
+
 				router.push('/');
 			})
 			.catch((error) => {

@@ -107,9 +107,9 @@ const School = ({ data: result, admins }) => {
 	const handleDelete = async () => {
 		firestore
 			.collection('schools')
-			.doc(school)
+			.doc(school.replace(/\s/g, '-'))
 			.collection('courses')
-			.doc(course)
+			.doc(course.replace(/\s/g, '-'))
 			.delete()
 			.then(() => {
 				displayToast();
@@ -123,7 +123,7 @@ const School = ({ data: result, admins }) => {
 
 	return (
 		<Box mt="1rem" pl="1rem">
-			<Flex justify="space-evenly" mt="1rem" d={isAdmin ? 'flex' : 'none'}>
+			<Flex justify="space-evenly" mt="1rem" d={uid ? 'flex' : 'none'}>
 				<Button onClick={onClick}>Add Material</Button>
 				<DeleteButton deleteFunction={handleDelete} name="Course" />
 			</Flex>

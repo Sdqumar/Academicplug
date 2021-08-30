@@ -8,7 +8,6 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 export default function PDFViewer({ data }) {
 	const [width, setWidth] = useState(window.innerWidth);
 	const [scale, setScale] = useState(0.47);
-	console.log(width, scale);
 
 	useEffect(() => {
 		width > 350 && setScale(0.57);

@@ -69,11 +69,11 @@ const School = ({ data }) => {
 	const auth = firebase.auth();
 
 	const uid = auth?.currentUser?.uid;
-	const isAdmin = uid == 'x1Fnwo5WimP9MwIjx4EWeQlyXpE3';
+	//const isAdmin = uid == 'x1Fnwo5WimP9MwIjx4EWeQlyXpE3';
 	return (
 		data && (
 			<Box mt="1rem" pl="1rem">
-				<Button mt="1rem" onClick={onClick} d={isAdmin ? 'block' : 'none'}>
+				<Button mt="1rem" onClick={onClick} d={uid ? 'block' : 'none'}>
 					Add Department
 				</Button>
 				<Box

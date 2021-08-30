@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { IoSchoolSharp } from 'react-icons/io5';
 import { LinkOverlay, LinkBox } from '@chakra-ui/react';
 
-const Hearder = () => {
+const Header = () => {
 	const user = useContext(AuthContext);
 	const auth = firebase.auth();
 	const router = useRouter();
@@ -89,4 +89,4 @@ const Hearder = () => {
 	);
 };
 
-export default Hearder;
+export default Header;

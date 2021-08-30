@@ -31,7 +31,7 @@ export async function getStaticProps(context) {
 		.collection('schools')
 		.doc(school)
 		.collection('courses')
-		.where('School', '==', school)
+		.where('School', '==', school.replace(/-/g, ' '))
 		.where('Department', '==', department.replace(/-/g, ' '))
 		.get();
 
@@ -91,7 +91,7 @@ const School = ({ data, admins }) => {
 
 	return (
 		<Box mt="1rem" pl="1rem">
-			<Button mt="1rem" onClick={onClick} d={isAdmin ? 'block' : 'none'}>
+			<Button mt="1rem" onClick={onClick} d={uid ? 'block' : 'none'}>
 				Add Course
 			</Button>
 			<Box

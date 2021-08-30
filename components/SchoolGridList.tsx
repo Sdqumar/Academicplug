@@ -17,12 +17,12 @@ const SchoolGridList: React.FC<SchoolGridListProps> = ({ schools }) => {
 			<Flex
 				maxW="60rem"
 				wrap="wrap"
-				justify={{ md: 'space-evenly', base: 'center' }}
+				justify={{ md: 'space-evenly', base: 'space-evenly' }}
 			>
 				{schools.map((school) => {
 					return (
 						<Box
-							w="12rem"
+							w={{ base: '10rem', md: '11.5rem' }}
 							boxShadow="base"
 							m="0 10px"
 							rounded="md"
@@ -32,24 +32,23 @@ const SchoolGridList: React.FC<SchoolGridListProps> = ({ schools }) => {
 							_hover={{
 								boxShadow: 'xl',
 							}}
-							h="13rem"
+							h="14rem"
 							mb="2rem"
+							key={school?.slug}
 						>
 							<LinkBox key={school?.name}>
 								<Image
 									src={school?.logourl}
 									onError={() => console.log('error')}
 									w="100%"
-									h="10rem"
 								/>
 								<Heading size="sm" align="center">
 									<Link
 										href={{
-											pathname: school?.slug,
+											pathname: '/' + school?.slug,
 											query: { school: school?.name },
 										}}
 										passHref
-										key={school?.slug}
 									>
 										<LinkOverlay>{school?.name}</LinkOverlay>
 									</Link>

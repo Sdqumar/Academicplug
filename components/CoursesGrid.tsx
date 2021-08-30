@@ -8,7 +8,7 @@ const CoursesGrid = ({ list, url, flexDir }) => {
 			mt="1rem"
 			flexDir={flexDir ? flexDir : 'column'}
 			wrap="wrap"
-			w="fit-content"
+			maxW="27rem"
 			h="fit-content"
 			justify={{ base: 'center', md: 'flex-start' }}
 		>

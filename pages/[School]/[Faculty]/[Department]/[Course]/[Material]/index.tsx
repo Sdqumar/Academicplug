@@ -74,7 +74,9 @@ const School = ({ data, admins }) => {
 	const courseUrl = `/${course.replace(/\s/g, '-')}`;
 
 	const [{ pdfurl }] = data.Materials.filter((item) => item.Name == material);
+
 	const toast = useToast();
+
 	const displayToast = () => {
 		toast({
 			title: 'Material Deleted',
@@ -91,9 +93,9 @@ const School = ({ data, admins }) => {
 
 		firestore
 			.collection('schools')
-			.doc(school)
+			.doc(school.replace(/\s/g, '-'))
 			.collection('courses')
-			.doc(course)
+			.doc(course.replace(/\s/g, '-'))
 			.update({
 				Materials: firebase.firestore.FieldValue.arrayRemove({
 					Name: material,
@@ -120,7 +122,7 @@ const School = ({ data, admins }) => {
 	return (
 		<Box>
 			<Box mt="1rem">
-				<Box ml="1rem" d={isAdmin ? 'block' : 'none'}>
+				<Box ml="1rem" d={uid ? 'block' : 'none'}>
 					<DeleteButton deleteFunction={handleDelete} name="Material" />
 				</Box>
 				<Heading ml="1rem" size="lg" fontSize="47px" mt="1rem">
