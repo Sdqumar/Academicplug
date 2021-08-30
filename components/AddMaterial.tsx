@@ -16,8 +16,8 @@ function AddMaterial() {
 	const router = useRouter();
 	let user: { displayName: String; uid: String } = useContext(AuthContext);
 	user = {
-		displayName: user.displayName,
-		uid: user.uid,
+		displayName: user?.displayName,
+		uid: user?.uid,
 	};
 	const [pdfurl, setPdfurl] = useState(null);
 
