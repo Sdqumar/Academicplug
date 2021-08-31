@@ -49,7 +49,6 @@ export async function getStaticProps(context) {
 		.collection('admin')
 		.doc('admin')
 		.get();
-	console.log(school, course);
 
 	const admins = adminRef.data().admins;
 
@@ -149,7 +148,7 @@ const School = ({ data: result, admins }) => {
 				</Flex>
 				<AddMaterial />
 			</Box>
-			<Heading size="lg" fontSize="47px" w="95%">
+			<Heading size="lg" fontSize="5vh" w="95%">
 				<Link href={schoolUrl}>{school}</Link> -{' '}
 				<Link href={schoolUrl + facultyUrl}>{faculty}</Link> -{' '}
 				<Link href={schoolUrl + facultyUrl + departmentUrl}>{department}</Link>{' '}
