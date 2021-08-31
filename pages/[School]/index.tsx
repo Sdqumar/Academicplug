@@ -43,7 +43,7 @@ const School = ({ data }) => {
 
 	return (
 		<Box mt="1rem" pl="1rem">
-			<Heading d="block" size="lg" fontSize="47px">
+			<Heading d="block" size="lg" fontSize="5vh">
 				{school ? school : School}
 			</Heading>
 			<CoursesGrid list={list} url={School} />

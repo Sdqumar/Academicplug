@@ -125,7 +125,7 @@ const School = ({ data, admins }) => {
 				<Box ml="1rem" d={uid ? 'block' : 'none'}>
 					<DeleteButton deleteFunction={handleDelete} name="Material" />
 				</Box>
-				<Heading ml="1rem" size="lg" fontSize="47px" mt="1rem">
+				<Heading ml="1rem" size="lg" fontSize="4vh" mt="1rem">
 					<Link href={schoolUrl}>{school}</Link> -{' '}
 					<Link href={schoolUrl + facultyUrl}>{faculty}</Link> -{' '}
 					<Link href={schoolUrl + facultyUrl + departmentUrl}>

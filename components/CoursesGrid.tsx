@@ -8,7 +8,7 @@ const CoursesGrid = ({ list, url, flexDir }) => {
 			mt="1rem"
 			flexDir={flexDir ? flexDir : 'column'}
 			wrap="wrap"
-			maxW="27rem"
+			maxW="100%"
 			h="fit-content"
 			justify={{ base: 'center', md: 'flex-start' }}
 		>
@@ -21,11 +21,12 @@ const CoursesGrid = ({ list, url, flexDir }) => {
 							padding="1.2rem"
 							cursor="pointer"
 							minW="10rem"
+							maxW="24rem"
 							mb="0.8rem"
 						>
 							<Heading
 								m="auto"
-								size="lg"
+								fontSize="3vh"
 								align="center"
 								w="100%"
 								border="3px solid"

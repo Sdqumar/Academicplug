@@ -14,13 +14,17 @@ import firebase from '../config/firebase-config';
 import moment from 'moment';
 import { useContext, useState, useEffect } from 'react';
 import AuthContext from '/components/AuthContext';
+import Reply from '../components/Reply';
+import { useRef } from 'react';
 
 //initialize firestore
 const firestore = firebase.firestore();
-firestore.collection('Suggestions');
 
 export async function getStaticProps() {
-	const dataref = await firestore.collection('suggestions').get();
+	const dataref = await firestore
+		.collection('suggestions')
+		.orderBy('timestamp')
+		.get();
 
 	let data = dataref.docs.map((doc) => doc.data());
 
@@ -30,6 +34,7 @@ export async function getStaticProps() {
 	data = JSON.stringify(data);
 
 	const id = dataref.docs.map((doc) => doc.id);
+
 	return {
 		props: {
 			data,
@@ -119,6 +124,7 @@ function Suggestion({ data: result, id }) {
 								formik.setFieldValue('name', user);
 							}, []);
 						}
+
 						return (
 							<Form>
 								<Flex flexDir="column" mt="20px">
@@ -132,7 +138,7 @@ function Suggestion({ data: result, id }) {
 											/>
 										</Box>
 									)}
-									<Box w={{ md: '50vw', base: '80vw' }} pos="relative">
+									<Box w={{ md: '60vw', base: '80vw' }} pos="relative">
 										<FormikControl
 											control="textarea"
 											label="Suggestion"
@@ -158,7 +164,14 @@ function Suggestion({ data: result, id }) {
 
 			<Box mt="2rem">
 				<Flex justify="center" m="auto" w="80%" flexDir="column">
-					{data.map((item) => {
+					{data.map((item, index) => {
+						const boxRef = useRef(null);
+						const showReplyBox = () => {
+							if (user) {
+								boxRef.current.style.display = 'block';
+							}
+						};
+
 						return (
 							<Box
 								border="2px solid #e2e2e2"
@@ -168,18 +181,58 @@ function Suggestion({ data: result, id }) {
 								p="0.3rem"
 								bg="#d4d2cd1c"
 								mb="1rem"
-								key={item.name}
+								key={item.timestamp}
+								ml="10px"
 							>
-								<Flex>
-									<Heading fontSize="1rem" m="0 10px">
+								<Flex wrap="wrap">
+									<Heading fontSize="1rem" mr="1rem">
 										{item?.name}
 									</Heading>
 									<Text>{item.timestamp}</Text>
 								</Flex>
 
-								<Text ml="10px" mt="10px">
-									{item?.suggestion}
-								</Text>
+								<Text mt="10px">{item?.suggestion}</Text>
+								<Box>
+									<Text
+										cursor="pointer"
+										onClick={showReplyBox}
+										fontWeight="600"
+									>
+										Reply
+									</Text>
+								</Box>
+
+								<Box d="none" ref={boxRef}>
+									<Reply boxRef={boxRef} id={id[index]} />
+								</Box>
+								<Box>
+									{item?.replies?.map((item) => {
+										return (
+											<Box
+												key={item.timestamp}
+												borderLeft="1px solid #e2e2e2"
+												m="0.5rem 1rem"
+											>
+												<Flex wrap="wrap">
+													<Heading mr="1rem" fontSize="1rem" m="0 10px">
+														{item?.user}
+													</Heading>
+													<Text>{item.timestamp}</Text>
+												</Flex>
+												<Text ml="10px" mt="10px">
+													{item?.Reply}
+												</Text>
+												<Text
+													cursor="pointer"
+													onClick={showReplyBox}
+													fontWeight="600"
+												>
+													Reply
+												</Text>
+											</Box>
+										);
+									})}
+								</Box>
 							</Box>
 						);
 					})}
