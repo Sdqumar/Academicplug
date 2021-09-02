@@ -245,7 +245,7 @@ const School = ({ data, admins }) => {
 					</Flex>
 				</Tooltip>
 			</Flex>
-			{/* <PDFViewer data={pdfurl} /> */}
+			<PDFViewer data={pdfurl} />
 		</Box>
 	);
 };
