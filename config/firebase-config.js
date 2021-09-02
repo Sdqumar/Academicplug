@@ -20,5 +20,7 @@ try {
 		console.error('Firebase initialization error', err.stack);
 	}
 }
-
+// if (typeof window != undefined) {
+// 	firebase.analytics();
+// }
 export default firebase;

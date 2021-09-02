@@ -1,10 +1,23 @@
 import firebase from 'config/firebase-config';
-import { Container, Heading, Flex, useToast, Box } from '@chakra-ui/react';
+import {
+	Container,
+	Heading,
+	Flex,
+	useToast,
+	Box,
+	Text,
+	Icon,
+} from '@chakra-ui/react';
 import DeleteButton from 'components/DeleteButton';
 import { useRouter } from 'next/router';
 import PDFViewer from 'components/PDFViewer';
 import Link from 'next/link';
-
+import { useState } from 'react';
+import { useContext } from 'react';
+import AuthContext from '/components/AuthContext';
+import { IoStarOutline } from 'react-icons/io5';
+import { IoStarSharp } from 'react-icons/io5';
+import { Tooltip } from '@chakra-ui/react';
 const firestore = firebase.firestore();
 
 export async function getStaticPaths() {
@@ -57,8 +70,6 @@ const School = ({ data, admins }) => {
 	const auth = firebase.auth();
 
 	const uid = auth?.currentUser?.uid;
-
-	let isAdmin = admins?.some((item) => item == uid);
 
 	const router = useRouter();
 
@@ -119,6 +130,64 @@ const School = ({ data, admins }) => {
 			});
 	};
 
+	let user: { uid: String } = useContext(AuthContext);
+	user = user?.uid;
+
+	const [star, setStar] = useState(data.star);
+	const isStared = star.includes(user);
+
+	const updateStar = () => {
+		firestore
+			.collection('schools')
+			.doc(school.replace(/\s/g, '-'))
+			.collection('courses')
+			.doc(course.replace(/\s/g, '-'))
+			.get()
+			.then((doc) => {
+				if (doc.exists) {
+					console.log('Document data:', doc.data().star.length);
+					setStar(doc.data().star);
+				} else {
+					// doc.data() will be undefined in this case
+				}
+			})
+			.catch((error) => {
+				console.log('Error getting document:', error);
+			});
+	};
+	const handleStar = () => {
+		if (isStared && user) {
+			firestore
+				.collection('schools')
+				.doc(school.replace(/\s/g, '-'))
+				.collection('courses')
+				.doc(course.replace(/\s/g, '-'))
+				.update({
+					star: firebase.firestore.FieldValue.arrayRemove(user),
+				})
+				.then((docRef) => {
+					updateStar();
+				})
+				.catch((error) => console.log(error));
+		}
+		if (!isStared && user) {
+			firestore
+				.collection('schools')
+				.doc(school.replace(/\s/g, '-'))
+				.collection('courses')
+				.doc(course.replace(/\s/g, '-'))
+				.update({
+					star: firebase.firestore.FieldValue.arrayUnion(user),
+				})
+				.then((docRef) => {
+					updateStar();
+				})
+				.catch((error) => console.log(error));
+		}
+		if (!user) {
+			router.push('/LoginForm');
+		}
+	};
 	return (
 		<Box>
 			<Box mt="1rem">
@@ -138,7 +207,45 @@ const School = ({ data, admins }) => {
 					- {material}
 				</Heading>
 			</Box>
-			<PDFViewer data={pdfurl} />
+			<Flex>
+				<Tooltip
+					label="You must signed in to star a material"
+					isDisabled={user}
+					hasArrow
+					arrowSize={15}
+				>
+					<Flex
+						border="1px solid lightgray"
+						m="1rem"
+						w="fit-content"
+						borderRadius="10px"
+						cursor="pointer"
+						fontSize="1.1rem"
+						fontWeight="600"
+						onClick={handleStar}
+						align="center"
+						p="3px"
+					>
+						<Flex align="center" p="0 3px">
+							<Icon
+								as={isStared ? IoStarSharp : IoStarOutline}
+								position="relative"
+								w="1.5rem"
+								mr="3px"
+							/>
+
+							<Text borderRight="1px solid lightgray" pr="5px">
+								{isStared ? 'Unstar' : 'Star'}
+							</Text>
+						</Flex>
+
+						<Text pr="8px" _hover={{ color: 'primary' }}>
+							{star.length}
+						</Text>
+					</Flex>
+				</Tooltip>
+			</Flex>
+			{/* <PDFViewer data={pdfurl} /> */}
 		</Box>
 	);
 };
