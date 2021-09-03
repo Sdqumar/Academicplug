@@ -34,30 +34,30 @@ function MyApp({ Component, pageProps }) {
 
 	return (
 		!loading && (
-			// <ChakraProvider theme={theme}>
 			<AuthContext.Provider value={currentUser}>
-				<Grid
-					templateRows="6rem auto 4rem"
-					templateColumns="auto"
-					height="100vh"
-					maxW="100%"
-					overflow-x="hidden"
-				>
-					<Header />
-
-					<Flex
-						w="100%"
-						m={{ base: 'auto', md: '1px' }}
-						mt={{ base: '0', md: '0rem' }}
-						position="relative"
+				<ChakraProvider theme={theme}>
+					<Grid
+						templateRows="6rem auto 4rem"
+						templateColumns="auto"
+						height="100vh"
+						maxW="100%"
 						overflow-x="hidden"
 					>
-						<Component {...pageProps} />
-					</Flex>
-					<Footer />
-				</Grid>
+						<Header />
+
+						<Flex
+							w="100%"
+							m={{ base: 'auto', md: '1px' }}
+							mt={{ base: '0', md: '0rem' }}
+							position="relative"
+							overflow-x="hidden"
+						>
+							<Component {...pageProps} />
+						</Flex>
+						<Footer />
+					</Grid>
+				</ChakraProvider>
 			</AuthContext.Provider>
-			// </ChakraProvider>
 		)
 	);
 }
