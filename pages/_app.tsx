@@ -1,4 +1,4 @@
-import { Flex, Grid, ChakraProvider, Box } from '@chakra-ui/react';
+import { Flex, Grid, ChakraProvider } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import firebase from '../config/firebase-config';
@@ -33,30 +33,32 @@ function MyApp({ Component, pageProps }) {
 	}, [currentUser]);
 
 	return (
-		<ChakraProvider theme={theme}>
-			<AuthContext.Provider value={currentUser}>
-				<Grid
-					templateRows="6rem auto 4rem"
-					templateColumns="auto"
-					height="100vh"
-					maxW="100%"
-					overflow-x="hidden"
-				>
-					<Header />
-
-					<Flex
-						w="100%"
-						m={{ base: 'auto', md: '1px' }}
-						mt={{ base: '0', md: '0rem' }}
-						position="relative"
+		!loading && (
+			<ChakraProvider theme={theme}>
+				<AuthContext.Provider value={currentUser}>
+					<Grid
+						templateRows="6rem auto 4rem"
+						templateColumns="auto"
+						height="100vh"
+						maxW="100%"
 						overflow-x="hidden"
 					>
-						<Component {...pageProps} />
-					</Flex>
-					<Footer />
-				</Grid>
-			</AuthContext.Provider>
-		</ChakraProvider>
+						<Header />
+
+						<Flex
+							w="100%"
+							m={{ base: 'auto', md: '1px' }}
+							mt={{ base: '0', md: '0rem' }}
+							position="relative"
+							overflow-x="hidden"
+						>
+							{/* <Component {...pageProps} /> */}
+						</Flex>
+						<Footer />
+					</Grid>
+				</AuthContext.Provider>
+			</ChakraProvider>
+		)
 	);
 }
 
