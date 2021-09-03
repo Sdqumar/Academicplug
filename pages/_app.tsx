@@ -36,14 +36,14 @@ function MyApp({ Component, pageProps }) {
 		!loading && (
 			<ChakraProvider theme={theme}>
 				<AuthContext.Provider value={currentUser}>
-					<Grid
+					{/* <Grid
 						templateRows="6rem auto 4rem"
 						templateColumns="auto"
 						height="100vh"
 						maxW="100%"
 						overflow-x="hidden"
 					>
-						{/* <Header /> */}
+						<Header />
 
 						<Flex
 							w="100%"
@@ -55,7 +55,8 @@ function MyApp({ Component, pageProps }) {
 							<Component {...pageProps} />
 						</Flex>
 						<Footer />
-					</Grid>
+					</Grid> */}
+					<h1>dfdfd</h1>
 				</AuthContext.Provider>
 			</ChakraProvider>
 		)
