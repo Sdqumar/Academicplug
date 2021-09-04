@@ -1,24 +1,13 @@
-import { Flex, Grid, ChakraProvider } from '@chakra-ui/react';
+import Grid from '@material-ui/core/Grid';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import firebase from '../config/firebase-config';
-import Header from '../components/Header';
+//import Header from '../components/Header';
 import AuthContext from '../components/AuthContext';
-import Footer from '../components/Footer';
-import '../styles/globals.css';
-
-import { extendTheme } from '@chakra-ui/react';
-
-const Link = {
-	baseStyle: {
-		textDecoration: 'none',
-	},
-};
-
-const colors = {
-	primary: '#fbae17',
-};
-const theme = extendTheme({ colors, Link });
+//import Footer from '../components/Footer';
+//import '../styles/globals.css';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Button from '@material-ui/core/Button';
 
 function MyApp({ Component, pageProps }) {
 	const [currentUser, setCurrentUser] = useState<undefined | {}>(undefined);
@@ -35,8 +24,12 @@ function MyApp({ Component, pageProps }) {
 	return (
 		!loading && (
 			<AuthContext.Provider value={currentUser}>
-				<ChakraProvider theme={theme}>
-					<Grid
+				<CssBaseline />
+				<Button variant="contained">Default</Button>
+				<Button variant="contained" color="primary">
+					Primary
+				</Button>
+				{/* <Grid
 						templateRows="6rem auto 4rem"
 						templateColumns="auto"
 						height="100vh"
@@ -55,8 +48,7 @@ function MyApp({ Component, pageProps }) {
 							<Component {...pageProps} />
 						</Flex>
 						<Footer />
-					</Grid>
-				</ChakraProvider>
+					</Grid> */}
 			</AuthContext.Provider>
 		)
 	);
