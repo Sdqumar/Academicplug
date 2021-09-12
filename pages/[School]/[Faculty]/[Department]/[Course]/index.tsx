@@ -9,6 +9,7 @@ import StarIcon from '@material-ui/icons/Star';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import firebase from 'config/firebase-config';
 import AuthContext from '/components/AuthContext';
+import dynamic from 'next/dynamic';
 
 const DeleteButton = dynamic(() => import('components/DeleteButton'));
 const PDFViewer = dynamic(() => import('components/PDFViewer'));
