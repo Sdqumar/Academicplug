@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import firebase from '../config/firebase-config';
 
 const UploadSchoolImg = ({ getFile, formik }) => {
 	interface file {

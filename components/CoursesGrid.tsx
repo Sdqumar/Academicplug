@@ -1,5 +1,5 @@
 import { Box, Typography, makeStyles, Link } from '@material-ui/core';
-import NextLink from 'next/Link';
+import NextLink from 'next/link';
 
 const useStyles = makeStyles((theme) => ({
 	grid: {

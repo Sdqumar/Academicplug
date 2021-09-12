@@ -1,4 +1,4 @@
-import { Box, Typography, makeStyles, Link } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 export interface FooterProps {}
 
 const Footer: React.FC<FooterProps> = () => {
@@ -12,7 +12,6 @@ const Footer: React.FC<FooterProps> = () => {
 			p="0.7rem"
 		>
 			<Typography> {'ACADEMIC PLUG 2021\u00A9 '}</Typography>
-			<Link href="/PageSuggestion">Suggestion Page</Link>
 		</Box>
 	);
 };

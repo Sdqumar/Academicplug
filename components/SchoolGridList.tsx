@@ -1,6 +1,6 @@
 import { Box, Typography, makeStyles, Link } from '@material-ui/core';
 import Image from 'next/image';
-import NextLink from 'next/Link';
+import NextLink from 'next/link';
 export interface SchoolGridListProps {
 	schools: [
 		{
