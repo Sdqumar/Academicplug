@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import FormikControl from '../components/Formik/FormikControl';
-import { Flex, Spacer, Box, Button, useToast } from '@chakra-ui/react';
 import firebase from '../config/firebase-config';
 import { useRouter } from 'next/router';
+import { Box, Button } from '@material-ui/core';
+import { useSnackbar } from 'notistack';
 
 //initialize firestore
-const firestore = firebase.firestore();
 
 function AddDepartment() {
 	const router = useRouter();
@@ -19,33 +18,27 @@ function AddDepartment() {
 		department: Yup.mixed().required('Required'),
 	});
 
-	const toast = useToast();
-	const displayToast = () => {
-		toast({
-			title: 'Department Added Successfully',
-			position: 'top',
-			status: 'success',
-			duration: 5000,
-			isClosable: true,
-		});
-	};
-	const school: string = router.query.School;
-	const faculty: string = router.query.Faculty;
+	const school = router.query.School.toString();
+	const faculty = router.query.Faculty.toString();
 
-	const onSubmit = (values, actions) => {
+	const { enqueueSnackbar } = useSnackbar();
+
+	const onSubmit = async (values, actions) => {
 		const department = values.department;
 		actions.setSubmitting(true);
 
-		firestore
-			.collection('schools')
-			.doc(school)
-			.collection('faculty')
-			.doc(faculty)
-			.update({
-				department: firebase.firestore.FieldValue.arrayUnion(department),
-			})
+		const { doc, updateDoc, getFirestore, arrayUnion } = await import(
+			'firebase/firestore'
+		);
+		const firestore = getFirestore(firebase);
+		updateDoc(doc(firestore, 'schools', school, 'faculty', faculty), {
+			department: arrayUnion(department),
+		})
 			.then(() => {
-				displayToast();
+				enqueueSnackbar('Department Added Sucessful', {
+					variant: 'success',
+					autoHideDuration: 1000,
+				});
 				actions.resetForm();
 				actions.setSubmitting(false);
 				router.reload();
@@ -56,7 +49,13 @@ function AddDepartment() {
 	};
 
 	return (
-		<Flex align="center" justify="center" mb="2rem">
+		<Box
+			alignItems="center"
+			justifyContent="center"
+			mb="2rem"
+			m="auto"
+			display="flex"
+		>
 			<Formik
 				initialValues={initialValues}
 				validationSchema={validationSchema}
@@ -74,11 +73,9 @@ function AddDepartment() {
 								/>
 							</Box>
 
-							<Spacer />
-							<Box mt={4} textAlign="center">
+							<Box mt={2} textAlign="center">
 								<Button
-									colorScheme="teal"
-									variant="outline"
+									variant="outlined"
 									type="submit"
 									disabled={!formik.isValid}
 								>
@@ -89,7 +86,7 @@ function AddDepartment() {
 					);
 				}}
 			</Formik>
-		</Flex>
+		</Box>
 	);
 }
 export default AddDepartment;

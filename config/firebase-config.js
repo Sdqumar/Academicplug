@@ -1,7 +1,4 @@
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/firestore';
-import 'firebase/storage';
+import { initializeApp } from 'firebase/app';
 
 const config = {
 	apiKey: 'AIzaSyBuX9Tg0LK7EnFZGkoXDPwm6mDeKOJyVJE',
@@ -13,14 +10,5 @@ const config = {
 	measurementId: 'G-EBM1PZ4W6K',
 };
 
-try {
-	firebase.initializeApp(config);
-} catch (err) {
-	if (!/already exists/.test(err.message)) {
-		console.error('Firebase initialization error', err.stack);
-	}
-}
-// if (typeof window != undefined) {
-// 	firebase.analytics();
-// }
+let firebase = initializeApp(config);
 export default firebase;

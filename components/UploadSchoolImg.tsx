@@ -1,17 +1,6 @@
 import { useState } from 'react';
 import firebase from '../config/firebase-config';
 
-import {
-	Flex,
-	Button,
-	Input,
-	FormControl,
-	FormLabel,
-	Box,
-	Text,
-	useToast,
-} from '@chakra-ui/react';
-
 const UploadSchoolImg = ({ getFile, formik }) => {
 	interface file {
 		name: string;
@@ -44,27 +33,7 @@ const UploadSchoolImg = ({ getFile, formik }) => {
 			setFileTemp(URL.createObjectURL(e.target.files[0]));
 		}
 	};
-	const toast = useToast();
 
-	const displayToast = () => {
-		toast({
-			title: 'Upload  Successfully',
-			position: 'top',
-			status: 'success',
-			duration: 2000,
-			isClosable: true,
-		});
-	};
-
-	const onSubmit = async (e, values) => {
-		e.preventDefault();
-		const storageRef = firebase.storage().ref();
-		const fileRef = storageRef.child(`school logo/${formik}`);
-		await fileRef.put(file);
-		const url = await fileRef.getDownloadURL();
-		displayToast();
-		getFile(url);
-	};
 	return (
 		<Box w="300px" m="0 10">
 			<FormControl isRequired>

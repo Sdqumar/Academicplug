@@ -2,22 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import FormikControl from '../components/Formik/FormikControl';
-import {
-	Flex,
-	Spacer,
-	Box,
-	Button,
-	Grid,
-	useToast,
-	Heading,
-} from '@chakra-ui/react';
+
 import firebase from '../config/firebase-config';
-import UploadSchoolImg from '../components/UploadSchoolImg';
+import UploadPdf from '../components/UploadPdf';
 import PrivateRoute from '../components/PrivateRoute';
 import { useRouter } from 'next/router';
-
-//initialize firestore
-const firestore = firebase.firestore();
+import { Box, Button, Typography } from '@material-ui/core';
+import { useSnackbar } from 'notistack';
 
 function AddSchool({ admin }) {
 	const router = useRouter();
@@ -36,46 +27,39 @@ function AddSchool({ admin }) {
 	const getFile = (url) => {
 		setLogoUrl(url);
 	};
-	const toast = useToast();
 
-	const displayToast = () => {
-		toast({
-			title: 'School created',
-			position: 'top',
-			status: 'success',
-			duration: 2000,
-			isClosable: true,
-		});
-	};
+	const { enqueueSnackbar } = useSnackbar();
 
-	const onSubmit = (values, actions) => {
+	const onSubmit = async (values, actions) => {
 		actions.setSubmitting(true);
+		const { doc, setDoc, getFirestore } = await import('firebase/firestore');
 
 		const school = values.SchoolName.trim();
 		let slug = values.Slug.trim();
 		slug = slug.charAt(0).charAt(0).toUpperCase() + slug.slice(1);
 		slug = slug.replace(/\s/g, '-');
+
 		//created a new courses array to the database for future adding of courses into the array
-		const Courses = [];
-		firestore.collection('schools').doc(slug).set({
+		const firestore = getFirestore(firebase);
+
+		await setDoc(doc(firestore, 'schools'), {
 			logourl: logoUrl,
 			name: school,
 			slug,
-		});
-
-		firestore
-			.collection('schools')
-			.doc(slug)
-			.collection('admin')
-			.doc('admin')
-			.set({
-				admins: ['x1Fnwo5WimP9MwIjx4EWeQlyXpE3'],
+		})
+			.then(async () => {
+				await setDoc(doc(firestore, 'schools', 'admin', 'admin'), {
+					admins: ['x1Fnwo5WimP9MwIjx4EWeQlyXpE3'],
+				});
 			})
+
 			.then(() => {
+				enqueueSnackbar('School Added Sucessful', {
+					variant: 'success',
+					autoHideDuration: 1000,
+				});
 				actions.resetForm();
-				displayToast();
 				actions.setSubmitting(false);
-				router.reload();
 			})
 			.catch((error) => {
 				console.error('Error writing document: ', error);
@@ -83,11 +67,15 @@ function AddSchool({ admin }) {
 	};
 
 	return (
-		<Box d="block" m="auto" mt="1rem">
-			<Heading size="lg" fontSize="50px">
-				Add School
-			</Heading>
-			<Box align="center" justify="center" w="300px" mb="10">
+		<Box
+			display="flex"
+			alignItems="center"
+			justifyContent="start"
+			flexDirection="column"
+			mt="1rem"
+		>
+			<Typography className="heading">Add School</Typography>
+			<Box width="300px" mb="10">
 				<Formik
 					initialValues={initialValues}
 					validationSchema={validationSchema}
@@ -114,16 +102,15 @@ function AddSchool({ admin }) {
 										/>
 									</Box>
 								</Form>
-								<Spacer />
 
-								<UploadSchoolImg
-									getFile={getFile}
-									formik={formik.values.SchoolName}
+								<UploadPdf
+									getfile={getFile}
+									label="image"
+									size={{ byte: '1000000', mb: '15' }}
 								/>
 								<Box mt={4} textAlign="center">
 									<Button
-										colorScheme="teal"
-										variant="outline"
+										variant="outlined"
 										onClick={formik.submitForm}
 										type="submit"
 										disabled={!formik.isValid || logoUrl === null}

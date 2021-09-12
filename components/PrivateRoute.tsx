@@ -4,16 +4,16 @@ import AuthContext from '../components/AuthContext';
 
 const PrivateRoute = (WrappedComponent) => {
 	return (props) => {
-		// checks whether we are on client / browser or server.
 		const Router = useRouter();
-		const user = useContext(AuthContext);
+		const [currentUser] = useContext(AuthContext);
 
-		const isAdmin = user?.uid == 'x1Fnwo5WimP9MwIjx4EWeQlyXpE3';
+		// checks whether we are on client / browser or server.
 
-		if (typeof window !== 'undefined') {
-			// If there is no access token we redirect to "/" page.
-			if (!user) {
-				Router.replace('/LoginForm');
+		if (typeof window !== 'undefined' && currentUser !== undefined) {
+			const isAdmin = currentUser?.uid == 'n49a6ko1tKdhuIIs30uft1eeBwO2';
+			console.log(isAdmin);
+			if (currentUser == null) {
+				Router.replace('/Signin');
 				return null;
 			}
 			if (!isAdmin) {
@@ -21,12 +21,9 @@ const PrivateRoute = (WrappedComponent) => {
 				return null;
 			}
 
-			// If this is an accessToken we just render the component that was passed with all its props
-
 			return <WrappedComponent {...props} />;
 		}
 
-		// If we are on server, return null
 		return null;
 	};
 };

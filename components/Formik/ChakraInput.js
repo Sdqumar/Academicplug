@@ -1,26 +1,32 @@
-import React from 'react'
-import { Field } from 'formik'
-import {
-  Input,
-  FormControl,
-  FormLabel,
-  FormErrorMessage
-} from '@chakra-ui/react'
+import React from 'react';
+import { Field } from 'formik';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
 
-function ChakraInput (props) {
-  const { label, name, ...rest } = props
-  return (
-    <Field name={name}>
-      {({ field, form }) => 
-      (
-        <FormControl isInvalid={form.errors[name] && form.touched[name]} isRequired>
-          <FormLabel htmlFor={name} >{label}</FormLabel>
-          <Input id={name} {...rest} {...field} />
-          <FormErrorMessage>{form.errors[name]}</FormErrorMessage>
-        </FormControl>
-      )}
-    </Field>
-  )
+function ChakraInput(props) {
+	const { label, name, ...rest } = props;
+	return (
+		<Field name={name}>
+			{({ field, form }) => {
+				return (
+					<FormControl fullWidth>
+						<InputLabel htmlFor={name}>{label}</InputLabel>
+						<Input
+							id={name}
+							error={form.errors[name] && form.touched[name]}
+							{...rest}
+							{...field}
+						/>
+						<FormHelperText error={form.errors[name] && form.touched[name]}>
+							{form.errors[name]}
+						</FormHelperText>
+					</FormControl>
+				);
+			}}
+		</Field>
+	);
 }
 
-export default ChakraInput
+export default ChakraInput;

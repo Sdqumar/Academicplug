@@ -1,100 +1,64 @@
 import { useState } from 'react';
-import firebase from '../config/firebase-config';
+import { Box, Button, Typography } from '@material-ui/core';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import InputBase from '@material-ui/core/InputBase';
 
-import {
-	Flex,
-	Button,
-	Input,
-	FormControl,
-	FormLabel,
-	Box,
-	useToast,
-} from '@chakra-ui/react';
-
-const UploadInput = ({ getfile, data, formik }) => {
-	const [file, setFile] = useState<Blob | Uint8Array | ArrayBuffer>();
+const UploadInput = ({ getfile, label, size }) => {
 	const [error, seterror] = useState<string | boolean>(null);
 	const [fileTemp, setFileTemp] = useState('');
 
 	interface e {
 		target: { files: [] | {} };
 	}
-
-	const toast = useToast();
-
-	const displayToast = () => {
-		toast({
-			title: 'Upload  Successfully',
-			position: 'top',
-			status: 'success',
-			duration: 2000,
-			isClosable: true,
-		});
-	};
-
-	const onSubmit = async (e) => {
-		e.preventDefault();
-		const storageRef = firebase.storage().ref();
-		const fileRef = storageRef.child(
-			`${data.school}/${data.faculty}/${data.department}/${data.course}/${formik}`
-		);
-		await fileRef.put(file);
-		const url = await fileRef.getDownloadURL();
-		getfile(url);
-		displayToast();
-	};
-
+	15000000;
 	const handleFile = (e: e) => {
 		const file = e.target.files[0];
-		seterror('Please Upload a pdf file');
+		seterror(`Please Upload a ${label} file`);
 		setFileTemp(null);
-		setFile(null);
-		setFile(null);
+		getfile(null);
 		if (file === undefined) {
-			seterror('Please Upload a pdf file');
-		} else if (file.type != 'application/pdf') {
-			seterror('Please Upload a pdf file');
-		} else if (file.size > 15000000) {
-			seterror('Upload file less than 15MB file');
+			seterror(`Please Upload a ${label} file`);
+		} else if (file.type != `application/${label}`) {
+			seterror(`Please Upload a ${label} file`);
+		} else if (file.size > size.byte) {
+			seterror(`Upload file less than ${size.mb} file`);
 		} else {
 			seterror(false);
-			setFile(file);
+			getfile(file);
 			setFileTemp(URL.createObjectURL(e.target.files[0]));
 		}
 	};
+
 	return (
-		<Flex w="300px" ml="10">
-			<FormControl isRequired>
-				<form onSubmit={onSubmit}>
-					<FormLabel>Upload pdf</FormLabel>
-					<Box d="flex" alignItems="center">
-						<Input
-							isRequired
+		<Box mt={2}>
+			<FormControl required variant="filled">
+				<form>
+					<Box>
+						<Typography>Upload {label}</Typography>
+					</Box>
+					<Box display="flex" flexDirection="column" alignItems="center">
+						<InputBase
+							required
 							type="file"
-							label="File"
 							name="file"
 							onChange={handleFile}
+							autoComplete="true"
 						/>
-						<Button
-							type="submit"
-							colorScheme="teal"
-							variant="outline"
-							m="auto"
-							ml="5"
-							disabled={error || !formik}
-						>
-							upload
-						</Button>
 					</Box>
 					{fileTemp && (
 						<a href={fileTemp} target="_blank">
 							Click to preview
 						</a>
 					)}
-					{error && <p>{error}</p>}
+					{error && (
+						<Box mt={1}>
+							<FormHelperText> {error}</FormHelperText>
+						</Box>
+					)}
 				</form>
 			</FormControl>
-		</Flex>
+		</Box>
 	);
 };
 

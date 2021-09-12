@@ -1,35 +1,45 @@
-import { Container, Flex, Image, Box, Heading } from '@chakra-ui/react';
-
+import { Box, Typography, makeStyles } from '@material-ui/core';
+import Image from 'next/image';
+import banner from '../public/banner.jpg';
 export interface BannerHomeProps {}
 
+const useStyles = makeStyles((theme) => ({
+	banner: {
+		margin: 'auto',
+		'& img': {
+			filter: 'brightness(40%) grayscale(100%)',
+		},
+		'& h2': {
+			fontWeight: 450,
+
+			fontSize: '3rem',
+		},
+	},
+}));
+
 const BannerHome: React.FC<BannerHomeProps> = () => {
+	const classes = useStyles();
 	return (
-		<Flex w="100%" h="20rem" justify="center" mt={{ base: 0, md: '1rem' }}>
-			<Box position="relative" w={{ base: '100%', md: '90%' }}>
-				<Image
-					w="100%"
-					h="100%"
-					objectFit="cover"
-					src="banner.jpg"
-					alt="Home-Banner"
-					filter="brightness(40%) grayscale(100%)"
-				/>
-				<Box
-					position="absolute"
-					top="6rem"
-					color="rgb(251 174 23)"
-					width={{ base: '100%', md: '27rem' }}
-				>
-					<Heading
-						size="2xl"
-						ml="1rem"
-						fontSize={{ base: '2.8rem', md: '3rem' }}
-					>
-						Courses for Nigerian Students
-					</Heading>
-				</Box>
+		<Box
+			position="relative"
+			display="block"
+			width={{ xs: '100%', sm: '100%' }}
+			height="20rem"
+			className={classes.banner}
+		>
+			<Image layout="fill" objectFit="cover" src={banner} alt="Home-Banner" />
+			<Box
+				position="absolute"
+				color="secondary.main"
+				width={{ xs: '100%', sm: '40rem' }}
+				paddingLeft={{ xs: '0', sm: '1rem' }}
+				marginTop={{ xs: '4rem', sm: '6rem' }}
+			>
+				<Typography component="h2" variant="h3">
+					Courses for Nigerian Students
+				</Typography>
 			</Box>
-		</Flex>
+		</Box>
 	);
 };
 

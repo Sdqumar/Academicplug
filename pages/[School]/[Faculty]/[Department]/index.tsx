@@ -1,12 +1,13 @@
-import firebase from '../../../../config/firebase-config';
-import { Container, Heading, Flex, Box, Button } from '@chakra-ui/react';
-import CoursesGrid from '../../../../components/CoursesGrid';
-import { useRouter } from 'next/router';
-import AddCourse from '../../../../components/AddCourse';
-import { useRef } from 'react';
-import Link from 'next/link';
+import { Box, Typography, Button, makeStyles } from '@material-ui/core';
 
-const firestore = firebase.firestore();
+import { useRouter } from 'next/router';
+import { useRef } from 'react';
+import NextLink from 'next/link';
+import firebase from 'config/firebase-config';
+
+import dynamic from 'next/dynamic';
+const AddCourse = dynamic(() => import('../../../../components/AddCourse'));
+const CoursesGrid = dynamic(() => import('components/CoursesGrid'));
 
 export async function getStaticPaths() {
 	const paths = [
@@ -27,20 +28,19 @@ export async function getStaticProps(context) {
 	const faculty = context.params.Faculty;
 	const department = context.params.Department;
 
-	const schoolRef = await firestore
-		.collection('schools')
-		.doc(school)
-		.collection('courses')
-		.where('School', '==', school.replace(/-/g, ' '))
-		.where('Department', '==', department.replace(/-/g, ' '))
-		.get();
+	const { collection, query, getFirestore, where, getDocs, getDoc, doc } =
+		await import('firebase/firestore');
+	const firestore = getFirestore(firebase);
 
-	const adminRef = await firestore
-		.collection('schools')
-		.doc(school)
-		.collection('admin')
-		.doc('admin')
-		.get();
+	const q = query(
+		collection(firestore, 'schools', school, 'courses'),
+		where('Department', '==', department.replace(/-/g, ' '))
+	);
+	const schoolRef = await getDocs(q);
+
+	const adminRef = await getDoc(
+		doc(firestore, 'schools', school, 'admin', 'admin')
+	);
 
 	let admins = adminRef?.data()?.admins;
 
@@ -60,13 +60,22 @@ export async function getStaticProps(context) {
 	};
 }
 
+const useStyles = makeStyles((theme) => ({
+	department: {
+		padding: '2rem',
+		'& .MuiButton-contained': {
+			color: 'red',
+		},
+	},
+}));
+
 const School = ({ data, admins }) => {
-	const auth = firebase.auth();
+	// const auth = firebase.auth();
 
-	const uid = auth?.currentUser?.uid;
+	// const uid = auth?.currentUser?.uid;
 
-	let isAdmin = admins?.some((item) => item == uid);
-
+	// let isAdmin = admins?.some((item) => item == uid);
+	const classes = useStyles();
 	const router = useRouter();
 
 	const school = router.query.School.toString().replace(/-/g, ' ');
@@ -89,39 +98,50 @@ const School = ({ data, admins }) => {
 		boxRef.current.style.display = 'none';
 	};
 
+	// const collectionGrp = async () => {
+	// 	const q = query(collectionGroup(firestore, 'courses'));
+	// 	const schoolRef = await getDocs(q);
+	// 	schoolRef.docs.map((item) => {
+	// 		console.log(item.data()?.['Course']);
+	// 	});
+	// };
+	// collectionGrp();
 	return (
 		<Box mt="1rem" pl="1rem">
-			<Button mt="1rem" onClick={onClick} d={uid ? 'block' : 'none'}>
-				Add Course
-			</Button>
-			<Box
-				d="none"
-				boxShadow="base"
-				rounded="md"
-				ref={boxRef}
-				pos="fixed"
-				left="1px"
-				top="6rem"
-				bg="#fff"
-				width="100%"
-				zIndex={1}
-			>
-				<Flex justify="space-between" mt="1rem">
-					<Heading size="lg" fontSize="30px" m="1rem">
-						Add Course
-					</Heading>
-					<Button color="red" float="right" m="1rem" onClick={closeBox}>
-						Close
-					</Button>
-				</Flex>
-
-				<AddCourse School={school} Faculty={faculty} Department={department} />
+			<Box>
+				<Button variant="outlined" onClick={onClick}>
+					Add Course
+				</Button>
+				<Box
+					display="none"
+					ref={boxRef}
+					position="fixed"
+					left="1px"
+					top="6rem"
+					bgcolor="#fff"
+					width="100%"
+					zIndex={1}
+					className={classes.department}
+				>
+					<Box justifyContent="space-between" mt="1rem">
+						<Typography className="heading">Add Course</Typography>
+						<Button variant="contained" onClick={closeBox}>
+							Close
+						</Button>
+					</Box>
+					<AddCourse
+						School={school}
+						Faculty={faculty}
+						Department={department}
+					/>
+				</Box>
 			</Box>
 
-			<Heading size="lg" fontSize="5vh" m="auto">
-				<Link href={schoolUrl}>{school}</Link> -
-				<Link href={schoolUrl + facultyUrl}>{faculty}</Link> - {department}
-			</Heading>
+			<Typography className="heading">
+				<NextLink href={schoolUrl}>{school}</NextLink> -
+				<NextLink href={schoolUrl + facultyUrl}>{faculty}</NextLink> -{' '}
+				{department}
+			</Typography>
 			<CoursesGrid flexDir="row" list={data} url={url} />
 		</Box>
 	);

@@ -1,96 +1,129 @@
-import { Flex, Heading, Box, Text, Icon, Button } from '@chakra-ui/react';
+import { Box, Button, Grid, makeStyles, Typography } from '@material-ui/core';
+import SchoolIcon from '@material-ui/icons/School';
 import firebase from '../config/firebase-config';
 import AuthContext from '../components/AuthContext';
-import { useRouter } from 'next/router';
 import { useContext } from 'react';
-import Link from 'next/link';
-import { IoSchoolSharp } from 'react-icons/io5';
-import { LinkOverlay, LinkBox } from '@chakra-ui/react';
+import Cookies from 'js-cookie';
+import { useSnackbar } from 'notistack';
+import NextLink from 'next/link';
+
+const useStyles = makeStyles((theme) => ({
+	header: {
+		backgroundColor: theme.palette.secondary.main,
+		maxWidth: '100%',
+		height: '5.5rem',
+		padding: '1rem',
+		alignItems: 'center',
+		display: 'flex',
+		justifyContent: 'space-between',
+		[theme.breakpoints.down('md')]: {
+			padding: '7px',
+		},
+	},
+
+	academicplug: {
+		cursor: 'pointer',
+		width: 'fit-content',
+		display: 'flex',
+		'& svg': {
+			marginRight: ' 5px',
+			fontSize: '40px',
+		},
+		'& h4': {
+			fontWeight: 700,
+			[theme.breakpoints.down('xs')]: {
+				fontSize: '24px',
+			},
+		},
+		'& h6': {
+			letterSpacing: '10px',
+			fontWeight: 700,
+			marginTop: '-11px',
+		},
+	},
+
+	logReg: {
+		width: 'fit-content',
+		display: 'flex',
+		marginRight: '10px',
+	},
+	welcome: {
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		width: '9rem',
+		marginRight: '1rem',
+
+		'& span': {
+			fontWeight: 500,
+		},
+	},
+}));
 
 const Header = () => {
-	const user = useContext(AuthContext);
-	const auth = firebase.auth();
-	const router = useRouter();
+	const [currentUser, setCurrentUser] = useContext(AuthContext);
 
-	const handleSignOut = () => {
-		auth
-			.signOut()
+	const { enqueueSnackbar } = useSnackbar();
+
+	const handleSignOut = async () => {
+		const { getAuth, signOut } = await import('firebase/auth');
+		const auth = getAuth(firebase);
+
+		signOut(auth)
 			.then(() => {
-				router.push('/');
+				Cookies.set('user', null);
+				setCurrentUser(null);
+				enqueueSnackbar('Sign Out Sucessful', {
+					variant: 'success',
+					autoHideDuration: 1000,
+				});
 			})
 			.catch((error) => {});
 	};
 
+	const classes = useStyles();
 	return (
-		<Flex background="primary" w="100%" justify="space-between" align="center">
-			<LinkBox>
-				<Box mt="-20px" cursor="pointer" ml={{ md: '5rem', base: '3rem' }}>
-					<Link href="/">
-						<LinkOverlay>
-							<Icon
-								as={IoSchoolSharp}
-								position="relative"
-								left="-47px"
-								bottom="-35px"
-								w="2rem"
-								h="2rem"
-							/>
-						</LinkOverlay>
-					</Link>
-					<Heading as="h3" size="lg">
-						ACADEMIC
-					</Heading>
-					<Heading as="h6" size="sm" letterSpacing={10} mt="-7px">
-						<Link href="/">
-							<LinkOverlay>PLUG</LinkOverlay>
-						</Link>
-					</Heading>
+		<Grid component="header" className={classes.header}>
+			<NextLink href="/">
+				<Box className={classes.academicplug}>
+					<Box>
+						<SchoolIcon />
+					</Box>
+					<Box>
+						<Typography variant="h4">ACADEMIC</Typography>
+						<Typography variant="h6">PLUG</Typography>
+					</Box>
 				</Box>
-			</LinkBox>
+			</NextLink>
 
-			<Flex
-				className="log-reg"
-				mr={{ md: '2rem', base: '1rem' }}
-				w="fit-content"
-				h="fit-content"
-			>
-				{user === null || undefined ? (
-					<Flex
-						w="7rem"
-						justify="space-around"
-						align-items="center"
-						fontWeight="600"
-						align="center"
-					>
-						<Box border=" 1px solid" p="3px" borderRadius="3px">
-							<Link href="/LoginForm">Login</Link>
-						</Box>
+			<Box>
+				{currentUser === null || undefined ? (
+					<Box className={classes.logReg}>
+						<Button>
+							<NextLink href="/Signin">Login</NextLink>
+						</Button>
 
-						<Box border=" 1px solid" p="3px" borderRadius="3px" ml="10px">
-							<Link href="/RegistrationForm">Register</Link>
-						</Box>
-					</Flex>
+						<Button variant="outlined">
+							<NextLink href="/Signup">Sign Up</NextLink>
+						</Button>
+					</Box>
 				) : (
-					<Flex align="center" justify="space-around">
-						<Flex d={{ sm: 'flex', base: 'none' }} mr="1rem">
-							<Text mr="5px">Welcome</Text>
-							<Text fontWeight="600">{user?.displayName}</Text>
-						</Flex>
-						<Text
-							_hover={{ color: 'gray.400' }}
-							cursor="pointer"
-							border="1.5px solid #000"
-							fontWeight="600"
-							borderRadius="8%"
-							p="4px"
-							onClick={handleSignOut}
+					<Box display="flex">
+						<Box
+							display={{ xs: 'none', sm: 'flex' }}
+							className={classes.welcome}
 						>
+							<Typography>Welcome</Typography>
+							<Typography component="span">
+								{currentUser?.displayName}
+							</Typography>
+						</Box>
+						<Button variant="outlined" onClick={handleSignOut}>
 							Sign Out
-						</Text>
-					</Flex>
+						</Button>
+					</Box>
 				)}
-			</Flex>
-		</Flex>
+			</Box>
+		</Grid>
 	);
 };
 

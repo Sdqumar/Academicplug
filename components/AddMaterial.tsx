@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import FormikControl from './Formik/FormikControl';
-import { Flex, Spacer, Box, Button, useToast } from '@chakra-ui/react';
 import firebase from '../config/firebase-config';
 import { useRouter } from 'next/router';
 import UploadInput from './UploadPdf';
@@ -96,7 +95,6 @@ function AddMaterial() {
 									/>
 								</Box>
 							</Form>
-							<Spacer />
 							<UploadInput
 								getfile={getfile}
 								data={data}

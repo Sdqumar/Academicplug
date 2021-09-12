@@ -1,20 +1,17 @@
-import firebase from 'config/firebase-config';
-import {
-	Container,
-	Heading,
-	useToast,
-	Button,
-	Box,
-	Flex,
-} from '@chakra-ui/react';
-import CoursesGrid from 'components/CoursesGrid';
-import DeleteButton from 'components/DeleteButton';
 import { useRouter } from 'next/router';
-import AddMaterial from 'components/AddMaterial';
-import { useRef } from 'react';
-import Link from 'next/link';
+import NextLink from 'next/link';
+import { useState } from 'react';
+import { useContext } from 'react';
+import { Box, Typography } from '@material-ui/core';
+import { useSnackbar } from 'notistack';
+import Tooltip from '@material-ui/core/Tooltip';
+import StarIcon from '@material-ui/icons/Star';
+import StarBorderIcon from '@material-ui/icons/StarBorder';
+import firebase from 'config/firebase-config';
+import AuthContext from '/components/AuthContext';
 
-const firestore = firebase.firestore();
+const DeleteButton = dynamic(() => import('components/DeleteButton'));
+const PDFViewer = dynamic(() => import('components/PDFViewer'));
 
 export async function getStaticPaths() {
 	const paths = [
@@ -35,44 +32,114 @@ export async function getStaticProps(context) {
 	const department = context.params.Department;
 	const course = context.params.Course;
 
-	const schoolRef = await firestore
-		.collection('schools')
-		.doc(school)
-		.collection('courses')
-		.where('Course', '==', course.replace(/-/g, ' '))
-		.where('Department', '==', department.replace(/-/g, ' '))
-		.get();
+	const { doc, getDoc, getFirestore } = await import('firebase/firestore');
+	const firestore = getFirestore(firebase);
 
-	const adminRef = await firestore
-		.collection('schools')
-		.doc(school)
-		.collection('admin')
-		.doc('admin')
-		.get();
+	const docRef = doc(firestore, 'schools', school, 'courses', course);
+	const dataRef = await getDoc(docRef);
+	const data = dataRef.data();
 
-	const admins = adminRef.data().admins;
+	const adminRef = await getDoc(
+		doc(firestore, 'schools', school, 'admin', 'admin')
+	);
 
-	const [data] = schoolRef.docs.map((item) => item.data());
+	let admins = adminRef?.data()?.admins;
 
 	return {
 		props: {
 			data,
 			admins,
 		},
-		revalidate: 10,
 	};
 }
 
-const School = ({ data: result, admins }) => {
-	const auth = firebase.auth();
+const School = ({ data, admins }) => {
+	let userId: { uid: String } = useContext(AuthContext);
+	const user = userId?.uid;
 
-	const uid = auth?.currentUser?.uid;
+	const [star, setStar] = useState(data?.star || []);
 
-	let isAdmin = admins?.some((item) => item == uid);
+	const [isStared, setIsStared] = useState(false);
+	star.length > 1 && setIsStared(star?.includes(user));
+
+	const updateStar = async () => {
+		const { doc, getDoc, getFirestore } = await import('firebase/firestore');
+
+		const firestore = getFirestore(firebase);
+
+		const docRef = doc(
+			firestore,
+			'schools',
+			school.replace(/\s/g, '-'),
+			'courses',
+			course.replace(/\s/g, '-')
+		);
+		const dataRef = await getDoc(docRef);
+
+		const data = dataRef.data();
+
+		setStar(data.star);
+	};
+
+	const handleStar = async () => {
+		const { doc, updateDoc, getFirestore, arrayUnion, arrayRemove } =
+			await import('firebase/firestore');
+
+		const firestore = getFirestore(firebase);
+
+		if (isStared && user) {
+			if (star == 1) {
+				setStar([]);
+			} else {
+				setStar(data.star - 1);
+			}
+			setIsStared(false);
+			updateDoc(
+				doc(
+					firestore,
+					'schools',
+					school.replace(/\s/g, '-'),
+					'courses',
+					course.replace(/\s/g, '-')
+				),
+				{
+					star: arrayRemove(user),
+				}
+			)
+				.then(() => {
+					updateStar();
+				})
+				.catch((error) => console.log(error));
+		}
+		if (!isStared && user) {
+			setStar(data.star + 1);
+			setIsStared(true);
+			updateDoc(
+				doc(
+					firestore,
+					'schools',
+					school.replace(/\s/g, '-'),
+					'courses',
+					course.replace(/\s/g, '-')
+				),
+				{
+					star: arrayUnion(user),
+				}
+			)
+				.then(() => {
+					updateStar();
+				})
+				.catch((error) => console.log(error));
+		}
+	};
+	// const auth = firebase.auth();
+
+	// const uid = auth?.currentUser?.uid;
+
+	// let isAdmin = admins?.some((item) => item == uid);
 
 	const router = useRouter();
 
-	const list = result?.Materials?.map((item) => item.Name);
 	const school = router.query.School.toString().replace(/-/g, ' ');
 	const faculty = router.query.Faculty.toString().replace(/-/g, ' ');
 	const department = router.query.Department.toString().replace(/-/g, ' ');
@@ -83,37 +150,26 @@ const School = ({ data: result, admins }) => {
 	const departmentUrl = `/${department.replace(/\s/g, '-')}`;
 	const courseUrl = `/${course.replace(/\s/g, '-')}`;
 
-	const url = schoolUrl + facultyUrl + departmentUrl + courseUrl;
+	const { enqueueSnackbar } = useSnackbar();
 
-	const toast = useToast();
-	const displayToast = () => {
-		toast({
-			title: 'Course Deleted',
-			position: 'top',
-			status: 'success',
-			duration: 2000,
-			isClosable: true,
-		});
-	};
-	const boxRef = useRef(null);
-
-	const onClick = () => {
-		boxRef.current.style.display = 'block';
-	};
-	const closeBox = () => {
-		boxRef.current.style.display = 'none';
-	};
 	const handleDelete = async () => {
-		firestore
-			.collection('schools')
-			.doc(school.replace(/\s/g, '-'))
-			.collection('courses')
-			.doc(course.replace(/\s/g, '-'))
-			.delete()
-			.then(() => {
-				displayToast();
+		const { doc, deleteDoc, getFirestore } = await import('firebase/firestore');
+		const firestore = getFirestore(firebase);
+		const docRef = await doc(
+			firestore,
+			'schools',
+			school.replace(/\s/g, '-'),
+			'courses',
+			course.replace(/\s/g, '-')
+		);
 
+		deleteDoc(docRef)
+			.then(() => {
 				setTimeout(() => router.back(), 2500);
+				enqueueSnackbar('Material Removed Sucessful', {
+					variant: 'success',
+					autoHideDuration: 1000,
+				});
 			})
 			.catch((error) => {
 				console.error('Error removing document: ', error);
@@ -121,41 +177,52 @@ const School = ({ data: result, admins }) => {
 	};
 
 	return (
-		<Box mt="1rem" pl="1rem">
-			<Flex justify="space-evenly" mt="1rem" d={uid ? 'flex' : 'none'}>
-				<Button onClick={onClick}>Add Material</Button>
-				<DeleteButton deleteFunction={handleDelete} name="Course" />
-			</Flex>
-			<Box
-				d="none"
-				boxShadow="base"
-				rounded="md"
-				ref={boxRef}
-				pos="fixed"
-				left="1px"
-				top="6rem"
-				bg="#fff"
-				width="100%"
-				zIndex={1}
-			>
-				<Flex justify="space-between" m="2rem 1rem" mb="0px">
-					<Heading size="lg" fontSize="30px">
-						Add Material
-					</Heading>
-					<Button color="red" float="right" onClick={closeBox}>
-						Close
-					</Button>
-				</Flex>
-				<AddMaterial />
+		<Box>
+			<Box mt="1rem">
+				<Box mr="1rem" display="flex" justifyContent="end">
+					<DeleteButton name="Material" deleteFunction={handleDelete} />
+				</Box>
+				<Typography className="heading">
+					<NextLink href={schoolUrl}>{school}</NextLink> -{' '}
+					<NextLink href={schoolUrl + facultyUrl}>{faculty}</NextLink> -{' '}
+					<NextLink href={schoolUrl + facultyUrl + departmentUrl}>
+						{department}
+					</NextLink>
+					-{course}
+				</Typography>
 			</Box>
-			<Heading size="lg" fontSize="5vh" w="95%">
-				<Link href={schoolUrl}>{school}</Link> -{' '}
-				<Link href={schoolUrl + facultyUrl}>{faculty}</Link> -{' '}
-				<Link href={schoolUrl + facultyUrl + departmentUrl}>{department}</Link>{' '}
-				- {course}
-			</Heading>
+			<Box>
+				<Tooltip
+					title={user ? '' : 'You must signed in to star a material'}
+					arrow
+				>
+					<Box
+						border="1px solid lightgray"
+						m="1rem"
+						width="fit-content"
+						borderRadius="10px"
+						fontSize="1.1rem"
+						fontWeight="600"
+						onClick={handleStar}
+						alignItems="center"
+						p="4px"
+						display="flex"
+						className="pointer"
+					>
+						<Box display="flex" alignItems="center" p="0 3px">
+							<Box mr="5px">{isStared ? <StarIcon /> : <StarBorderIcon />}</Box>
 
-			<CoursesGrid list={list} url={url} />
+							<Box borderRight="1px solid lightgray" pr="7px">
+								<Typography>{isStared ? 'Unstar' : 'Star'}</Typography>
+							</Box>
+						</Box>
+						<Box p="0 5px">
+							<Typography>{star.length}</Typography>
+						</Box>
+					</Box>
+				</Tooltip>
+			</Box>
+			<PDFViewer data={data?.pdfRef} />
 		</Box>
 	);
 };

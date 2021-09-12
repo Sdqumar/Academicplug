@@ -1,45 +1,61 @@
-import { Flex, Button, Heading, Image } from '@chakra-ui/react';
-import Link from 'next/link';
-import { LinkOverlay, LinkBox } from '@chakra-ui/react';
+import { Box, Typography, makeStyles, Link } from '@material-ui/core';
+import NextLink from 'next/Link';
 
-const CoursesGrid = ({ list, url, flexDir }) => {
+const useStyles = makeStyles((theme) => ({
+	grid: {
+		display: 'flex',
+		flexWrap: 'wrap',
+
+		'& h5': {
+			border: '2px solid',
+			textAlign: 'center',
+			padding: '0.5rem',
+			fontWeight: 600,
+		},
+	},
+}));
+
+type CourseGridProps = {
+	list: [];
+	url: string;
+	flexDir?: 'row' | 'column';
+};
+const CoursesGrid = ({ list, url, flexDir }: CourseGridProps) => {
+	const classes = useStyles();
+
 	return (
-		<Flex
+		<Box
 			mt="1rem"
-			flexDir={flexDir ? flexDir : 'column'}
-			wrap="wrap"
-			maxW="100%"
-			h="fit-content"
-			justify={{ base: 'center', md: 'flex-start' }}
+			flexDirection={flexDir ? flexDir : 'column'}
+			maxWidth="100%"
+			height="fit-content"
+			justifyContent={{ base: 'center', md: 'flex-start' }}
+			className={classes.grid}
 		>
 			{list?.map((item) => {
 				return (
-					<LinkBox key={item}>
-						<Flex
-							m="0 5px"
-							bg="rgb(251 174 23)"
-							padding="1.2rem"
-							cursor="pointer"
-							minW="10rem"
-							maxW="24rem"
-							mb="0.8rem"
-						>
-							<Heading
-								m="auto"
-								fontSize="3vh"
-								align="center"
-								w="100%"
-								border="3px solid"
+					<NextLink
+						key={item}
+						href={`${url}/${item.replace(/\s/g, '-')}`}
+						passHref
+					>
+						<Link>
+							{' '}
+							<Box
+								m="0 5px"
+								bgcolor="rgb(251 174 23)"
+								padding="1.2rem"
+								minWidth="10rem"
+								maxWidth="24rem"
+								mb="0.8rem"
 							>
-								<Link href={`${url}/${item.replace(/\s/g, '-')}`} passHref>
-									<LinkOverlay>{item}</LinkOverlay>
-								</Link>
-							</Heading>
-						</Flex>
-					</LinkBox>
+								<Typography variant="h5">{item}</Typography>
+							</Box>
+						</Link>
+					</NextLink>
 				);
 			})}
-		</Flex>
+		</Box>
 	);
 };
 

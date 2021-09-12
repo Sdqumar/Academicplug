@@ -1,52 +1,45 @@
-import {
-	AlertDialog,
-	AlertDialogBody,
-	AlertDialogFooter,
-	AlertDialogHeader,
-	AlertDialogContent,
-	AlertDialogOverlay,
-	Button,
-} from '@chakra-ui/react';
-import { Interface } from 'node:readline';
-import { useState, useRef } from 'react';
+import React from 'react';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import { Box } from '@material-ui/core';
 
 export default function AlertDialogExample({ deleteFunction, name }) {
-	const [isOpen, setIsOpen] = useState(false);
-	const onClose = () => setIsOpen(false);
-	const cancelRef = useRef();
+	const [open, setOpen] = React.useState(false);
+
+	const handleClickOpen = () => {
+		setOpen(true);
+	};
+
+	const handleClose = () => {
+		setOpen(false);
+	};
 
 	return (
-		<>
-			<Button colorScheme="red" mr="-2rem" onClick={() => setIsOpen(true)}>
+		<div>
+			<button className="closeBtn" onClick={handleClickOpen}>
 				Delete {name}
-			</Button>
-
-			<AlertDialog
-				isOpen={isOpen}
-				leastDestructiveRef={cancelRef}
-				onClose={onClose}
+			</button>
+			<Dialog
+				maxWidth="sm"
+				open={open}
+				onClose={handleClose}
+				aria-labelledby="alert-dialog-title"
+				aria-describedby="alert-dialog-description"
 			>
-				<AlertDialogOverlay>
-					<AlertDialogContent>
-						<AlertDialogHeader fontSize="lg" fontWeight="bold">
-							Delete {name}
-						</AlertDialogHeader>
+				<Box fontSize="1.5rem" padding="1.5rem" fontWeight="500">
+					Are you sure? You can't undo this action afterwards.
+				</Box>
 
-						<AlertDialogBody>
-							Are you sure? You can't undo this action afterwards.
-						</AlertDialogBody>
-
-						<AlertDialogFooter>
-							<Button ref={cancelRef} onClick={onClose}>
-								Cancel
-							</Button>
-							<Button colorScheme="red" onClick={deleteFunction} ml={3}>
-								Delete
-							</Button>
-						</AlertDialogFooter>
-					</AlertDialogContent>
-				</AlertDialogOverlay>
-			</AlertDialog>
-		</>
+				<DialogActions>
+					<Button onClick={handleClose} color="primary">
+						Disagree
+					</Button>
+					<button onClick={deleteFunction} className="closeBtn" autoFocus>
+						Agree
+					</button>
+				</DialogActions>
+			</Dialog>
+		</div>
 	);
 }

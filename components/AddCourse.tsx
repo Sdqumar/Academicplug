@@ -1,17 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import FormikControl from '../components/Formik/FormikControl';
-import { Flex, Spacer, Box, Button, useToast } from '@chakra-ui/react';
 import firebase from '../config/firebase-config';
 import { useRouter } from 'next/router';
 
-//initialize firestore
-const firestore = firebase.firestore();
+import { Box, Button } from '@material-ui/core';
+import { useSnackbar } from 'notistack';
+import UploadInput from './UploadPdf';
+import { useContext } from 'react';
+import AuthContext from '/components/AuthContext';
 
 function AddCourse({ School, Faculty, Department }) {
+	const data = {
+		School,
+		Faculty,
+		Department,
+	};
+	let user: { displayName: String; uid: String } = useContext(AuthContext);
+	user = {
+		displayName: user?.displayName,
+		uid: user?.uid,
+	};
+	const [pdfurl, setPdfurl] = useState(null);
+
+	const getfile = (url) => {
+		setPdfurl(url);
+	};
+
 	const router = useRouter();
-	const slug = router.query.School;
+
 	const initialValues = {
 		Course: '',
 	};
@@ -19,35 +37,41 @@ function AddCourse({ School, Faculty, Department }) {
 		Course: Yup.mixed().required('Required'),
 	});
 
-	const toast = useToast();
-	const displayToast = () => {
-		toast({
-			title: 'Course Added Successfully',
-			position: 'top',
-			status: 'success',
-			duration: 5000,
-			isClosable: true,
-		});
-	};
+	const { enqueueSnackbar } = useSnackbar();
 
-	const onSubmit = (values, actions) => {
+	const onSubmit = async (values, actions) => {
+		const { getStorage, ref, uploadBytes, getDownloadURL } = await import(
+			'firebase/storage'
+		);
+
 		const Course = values.Course.trim();
-		actions.setSubmitting(true);
 
-		firestore
-			.collection('schools')
-			.doc(slug)
-			.collection('courses')
-			.doc(Course.replace(/\s/g, '-'))
-			.set({
+		actions.setSubmitting(true);
+		const path = `${School}/${Faculty}/${Department}/${Course}`;
+
+		const pdfUpload = await uploadBytes(ref(getStorage(), path), pdfurl);
+
+		const pdfRef = await getDownloadURL(pdfUpload.ref);
+
+		const { doc, setDoc, getFirestore } = await import('firebase/firestore');
+		const firestore = getFirestore(firebase);
+
+		await setDoc(
+			doc(firestore, 'schools', School, 'courses', Course.replace(/\s/g, '-')),
+			{
 				Course,
 				School,
 				Faculty,
 				Department,
-				Materials: [],
-			})
+				pdfRef,
+				by: user,
+			}
+		)
 			.then(() => {
-				displayToast();
+				enqueueSnackbar('Course Added Sucessful', {
+					variant: 'success',
+					autoHideDuration: 1000,
+				});
 				actions.resetForm();
 				actions.setSubmitting(false);
 				router.reload();
@@ -58,7 +82,13 @@ function AddCourse({ School, Faculty, Department }) {
 	};
 
 	return (
-		<Flex align="center" justify="center" mb="2rem">
+		<Box
+			alignItems="center"
+			justifyContent="center"
+			mb="2rem"
+			m="auto"
+			display="flex"
+		>
 			<Formik
 				initialValues={initialValues}
 				validationSchema={validationSchema}
@@ -66,32 +96,39 @@ function AddCourse({ School, Faculty, Department }) {
 			>
 				{(formik) => {
 					return (
-						<Form>
-							<Box mt="20px">
-								<FormikControl
-									control="chakraInput"
-									type="name"
-									label="Course Name"
-									name="Course"
-								/>
-							</Box>
-
-							<Spacer />
-							<Box mt={4} textAlign="center">
+						<Box>
+							<Form>
+								<Box width="15rem" mt={2}>
+									<FormikControl
+										control="chakraInput"
+										type="name"
+										label="Course Name"
+										name="Course"
+									/>
+								</Box>
+							</Form>
+							<UploadInput
+								getfile={getfile}
+								label="image"
+								size={{ byte: '1000000', mb: '15' }}
+							/>
+							<Box mt={2} textAlign="center">
 								<Button
-									colorScheme="teal"
-									variant="outline"
+									variant="outlined"
 									type="submit"
-									disabled={!formik.isValid}
+									disabled={
+										pdfurl === null || !formik.isValid || formik.isSubmitting
+									}
+									onClick={formik.submitForm}
 								>
 									Submit
 								</Button>
 							</Box>
-						</Form>
+						</Box>
 					);
 				}}
 			</Formik>
-		</Flex>
+		</Box>
 	);
 }
 export default AddCourse;

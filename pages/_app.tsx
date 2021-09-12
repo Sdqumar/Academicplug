@@ -1,64 +1,71 @@
-import { Flex, Grid, ChakraProvider } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import firebase from '../config/firebase-config';
-import Header from '../components/Header';
 import AuthContext from '../components/AuthContext';
 import Footer from '../components/Footer';
 import '../styles/globals.css';
+import { createTheme, ThemeProvider } from '@material-ui/core/styles';
+import { Box } from '@material-ui/core';
+import { SnackbarProvider } from 'notistack';
+import Cookies from 'js-cookie';
 
-import { extendTheme } from '@chakra-ui/react';
+import dynamic from 'next/dynamic';
+const Header = dynamic(() => import('components/Header'));
 
-const Link = {
-	baseStyle: {
-		textDecoration: 'none',
+const theme = createTheme({
+	palette: {
+		primary: {
+			main: '#000',
+			dark: '#e53e3e',
+		},
+		secondary: {
+			main: '#fbae17',
+		},
 	},
-};
-
-const colors = {
-	primary: '#fbae17',
-};
-const theme = extendTheme({ colors, Link });
+});
 
 function MyApp({ Component, pageProps }) {
 	const [currentUser, setCurrentUser] = useState<undefined | {}>(undefined);
-	const [loading, setLoading] = useState(true);
-	const auth = firebase.auth();
 
 	useEffect(() => {
-		auth.onAuthStateChanged((user) => {
-			setCurrentUser(user);
-			setLoading(false);
-		});
-	}, [currentUser]);
+		if (Cookies.get('user') === undefined) {
+			Cookies.set('user', null);
+		}
+
+		setCurrentUser(JSON.parse(Cookies.get('user')));
+	}, []);
 
 	return (
-		!loading && (
-			<AuthContext.Provider value={currentUser}>
-				<ChakraProvider theme={theme}>
-					<Grid
-						templateRows="6rem auto 4rem"
-						templateColumns="auto"
-						height="100vh"
-						maxW="100%"
-						overflow-x="hidden"
+		<AuthContext.Provider value={[currentUser, setCurrentUser]}>
+			<ThemeProvider theme={theme}>
+				<SnackbarProvider
+					anchorOrigin={{
+						vertical: 'top',
+						horizontal: 'center',
+					}}
+				>
+					<Box
+						width="inherit"
+						display="flex"
+						flexDirection="column"
+						justifyContent="space-between"
+						minHeight="100vh"
 					>
 						<Header />
-
-						<Flex
-							w="100%"
-							m={{ base: 'auto', md: '1px' }}
-							mt={{ base: '0', md: '0rem' }}
-							position="relative"
-							overflow-x="hidden"
+						<Box
+							height="inherit"
+							display="flex"
+							flexDirection="column"
+							justifyContent="start"
+							width="100%"
+							flexGrow="1"
 						>
 							<Component {...pageProps} />
-						</Flex>
+						</Box>
 						<Footer />
-					</Grid>
-				</ChakraProvider>
-			</AuthContext.Provider>
-		)
+					</Box>
+				</SnackbarProvider>
+			</ThemeProvider>
+		</AuthContext.Provider>
 	);
 }
 

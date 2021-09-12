@@ -1,48 +1,40 @@
-import { Flex, Container } from '@chakra-ui/react';
-import BannerHome from 'components/BannerHome';
-import SchoolGridList from 'components/SchoolGridList';
+import { Box } from '@material-ui/core';
 import firebase from 'config/firebase-config';
 
-const firestore = firebase.firestore();
-// .enablePersistence()
-// .catch((err) => {
-// 	if (err.code == 'failed-precondition') {
-// 		// Multiple tabs open, persistence can only be enabled
-// 		// in one tab at a a time.
-// 		// ...
-// 	} else if (err.code == 'unimplemented') {
-// 		// The current browser does not support all of the
-// 		// features required to enable persistence
-// 		// ...
-// 	}
-// });
+import dynamic from 'next/dynamic';
+const BannerHome = dynamic(() => import('components/BannerHome'));
+const SchoolGridList = dynamic(() => import('components/SchoolGridList'));
 
 export async function getStaticProps() {
-	const dataref = await firestore.collection('schools').get();
+	const { getDocs, getFirestore, collection } = await import(
+		'firebase/firestore'
+	);
+	const firestore = getFirestore(firebase);
 
-	const data = dataref.docs.map((doc) => doc.data());
+	const q = await getDocs(collection(firestore, 'schools'));
+	const data = q.docs.map((doc) => doc.data());
 
 	return {
 		props: {
 			data,
 		},
-		revalidate: 10,
+		revalidate: 100000,
 	};
 }
 
 const Index = ({ data }) => {
 	return (
 		<>
-			<Flex
+			<Box
 				justifyContent="center"
-				direction="column"
-				width={{ md: '95%', base: '100%' }}
-				mt={{ base: '0px', sm: '1rem' }}
+				maxWidth={{ md: '95%', base: '100%' }}
+				mt={{ base: '0px', sm: '2rem' }}
 				m="auto"
+				display="block"
 			>
 				<BannerHome />
 				<SchoolGridList schools={data} />
-			</Flex>
+			</Box>
 		</>
 	);
 };

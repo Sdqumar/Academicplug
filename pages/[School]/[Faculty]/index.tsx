@@ -1,12 +1,12 @@
-import firebase from '../../../config/firebase-config';
-import { Container, Heading, Flex, Button, Box } from '@chakra-ui/react';
-import CoursesGrid from '../../../components/CoursesGrid';
+import { Box, Typography, Button, makeStyles } from '@material-ui/core';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import { useRef } from 'react';
-import AddDepartment from 'components/AddDepartment';
+import firebase from 'config/firebase-config';
 
-const firestore = firebase.firestore();
+import dynamic from 'next/dynamic';
+const AddDepartment = dynamic(() => import('components/AddDepartment'));
+const CoursesGrid = dynamic(() => import('components/CoursesGrid'));
 
 export async function getStaticPaths() {
 	const paths = [
@@ -25,14 +25,20 @@ export async function getStaticProps(context) {
 	const school = context.params.School;
 	const faculty = context.params.Faculty;
 
-	const dataRef = await firestore
-		.collection('schools')
-		.doc(school)
-		.collection('faculty')
-		.doc(faculty)
-		.get();
+	const { doc, getDoc, getFirestore } = await import('firebase/firestore');
+
+	const firestore = getFirestore(firebase);
+
+	const docRef = doc(firestore, 'schools', school, 'faculty', faculty);
+	const dataRef = await getDoc(docRef);
 
 	const data = dataRef.data();
+
+	const adminRef = await getDoc(
+		doc(firestore, 'schools', school, 'admin', 'admin')
+	);
+
+	let admins = adminRef?.data()?.admins;
 
 	return {
 		props: {
@@ -42,9 +48,18 @@ export async function getStaticProps(context) {
 	};
 }
 
+const useStyles = makeStyles((theme) => ({
+	department: {
+		padding: '2rem',
+		'& .MuiButton-contained': {
+			color: 'red',
+		},
+	},
+}));
+
 const School = ({ data }) => {
 	const router = useRouter();
-
+	const classes = useStyles();
 	// if (!data) {
 	// 	const router = useRouter();
 	// 	router.push('/404');
@@ -66,41 +81,41 @@ const School = ({ data }) => {
 		boxRef.current.style.display = 'none';
 	};
 
-	const auth = firebase.auth();
+	// const auth = firebase.auth();
 
-	const uid = auth?.currentUser?.uid;
+	// const uid = auth?.currentUser?.uid;
 	//const isAdmin = uid == 'x1Fnwo5WimP9MwIjx4EWeQlyXpE3';
 	return (
 		data && (
 			<Box mt="1rem" pl="1rem">
-				<Button mt="1rem" onClick={onClick} d={uid ? 'block' : 'none'}>
-					Add Department
-				</Button>
-				<Box
-					d="none"
-					boxShadow="base"
-					rounded="md"
-					ref={boxRef}
-					pos="fixed"
-					left="1px"
-					top="6rem"
-					bg="#fff"
-					width="100%"
-					zIndex={1}
-				>
-					<Flex justify="space-between" mt="1rem">
-						<Heading size="lg" fontSize="30px" m="1rem">
-							Add Department
-						</Heading>
-						<Button color="red" float="right" m="1rem" onClick={closeBox}>
-							Close
-						</Button>
-					</Flex>
-					<AddDepartment />
+				<Box>
+					<Button variant="outlined" onClick={onClick}>
+						Add Department
+					</Button>
+					<Box
+						display="none"
+						ref={boxRef}
+						position="fixed"
+						left="1px"
+						top="6rem"
+						bgcolor="#fff"
+						width="100%"
+						zIndex={1}
+						className={classes.department}
+					>
+						<Box justifyContent="space-between" mt="1rem">
+							<Typography className="heading">Add Department</Typography>
+							<Button variant="contained" onClick={closeBox}>
+								Close
+							</Button>
+						</Box>
+						<AddDepartment />
+					</Box>
 				</Box>
-				<Heading size="lg" fontSize="5vh" m="auto">
-					<Link href={schoolUrl}>{school}</Link> - {faculty}
-				</Heading>
+
+				<Typography className="heading">
+					<NextLink href={schoolUrl}>{school}</NextLink> - {faculty}
+				</Typography>
 				<CoursesGrid list={data?.department} url={url} />
 			</Box>
 		)

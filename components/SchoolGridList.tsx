@@ -1,6 +1,6 @@
-import { Box, Flex, Heading, Image } from '@chakra-ui/react';
-import Link from 'next/link';
-import { LinkBox, LinkOverlay } from '@chakra-ui/react';
+import { Box, Typography, makeStyles, Link } from '@material-ui/core';
+import Image from 'next/image';
+import NextLink from 'next/Link';
 export interface SchoolGridListProps {
 	schools: [
 		{
@@ -11,56 +11,67 @@ export interface SchoolGridListProps {
 	];
 }
 
+const useStyles = makeStyles((theme) => ({
+	schoolItem: {
+		position: 'relative',
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
+		justifyContent: 'start',
+		boxShadow: ' 0 0px 0px 0 rgb(0 0 0 / 0%), 0 1px 6px 0 rgb(0 0 0 / 10%)',
+		borderRadius: '5px',
+		cursor: 'pointer',
+
+		'& h6': {
+			fontSize: '16px',
+			textAlign: 'center',
+			marginTop: '8px',
+			fontWeight: 600,
+			maxHeight: '52px',
+		},
+	},
+}));
+
 const SchoolGridList: React.FC<SchoolGridListProps> = ({ schools }) => {
+	const classes = useStyles();
 	return (
-		<Box maxW="60rem" m="auto" mt="2rem">
-			<Flex
-				maxW="60rem"
-				wrap="wrap"
-				justify={{ md: 'space-evenly', base: 'space-evenly' }}
-			>
+		<Box maxWidth="55rem" m="auto" mt="2rem">
+			<Box display="flex" flexWrap="wrap" justifyContent="center">
 				{schools.map((school) => {
-					const imgSrc = `logo/${school.slug}.png`;
+					const imgSrc = `/logo/${school.slug}.png`;
 
 					return (
-						<Box
-							w={{ base: '9rem', md: '11.5rem' }}
-							boxShadow="base"
-							m="0 10px"
-							rounded="md"
-							bg="gray.20"
-							cursor="pointer"
-							transition="all 0.4s"
-							_hover={{
-								boxShadow: 'xl',
+						<NextLink
+							href={{
+								pathname: '/' + school?.slug,
+								query: { school: school?.name },
 							}}
-							h={{ base: '12rem', md: '14rem' }}
-							mb="2rem"
+							passHref
 							key={school?.slug}
 						>
-							<LinkBox key={school?.name}>
-								<Image
-									src={imgSrc}
-									fallbackSrc={school.logourl}
-									w="100%"
-									h={{ base: '8rem', md: '11rem' }}
-								/>
-								<Heading size="sm" align="center">
-									<Link
-										href={{
-											pathname: '/' + school?.slug,
-											query: { school: school?.name },
-										}}
-										passHref
-									>
-										<LinkOverlay>{school?.name}</LinkOverlay>
-									</Link>
-								</Heading>
-							</LinkBox>
-						</Box>
+							<Link>
+								<Box
+									width={{ xs: '9rem', md: '11rem' }}
+									height={{ xs: '12rem', md: '12rem' }}
+									padding="4px 0"
+									paddingBottom={{ xs: '21px', md: '0' }}
+									m="0 10px"
+									mb="2rem"
+									className={classes.schoolItem}
+								>
+									<Image
+										src={imgSrc}
+										width="200%"
+										height="200%"
+										objectFit="contain"
+									/>
+									<Typography variant="h6">{school?.name}</Typography>
+								</Box>
+							</Link>
+						</NextLink>
 					);
 				})}
-			</Flex>
+			</Box>
 		</Box>
 	);
 };
