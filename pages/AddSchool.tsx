@@ -8,7 +8,7 @@ import UploadPdf from '../components/UploadPdf';
 import PrivateRoute from '../components/PrivateRoute';
 import { useRouter } from 'next/router';
 import { Box, Button, Typography } from '@material-ui/core';
-import { useSnackbar } from 'notistack';
+import toast, { Toaster } from 'react-hot-toast';
 
 function AddSchool() {
 	const initialValues = {
@@ -25,8 +25,6 @@ function AddSchool() {
 	const getFile = (url) => {
 		setLogoUrl(url);
 	};
-
-	const { enqueueSnackbar } = useSnackbar();
 
 	const onSubmit = async (values, actions) => {
 		actions.setSubmitting(true);
@@ -62,10 +60,7 @@ function AddSchool() {
 			})
 
 			.then(() => {
-				enqueueSnackbar('School Added Sucessful', {
-					variant: 'success',
-					autoHideDuration: 1000,
-				});
+				toast.success('School Added Sucessfully!');
 				actions.resetForm();
 				actions.setSubmitting(false);
 			})
@@ -110,6 +105,7 @@ function AddSchool() {
 										/>
 									</Box>
 								</Form>
+								<Toaster position="top-center" />
 
 								<UploadPdf
 									getfile={getFile}

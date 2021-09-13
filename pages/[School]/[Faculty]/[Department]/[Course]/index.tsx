@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import NextLink from 'next/link';
-import { useState, useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { Box, Typography } from '@material-ui/core';
 import firebase from 'config/firebase-config';
 import AuthContext from '/components/AuthContext';
