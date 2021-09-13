@@ -1,26 +1,28 @@
-import { useEffect } from 'react';
-import { useState } from 'react';
-import AuthContext from '../components/AuthContext';
+ import { useEffect } from 'react';
+ import { useState } from 'react';
+ import AuthContext from '../components/AuthContext';
 import '../styles/globals.css';
-import { createTheme, ThemeProvider } from '@material-ui/core/styles';
+ import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import { Box } from '@material-ui/core';
-import Cookies from 'js-cookie';
+ import Cookies from 'js-cookie';
 import dynamic from 'next/dynamic';
 const Header = dynamic(() => import('components/Header'));
 const Footer = dynamic(() => import('components/Footer'));
 
-// const getUser = async () => {
-// 	const { getAuth, onAuthStateChanged } = await import('firebase/auth');
-// 	const auth = getAuth();
 
-// 	onAuthStateChanged(auth, (user) => {
-// 		if (user) {
-// 			Cookies.set('user', JSON.stringify(user));
-// 		} else {
-// 			Cookies.set('user', JSON.stringify(user));
-// 		}
-// 	});
-// };
+
+const getUser = async () => {
+	const { getAuth, onAuthStateChanged } = await import('firebase/auth');
+	const auth = getAuth();
+
+	onAuthStateChanged(auth, (user) => {
+		if (user) {
+			Cookies.set('user', JSON.stringify(user));
+		} else {
+			Cookies.set('user', JSON.stringify(user));
+		}
+	});
+};
 
 const theme = createTheme({
 	palette: {
@@ -40,14 +42,13 @@ function MyApp({ Component, pageProps }) {
 		if (Cookies.get('user') === undefined) {
 			Cookies.set('user', null);
 		}
-		// getUser();
-
+		getUser();
 		setCurrentUser(JSON.parse(Cookies.get('user')));
 	}, []);
 
 	return (
 		<AuthContext.Provider value={[currentUser, setCurrentUser]}>
-			<ThemeProvider theme={theme}>
+		 	<ThemeProvider theme={theme}>
 				<Box
 					width="inherit"
 					display="flex"
@@ -64,12 +65,12 @@ function MyApp({ Component, pageProps }) {
 						width="100%"
 						flexGrow="1"
 					>
-						<Component {...pageProps} />
+						 <Component {...pageProps} />
 					</Box>
 					<Footer />
 				</Box>
-			</ThemeProvider>
-		</AuthContext.Provider>
+			 </ThemeProvider>
+		 </AuthContext.Provider>
 	);
 }
 

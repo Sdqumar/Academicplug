@@ -1,6 +1,6 @@
 import { Box, Typography, makeStyles } from '@material-ui/core';
 import Image from 'next/image';
-import banner from '../public/banner.jpg';
+import banner from '../public/banner.webp';
 export interface BannerHomeProps {}
 
 const useStyles = makeStyles((theme) => ({
