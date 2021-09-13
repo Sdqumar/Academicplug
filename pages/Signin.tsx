@@ -3,12 +3,12 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { Box, Button, makeStyles, Typography, Paper } from '@material-ui/core';
 import { useRouter } from 'next/router';
-import { useSnackbar } from 'notistack';
 import Cookies from 'js-cookie';
 import { useContext } from 'react';
 import AuthContext from 'components/AuthContext';
 import firebase from 'config/firebase-config';
 import dynamic from 'next/dynamic';
+import toast, { Toaster } from 'react-hot-toast';
 
 const FormikControl = dynamic(
 	() => import('../components/Formik/FormikControl')
@@ -61,7 +61,6 @@ function SignIn() {
 		email: string;
 		password: string;
 	};
-	const { enqueueSnackbar } = useSnackbar();
 	const [, setCurrentUser] = useContext(AuthContext);
 
 	const onSubmit = async (values: values, actions) => {
@@ -78,15 +77,11 @@ function SignIn() {
 				const uid = user.uid;
 				setCurrentUser({ displayName, uid });
 				Cookies.set('user', JSON.stringify({ displayName, uid }));
-				enqueueSnackbar('Login Sucessful', {
-					variant: 'success',
-					autoHideDuration: 1000,
-				});
+				toast.success('Login Sucessfully!');
 				router.push('/');
 			})
 			.catch((error) => {
-				enqueueSnackbar('Invalid Username or Password ', { variant: 'error' });
-				console.log(error);
+				toast.error('Invalid Username or Password!');
 			});
 	};
 	const boxRef = useRef(null);
@@ -131,6 +126,8 @@ function SignIn() {
 										name="password"
 									/>
 								</Box>
+								<Toaster position="top-center" />
+
 								<Box>
 									<Button onClick={onClick}>Forget Password?</Button>
 								</Box>

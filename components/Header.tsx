@@ -4,8 +4,10 @@ import firebase from '../config/firebase-config';
 import AuthContext from '../components/AuthContext';
 import { useContext } from 'react';
 import Cookies from 'js-cookie';
-import { useSnackbar } from 'notistack';
+
 import NextLink from 'next/link';
+
+import toast, { Toaster } from 'react-hot-toast';
 
 const useStyles = makeStyles((theme) => ({
 	header: {
@@ -62,8 +64,6 @@ const useStyles = makeStyles((theme) => ({
 const Header = () => {
 	const [currentUser, setCurrentUser] = useContext(AuthContext);
 
-	const { enqueueSnackbar } = useSnackbar();
-
 	const handleSignOut = async () => {
 		const { getAuth, signOut } = await import('firebase/auth');
 		const auth = getAuth(firebase);
@@ -72,12 +72,11 @@ const Header = () => {
 			.then(() => {
 				Cookies.set('user', null);
 				setCurrentUser(null);
-				enqueueSnackbar('Sign Out Sucessful', {
-					variant: 'success',
-					autoHideDuration: 1000,
-				});
+				toast.success('Successfully Signout!');
 			})
-			.catch((error) => {});
+			.catch((error) => {
+				toast.error('error!');
+			});
 	};
 
 	const classes = useStyles();
@@ -122,6 +121,7 @@ const Header = () => {
 						</Button>
 					</Box>
 				)}
+				<Toaster position="top-center" />
 			</Box>
 		</Grid>
 	);

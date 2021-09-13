@@ -1,43 +1,35 @@
 {
-  "compilerOptions": {
-    "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": false,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "baseUrl": ".",
-    "paths": {
-      "@/*": [
-        "components/*"
-      ]
-    }
-  },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "pages/_app.tsx",
-    "config/firebase-config.js",
-    "config/firebase-config.js",
-    "config/firebaseAdmin.js",
-    "pages/AddCourse.jsx",
-    "pages/AddDepartment.tsx",
-    "components/UploadSchoolImg.jsx",
-    "pages/**/*.ts",
-    "components/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+	"compilerOptions": {
+		"target": "es5",
+		"lib": ["dom", "dom.iterable", "esnext"],
+		"allowJs": true,
+		"skipLibCheck": true,
+		"strict": false,
+		"forceConsistentCasingInFileNames": true,
+		"noEmit": true,
+		"esModuleInterop": true,
+		"module": "esnext",
+		"moduleResolution": "node",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"jsx": "preserve",
+		"baseUrl": ".",
+		"paths": {
+			"@/components/*": ["components/*"]
+		}
+	},
+	"include": [
+		"next-env.d.ts",
+		"**/*.ts",
+		"pages/_app.tsx",
+		"config/firebase-config.js",
+		"config/firebase-config.js",
+		"config/firebaseAdmin.js",
+		"pages/AddCourse.jsx",
+		"pages/AddDepartment.tsx",
+		"components/UploadSchoolImg.jsx",
+		"pages/**/*.ts",
+		"components/**/*.ts"
+	],
+	"exclude": ["node_modules"]
 }

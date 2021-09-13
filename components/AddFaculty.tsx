@@ -1,43 +1,36 @@
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import FormikControl from '../components/Formik/FormikControl';
+import FormikControl from './Formik/FormikControl';
 import firebase from '../config/firebase-config';
-import { useRouter } from 'next/router';
 import { Box, Button } from '@material-ui/core';
 import toast, { Toaster } from 'react-hot-toast';
 
-//initialize firestore
-
-function AddDepartment() {
-	const router = useRouter();
-
+function AddFaculty({ school }) {
 	const initialValues = {
-		department: '',
+		faculty: '',
 	};
+
 	const validationSchema = Yup.object().shape({
-		department: Yup.mixed().required('Required'),
+		faculty: Yup.mixed().required('Required'),
 	});
 
-	const school = router.query.School.toString();
-	const faculty = router.query.Faculty.toString();
-
 	const onSubmit = async (values, actions) => {
-		const department = values.department;
 		actions.setSubmitting(true);
 
-		const { doc, updateDoc, getFirestore, arrayUnion } = await import(
-			'firebase/firestore'
-		);
+		const { doc, setDoc, getFirestore } = await import('firebase/firestore');
 		const firestore = getFirestore(firebase);
-		updateDoc(doc(firestore, 'schools', school, 'faculty', faculty), {
-			department: arrayUnion(department),
+
+		const faculty = values.faculty.trim();
+
+		setDoc(doc(firestore, 'schools', school, 'faculty', faculty), {
+			name: faculty,
+			department: [],
 		})
 			.then(() => {
-				toast.success('Department Added!');
+				toast.success('Faculty Added!');
 
 				actions.resetForm();
 				actions.setSubmitting(false);
-				router.reload();
 			})
 			.catch((error) => {
 				console.error('Error writing document: ', error);
@@ -64,11 +57,12 @@ function AddDepartment() {
 								<FormikControl
 									control="chakraInput"
 									type="name"
-									label="Department Name"
-									name="department"
+									label="Faculty Name"
+									name="faculty"
 								/>
 							</Box>
 							<Toaster position="top-center" />
+
 							<Box mt={2} textAlign="center">
 								<Button
 									variant="outlined"
@@ -85,4 +79,5 @@ function AddDepartment() {
 		</Box>
 	);
 }
-export default AddDepartment;
+
+export default AddFaculty;

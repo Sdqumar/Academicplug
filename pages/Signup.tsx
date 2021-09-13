@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import { Box, Button, Typography } from '@material-ui/core';
 import Cookies from 'js-cookie';
 import { useContext } from 'react';
-import { useSnackbar } from 'notistack';
+import toast, { Toaster } from 'react-hot-toast';
 
 import AuthContext from 'components/AuthContext';
 
@@ -49,7 +49,6 @@ function RegistrationForm() {
 		password: string;
 		username: string;
 	};
-	const { enqueueSnackbar } = useSnackbar();
 	const [currentUser, setCurrentUser] = useContext(AuthContext);
 
 	const onSubmit = async (values: values, actions) => {
@@ -69,9 +68,7 @@ function RegistrationForm() {
 		const querySnapshot = await getDocs(q);
 
 		if (querySnapshot.docs.length !== 0) {
-			enqueueSnackbar('Username has Already been taken ', {
-				variant: 'error',
-			});
+			toast.error('Username has Already been taken!');
 
 			actions.setSubmitting(false);
 		} else {
@@ -95,18 +92,13 @@ function RegistrationForm() {
 					Cookies.set('user', JSON.stringify({ displayName, uid }));
 				})
 				.then(() => {
-					enqueueSnackbar('SignUp Sucessful', {
-						variant: 'success',
-						autoHideDuration: 1000,
-					});
+					toast.success('SignUp Sucessfully!');
+
 					actions.setSubmitting(false);
 				})
 
 				.catch((error) => {
-					enqueueSnackbar('Email Address has Already been taken ', {
-						variant: 'error',
-					});
-					console.log(error);
+					toast.error('Email has Already been taken!');
 
 					actions.setSubmitting(false);
 				});
@@ -157,6 +149,8 @@ function RegistrationForm() {
 								label="Confirm Password"
 								name="confirmPassword"
 							/>
+							<Toaster position="top-center" />
+
 							<Box m="10px 0" textAlign="center">
 								{' '}
 								<Button

@@ -6,22 +6,16 @@ import firebase from '../config/firebase-config';
 import { useRouter } from 'next/router';
 
 import { Box, Button } from '@material-ui/core';
-import { useSnackbar } from 'notistack';
+
 import UploadInput from './UploadPdf';
 import { useContext } from 'react';
 import AuthContext from '/components/AuthContext';
 
+import toast, { Toaster } from 'react-hot-toast';
+
 function AddCourse({ School, Faculty, Department }) {
-	const data = {
-		School,
-		Faculty,
-		Department,
-	};
-	let user: { displayName: String; uid: String } = useContext(AuthContext);
-	user = {
-		displayName: user?.displayName,
-		uid: user?.uid,
-	};
+	let [currentUser] = useContext(AuthContext);
+
 	const [pdfurl, setPdfurl] = useState(null);
 
 	const getfile = (url) => {
@@ -36,8 +30,6 @@ function AddCourse({ School, Faculty, Department }) {
 	const validationSchema = Yup.object().shape({
 		Course: Yup.mixed().required('Required'),
 	});
-
-	const { enqueueSnackbar } = useSnackbar();
 
 	const onSubmit = async (values, actions) => {
 		const { getStorage, ref, uploadBytes, getDownloadURL } = await import(
@@ -64,14 +56,11 @@ function AddCourse({ School, Faculty, Department }) {
 				Faculty,
 				Department,
 				pdfRef,
-				by: user,
+				by: currentUser,
 			}
 		)
 			.then(() => {
-				enqueueSnackbar('Course Added Sucessful', {
-					variant: 'success',
-					autoHideDuration: 1000,
-				});
+				toast.success('Course Added!');
 				actions.resetForm();
 				actions.setSubmitting(false);
 				router.reload();
@@ -109,9 +98,11 @@ function AddCourse({ School, Faculty, Department }) {
 							</Form>
 							<UploadInput
 								getfile={getfile}
-								label="image"
-								size={{ byte: '1000000', mb: '15' }}
+								label="pdf"
+								size={{ byte: '10000000', mb: '15mb' }}
+								type="application/pdf"
 							/>
+							<Toaster position="top-center" />
 							<Box mt={2} textAlign="center">
 								<Button
 									variant="outlined"

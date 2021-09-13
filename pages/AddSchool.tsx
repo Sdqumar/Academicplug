@@ -10,9 +10,7 @@ import { useRouter } from 'next/router';
 import { Box, Button, Typography } from '@material-ui/core';
 import { useSnackbar } from 'notistack';
 
-function AddSchool({ admin }) {
-	const router = useRouter();
-
+function AddSchool() {
 	const initialValues = {
 		SchoolName: '',
 		Slug: '',
@@ -32,24 +30,34 @@ function AddSchool({ admin }) {
 
 	const onSubmit = async (values, actions) => {
 		actions.setSubmitting(true);
-		const { doc, setDoc, getFirestore } = await import('firebase/firestore');
-
 		const school = values.SchoolName.trim();
 		let slug = values.Slug.trim();
 		slug = slug.charAt(0).charAt(0).toUpperCase() + slug.slice(1);
 		slug = slug.replace(/\s/g, '-');
 
+		const { doc, setDoc, getFirestore } = await import('firebase/firestore');
+
+		const { getStorage, ref, uploadBytes, getDownloadURL } = await import(
+			'firebase/storage'
+		);
+
+		const path = `school logo/${slug}`;
+
+		const logoUpload = await uploadBytes(ref(getStorage(), path), logoUrl);
+
+		const logoRef = await getDownloadURL(logoUpload.ref);
+
 		//created a new courses array to the database for future adding of courses into the array
 		const firestore = getFirestore(firebase);
 
-		await setDoc(doc(firestore, 'schools'), {
-			logourl: logoUrl,
+		await setDoc(doc(firestore, 'schools', slug), {
 			name: school,
 			slug,
+			logourl: logoRef,
 		})
 			.then(async () => {
-				await setDoc(doc(firestore, 'schools', 'admin', 'admin'), {
-					admins: ['x1Fnwo5WimP9MwIjx4EWeQlyXpE3'],
+				await setDoc(doc(firestore, 'schools', slug, 'admin', 'admin'), {
+					admins: ['n49a6ko1tKdhuIIs30uft1eeBwO2'],
 				});
 			})
 
@@ -106,7 +114,8 @@ function AddSchool({ admin }) {
 								<UploadPdf
 									getfile={getFile}
 									label="image"
-									size={{ byte: '1000000', mb: '15' }}
+									size={{ byte: '1000000', mb: '1mb' }}
+									type="image/png"
 								/>
 								<Box mt={4} textAlign="center">
 									<Button

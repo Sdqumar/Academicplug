@@ -20,15 +20,12 @@
 		"formik": "^2.2.6",
 		"framer-motion": "^4.1.17",
 		"js-cookie": "^3.0.1",
-		"moment": "^2.29.1",
 		"next": "^11.1.2",
-		"notistack": "^1.0.10",
 		"pdfjs-dist": "^2.6.347",
 		"postcss": "^8.3.6",
 		"react": "17.0.2",
 		"react-dom": "17.0.2",
-		"react-query": "^3.21.1",
-		"swr": "^1.0.0",
+		"react-hot-toast": "^2.1.1",
 		"yup": "^0.32.9"
 	},
 	"devDependencies": {

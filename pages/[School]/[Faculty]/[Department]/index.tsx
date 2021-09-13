@@ -1,12 +1,13 @@
 import { Box, Typography, Button, makeStyles } from '@material-ui/core';
 
 import { useRouter } from 'next/router';
-import { useRef } from 'react';
+import { useRef, useContext } from 'react';
 import NextLink from 'next/link';
 import firebase from 'config/firebase-config';
+import AuthContext from '/components/AuthContext';
 
 import dynamic from 'next/dynamic';
-const AddCourse = dynamic(() => import('../../../../components/AddCourse'));
+const AddCourse = dynamic(() => import('components/AddCourse'));
 const CoursesGrid = dynamic(() => import('components/CoursesGrid'));
 
 export async function getStaticPaths() {
@@ -62,7 +63,6 @@ export async function getStaticProps(context) {
 
 const useStyles = makeStyles((theme) => ({
 	department: {
-		padding: '2rem',
 		'& .MuiButton-contained': {
 			color: 'red',
 		},
@@ -70,11 +70,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const School = ({ data, admins }) => {
-	// const auth = firebase.auth();
+	const [currentUser] = useContext(AuthContext);
 
-	// const uid = auth?.currentUser?.uid;
+	let isAdmin = admins?.some((item) => item == currentUser?.uid);
 
-	// let isAdmin = admins?.some((item) => item == uid);
 	const classes = useStyles();
 	const router = useRouter();
 
@@ -108,7 +107,7 @@ const School = ({ data, admins }) => {
 	// collectionGrp();
 	return (
 		<Box mt="1rem" pl="1rem">
-			<Box>
+			<Box display={isAdmin ? 'block' : 'none'}>
 				<Button variant="outlined" onClick={onClick}>
 					Add Course
 				</Button>
@@ -123,7 +122,11 @@ const School = ({ data, admins }) => {
 					zIndex={1}
 					className={classes.department}
 				>
-					<Box justifyContent="space-between" mt="1rem">
+					<Box
+						justifyContent="space-between"
+						mt="1rem"
+						ml={{ xs: '10px', md: '2rem' }}
+					>
 						<Typography className="heading">Add Course</Typography>
 						<Button variant="contained" onClick={closeBox}>
 							Close
