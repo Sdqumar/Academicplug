@@ -9,18 +9,18 @@ import dynamic from 'next/dynamic';
 const Header = dynamic(() => import('components/Header'));
 const Footer = dynamic(() => import('components/Footer'));
 
-const getUser = async () => {
-	const { getAuth, onAuthStateChanged } = await import('firebase/auth');
-	const auth = getAuth();
+// const getUser = async () => {
+// 	const { getAuth, onAuthStateChanged } = await import('firebase/auth');
+// 	const auth = getAuth();
 
-	onAuthStateChanged(auth, (user) => {
-		if (user) {
-			Cookies.set('user', JSON.stringify(user));
-		} else {
-			Cookies.set('user', JSON.stringify(user));
-		}
-	});
-};
+// 	onAuthStateChanged(auth, (user) => {
+// 		if (user) {
+// 			Cookies.set('user', JSON.stringify(user));
+// 		} else {
+// 			Cookies.set('user', JSON.stringify(user));
+// 		}
+// 	});
+// };
 
 const theme = createTheme({
 	palette: {
@@ -40,7 +40,7 @@ function MyApp({ Component, pageProps }) {
 		if (Cookies.get('user') === undefined) {
 			Cookies.set('user', null);
 		}
-		getUser();
+		// getUser();
 
 		setCurrentUser(JSON.parse(Cookies.get('user')));
 	}, []);
