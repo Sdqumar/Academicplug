@@ -30,6 +30,6 @@
 		"components/UploadSchoolImg.jsx",
 		"pages/**/*.ts",
 		"components/**/*.ts"
-	],
+, "next.config.js", "next.config.js"	],
 	"exclude": ["node_modules"]
 }

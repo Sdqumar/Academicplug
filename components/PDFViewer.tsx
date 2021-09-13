@@ -7,7 +7,7 @@ import '@react-pdf-viewer/core/lib/styles/index.css';
 const PDFViewer = ({ data }) => {
 	return (
 		<Worker workerUrl="https://unpkg.com/pdfjs-dist@2.6.347/build/pdf.worker.min.js">
-			<div style={{ height: '70vh' }}>
+			<div style={{ width: '100vw' }}>
 				<Viewer
 					fileUrl={data}
 					renderLoader={(percentages: number) => (

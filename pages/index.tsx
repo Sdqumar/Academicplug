@@ -9,7 +9,7 @@ export async function getStaticProps() {
 	const { getDocs, getFirestore, collection } = await import(
 		'firebase/firestore'
 	);
-	const firestore = getFirestore(firebase);
+	const firestore = await getFirestore(firebase);
 
 	const q = await getDocs(collection(firestore, 'schools'));
 	const data = q.docs.map((doc) => doc.data());
