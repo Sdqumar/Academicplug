@@ -15,21 +15,7 @@ a {
 	text-decoration: none !important;
 	color: #000;
 }
-.rpv-core__page-layer {
-	width: 99vw !important;
-}
-.rpv-core__canvas-layer {
-	width: 99vw !important;
-}
 
-.rpv-core__canvas-layer {
-	direction: ltr;
-	left: 0;
-	overflow: hidden;
-	position: static !important;
-	top: 0;
-	width: 0 !important;
-}
 .closeBtn {
 	background: #e53e3e;
 	cursor: pointer;

@@ -7,11 +7,11 @@ import '@react-pdf-viewer/core/lib/styles/index.css';
 const PDFViewer = ({ data }) => {
 	return (
 		<Worker workerUrl="https://unpkg.com/pdfjs-dist@2.6.347/build/pdf.worker.min.js">
-			<div style={{ width: '100vw' }}>
+			<div >
 				<Viewer
 					fileUrl={data}
 					renderLoader={(percentages: number) => (
-						<div style={{ width: '240px', margin: 'auto' }}>
+						<div>
 							<ProgressBar progress={Math.round(percentages)} />
 						</div>
 					)}
