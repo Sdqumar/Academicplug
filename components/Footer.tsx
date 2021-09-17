@@ -8,7 +8,6 @@ const Footer: React.FC<FooterProps> = () => {
     const analytics = getAnalytics();
     logEvent(analytics, "notification_received");
   });
-
   return (
     <Box
       maxWidth="100%"

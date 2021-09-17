@@ -11,6 +11,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 import AuthContext from "components/AuthContext";
 import FormikControl from "@/components/Formik/FormikControl";
+import Head from "next/head";
 
 function RegistrationForm() {
   const initialValues = {
@@ -96,62 +97,65 @@ function RegistrationForm() {
   };
 
   return (
-    <Box width="50vw" m="2rem auto">
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={onSubmit}
-      >
-        {(formik) => {
-          return (
-            <>
-              <Typography className="heading">SIGN UP</Typography>
-              <Form>
-                <FormikControl
-                  control="chakraInput"
-                  type="username"
-                  label="Username"
-                  name="username"
-                />
-                <FormikControl
-                  control="chakraInput"
-                  type="email"
-                  label="Email"
-                  name="email"
-                />
-                <FormikControl
-                  control="chakraInput"
-                  type="password"
-                  label="Password"
-                  name="password"
-                />
-                <FormikControl
-                  control="chakraInput"
-                  type="password"
-                  label="Confirm Password"
-                  name="confirmPassword"
-                />
-                <Toaster position="top-center" />
+    <>
+      <Head>
+        <title>Sign U | Academic Plug </title>
+      </Head>
 
-                <Box m="10px 0" textAlign="center">
-                  {" "}
-                  <Button
-                    variant="outlined"
-                    type="submit"
-                    disabled={!formik.isValid}
-                  >
-                    Submit
-                  </Button>
-                </Box>
-              </Form>
-            </>
-          );
-        }}
-      </Formik>
-    </Box>
+      <Box width="50vw" m="2rem auto">
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={onSubmit}
+        >
+          {(formik) => {
+            return (
+              <>
+                <Typography className="heading">SIGN UP</Typography>
+                <Form>
+                  <FormikControl
+                    control="chakraInput"
+                    type="username"
+                    label="Username"
+                    name="username"
+                  />
+                  <FormikControl
+                    control="chakraInput"
+                    type="email"
+                    label="Email"
+                    name="email"
+                  />
+                  <FormikControl
+                    control="chakraInput"
+                    type="password"
+                    label="Password"
+                    name="password"
+                  />
+                  <FormikControl
+                    control="chakraInput"
+                    type="password"
+                    label="Confirm Password"
+                    name="confirmPassword"
+                  />
+                  <Toaster position="top-center" />
+
+                  <Box m="10px 0" textAlign="center">
+                    {" "}
+                    <Button
+                      variant="outlined"
+                      type="submit"
+                      disabled={!formik.isValid}
+                    >
+                      Submit
+                    </Button>
+                  </Box>
+                </Form>
+              </>
+            );
+          }}
+        </Formik>
+      </Box>
+    </>
   );
 }
 export default RegistrationForm;
-// {
-/*  */
-// }
