@@ -32,7 +32,7 @@ const CoursesGrid = ({ list, url, flexDir }: CourseGridProps) => {
 			justifyContent={{ base: 'center', md: 'flex-start' }}
 			className={classes.grid}
 		>
-			{list.map((item:string) => {
+			{list?.map((item:string) => {
 				return (
 					<NextLink
 						key={item}

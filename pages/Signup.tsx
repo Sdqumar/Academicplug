@@ -45,7 +45,7 @@ function RegistrationForm() {
         password: string;
         username: string;
     };
-    const [currentUser, setCurrentUser] = useContext(AuthContext);
+    const [, setCurrentUser] = useContext(AuthContext);
 
     const onSubmit = async (values : values, actions) => {
         actions.setSubmitting(true);
@@ -96,36 +96,40 @@ function RegistrationForm() {
     };
 
     return (
-        <Formik initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={onSubmit}>
-            {
-            (formik) => {
-                return (
-                    <Box alignItems="center" justifyContent="center" maxWidth="15rem" height="content-fit" m="auto" mt="1rem" display="flex" flexWrap="wrap">
-                        <Typography className="heading">SIGN UP</Typography>
-                        <Form>
-                            <FormikControl control="chakraInput" type="username" label="Username" name="username"/>
-                            <FormikControl control="chakraInput" type="email" label="Email" name="email"/>
-                            <FormikControl control="chakraInput" type="password" label="Password" name="password"/>
-                            <FormikControl control="chakraInput" type="password" label="Confirm Password" name="confirmPassword"/>
-                            <Toaster position="top-center"/>
+        <Box width='50vw' m='2rem auto'>
+            <Formik initialValues={initialValues}
+                validationSchema={validationSchema}
+                onSubmit={onSubmit}>
 
-                            <Box m="10px 0" textAlign="center">
-                                {' '}
-                                <Button variant="outlined" type="submit"
-                                    disabled={
-                                        !formik.isValid
-                                }>
-                                    Submit
-                                </Button>
-                            </Box>
-                        </Form>
-                    </Box>
-                );
-            }
-        } </Formik>
+{(formik) => {
+						return (
+                            <>
+                            <Typography className="heading">SIGN UP</Typography>
+                            <Form>
+                                <FormikControl control="chakraInput" type="username" label="Username" name="username"/>
+                                <FormikControl control="chakraInput" type="email" label="Email" name="email"/>
+                                <FormikControl control="chakraInput" type="password" label="Password" name="password"/>
+                                <FormikControl control="chakraInput" type="password" label="Confirm Password" name="confirmPassword"/>
+                                <Toaster position="top-center"/>
+                            
+                                <Box m="10px 0" textAlign="center">
+                                    {' '}
+                                    <Button variant="outlined" type="submit"
+                                        disabled={
+                                            !formik.isValid
+                                    }>
+                                        Submit
+                                    </Button>
+                                </Box>
+                            </Form>
+                            </>
+						);
+					}}
+             </Formik>
+        </Box>
     );
 }
-
 export default RegistrationForm;
+// {
+/*  */
+// }

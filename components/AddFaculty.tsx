@@ -45,7 +45,7 @@ function AddFaculty({school}) {
     };
     return (
         <>
-            <Button variant="outlined"
+        <Button variant="outlined"
                 onClick={handleClickOpen}>
                 Add Faculty
             </Button>
