@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Button, Typography } from '@material-ui/core';
+import { Box,  Typography } from '@material-ui/core';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import InputBase from '@material-ui/core/InputBase';
@@ -8,11 +8,8 @@ const UploadInput = ({ getfile, label, size, type }) => {
 	const [error, seterror] = useState<string | boolean>(null);
 	const [fileTemp, setFileTemp] = useState('');
 
-	interface e {
-		target: { files: [] | {} };
-	}
-	15000000;
-	const handleFile = (e: e) => {
+	
+	const handleFile = (e) => {
 		const file = e.target.files[0];
 
 		seterror(`Please Upload a ${label} file`);

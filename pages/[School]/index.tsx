@@ -1,9 +1,9 @@
 import { GetStaticPaths } from 'next';
 import { useRouter } from 'next/router';
 import firebase from 'config/firebase-config';
-import { Box, Typography, Button, makeStyles } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import { useRef, useContext } from 'react';
-import AuthContext from '/components/AuthContext';
+import AuthContext from 'components/AuthContext';
 
 import dynamic from 'next/dynamic';
 
@@ -42,20 +42,13 @@ export async function getStaticProps(context) {
 	};
 }
 
-const useStyles = makeStyles((theme) => ({
-	department: {
-		'& .MuiButton-contained': {
-			color: 'red',
-		},
-	},
-}));
+
 
 const School = ({ data, admin }) => {
 	const [currentUser] = useContext(AuthContext);
 	const router = useRouter();
 	const school = router.query.school;
 	const School = router.query.School;
-	const classes = useStyles();
 
 	const list = data.map((item) => item?.name);
 
@@ -71,34 +64,9 @@ const School = ({ data, admin }) => {
 	};
 	return (
 		<Box mt="1rem" pl="1rem">
-			<Box display={isAdmin ? 'block' : 'none'}>
-				<Button variant="outlined" onClick={onClick}>
-					Add Faculty
-				</Button>
-				<Box
-					display="none"
-					ref={boxRef}
-					position="fixed"
-					left="1px"
-					top="6rem"
-					bgcolor="#fff"
-					width="100%"
-					zIndex={1}
-					className={classes.department}
-				>
-					<Box
-						justifyContent="space-between"
-						mt="1rem"
-						ml={{ xs: '10px', md: '2rem' }}
-					>
-						<Typography className="heading">Add Faculty</Typography>
-						<Button variant="contained" onClick={closeBox}>
-							Close
-						</Button>
-					</Box>
-					<AddFaculty school={School} />
-				</Box>
-			</Box>
+			{isAdmin && <AddFaculty school={School} />}
+					
+			
 			<Typography variant="h3" className="heading">
 				{school ? school : School}
 			</Typography>

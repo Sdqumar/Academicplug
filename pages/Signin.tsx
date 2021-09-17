@@ -9,10 +9,8 @@ import AuthContext from 'components/AuthContext';
 import firebase from 'config/firebase-config';
 import dynamic from 'next/dynamic';
 import toast, { Toaster } from 'react-hot-toast';
+import FormikControl from '@/components/Formik/FormikControl';
 
-const FormikControl = dynamic(
-	() => import('../components/Formik/FormikControl')
-);
 
 const ForgetPassword = dynamic(() => import('components/ForgetPassword'));
 
@@ -95,9 +93,9 @@ function SignIn() {
 	return (
 		<>
 			<Paper className={classes.forget} ref={boxRef}>
-				<Button variant="contained" disableElevation onClick={closeBox}>
+				<button  className='closeBtn' onClick={closeBox}>
 					Close
-				</Button>
+				</button>
 				<ForgetPassword />
 			</Paper>
 			<Box className={classes.login}>

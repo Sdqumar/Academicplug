@@ -1,4 +1,10 @@
-
+html,
+body {
+	padding: 0;
+	margin: 0;
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+		Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
 
 .heading {
 	font-size: clamp(1rem, 10vw, 3rem) !important;
@@ -22,4 +28,9 @@ a {
 }
 .pointer:hover {
 	cursor: pointer;
+}
+.MuiDialog-paper {
+	position: absolute !important;
+	top: 5rem;
+	width: 98vw !important;
 }

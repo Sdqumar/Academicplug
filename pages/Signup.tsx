@@ -10,12 +10,9 @@ import { useContext } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 
 import AuthContext from 'components/AuthContext';
+import FormikControl '@components/Formik/FormikControl'
 
-import dynamic from 'next/dynamic';
 
-const FormikControl = dynamic(
-	() => import('../components/Formik/FormikControl')
-);
 function RegistrationForm() {
 	const initialValues = {
 		email: '',

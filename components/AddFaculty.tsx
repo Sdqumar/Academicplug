@@ -2,8 +2,10 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import FormikControl from './Formik/FormikControl';
 import firebase from '../config/firebase-config';
-import { Box, Button } from '@material-ui/core';
+import { Box, Button, Typography } from '@material-ui/core';
 import toast, { Toaster } from 'react-hot-toast';
+import Dialog from '@material-ui/core/Dialog';
+import React, {useState} from 'react';
 
 function AddFaculty({ school }) {
 	const initialValues = {
@@ -36,9 +38,41 @@ function AddFaculty({ school }) {
 				console.error('Error writing document: ', error);
 			});
 	};
+	const [open, setOpen] = useState(false);
 
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 	return (
-		<Box
+		<>
+            <Button variant="outlined"
+                onClick={handleClickOpen}>
+                Add Faculty
+            </Button>
+            <Dialog open={open}
+                onClose={handleClose}
+				maxWidth={'lg'}
+				fullWidth={true}
+				className='AddDialog'
+				>
+                <Box justifyContent="space-between" mt="1rem"
+                    ml={
+                        {
+                            xs: '10px',
+                            md: '2rem'
+                        }
+                }>
+                    <Typography className="heading">Add Faculty</Typography>
+                    <button className='closeBtn'
+                        onClick={handleClose}>
+                        Close
+                    </button>
+                </Box>
+				<Box
 			alignItems="center"
 			justifyContent="center"
 			mb="2rem"
@@ -77,6 +111,10 @@ function AddFaculty({ school }) {
 				}}
 			</Formik>
 		</Box>
+              
+            </Dialog>
+        </>
+	
 	);
 }
 

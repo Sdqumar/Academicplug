@@ -3,9 +3,10 @@ import * as Yup from 'yup';
 import FormikControl from '../components/Formik/FormikControl';
 import firebase from '../config/firebase-config';
 import { useRouter } from 'next/router';
-import { Box, Button } from '@material-ui/core';
+import { Box, Button,Typography } from '@material-ui/core';
 import toast, { Toaster } from 'react-hot-toast';
-
+import Dialog from '@material-ui/core/Dialog';
+import React, {useState} from 'react';
 //initialize firestore
 
 function AddDepartment() {
@@ -43,9 +44,41 @@ function AddDepartment() {
 				console.error('Error writing document: ', error);
 			});
 	};
+	const [open, setOpen] = useState(false);
 
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 	return (
-		<Box
+		<>
+            <Button variant="outlined"
+                onClick={handleClickOpen}>
+                Add Department
+            </Button>
+            <Dialog open={open}
+                onClose={handleClose}
+				maxWidth={'lg'}
+				fullWidth={true}
+				className='AddDialog'
+				>
+                <Box justifyContent="space-between" mt="1rem"
+                    ml={
+                        {
+                            xs: '10px',
+                            md: '2rem'
+                        }
+                }>
+                    <Typography className="heading">Add Department</Typography>
+                    <button className='closeBtn'
+                        onClick={handleClose}>
+                        Close
+                    </button>
+                </Box>
+				<Box
 			alignItems="center"
 			justifyContent="center"
 			mb="2rem"
@@ -69,6 +102,7 @@ function AddDepartment() {
 								/>
 							</Box>
 							<Toaster position="top-center" />
+
 							<Box mt={2} textAlign="center">
 								<Button
 									variant="outlined"
@@ -83,6 +117,11 @@ function AddDepartment() {
 				}}
 			</Formik>
 		</Box>
+              
+            </Dialog>
+        </>
+	
 	);
 }
+
 export default AddDepartment;

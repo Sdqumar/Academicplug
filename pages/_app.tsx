@@ -5,14 +5,39 @@ import '../styles/globals.css';
  import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import { Box } from '@material-ui/core';
  import Cookies from 'js-cookie';
-import dynamic from 'next/dynamic';
-const Header = dynamic(() => import('components/Header'));
+ import { getAuth, onAuthStateChanged } from 'firebase/auth';
+ import "@fontsource/roboto";
+ import dynamic from 'next/dynamic';
+import Header  from 'components/Header'
 const Footer = dynamic(() => import('components/Footer'));
 
 
 
-const getUser = async () => {
-	const { getAuth, onAuthStateChanged } = await import('firebase/auth');
+
+const theme = createTheme({
+	// overrides: {
+		
+	//   },
+	  palette: {
+		primary: {
+			main: '#000',
+			dark: '#e53e3e',
+		},
+		secondary: {
+			main: '#fbae17',
+			dark:'red'
+		},
+	},
+  });
+
+
+function MyApp({ Component, pageProps }) {
+	const [currentUser, setCurrentUser] = useState<undefined | {}>(undefined);
+	useEffect(() => {
+		if (Cookies.get('user') === undefined) {
+			Cookies.set('user', null);
+		}
+	
 	const auth = getAuth();
 
 	onAuthStateChanged(auth, (user) => {
@@ -22,27 +47,6 @@ const getUser = async () => {
 			Cookies.set('user', JSON.stringify(user));
 		}
 	});
-};
-
-const theme = createTheme({
-	palette: {
-		primary: {
-			main: '#000',
-			dark: '#e53e3e',
-		},
-		secondary: {
-			main: '#fbae17',
-		},
-	},
-});
-
-function MyApp({ Component, pageProps }) {
-	const [currentUser, setCurrentUser] = useState<undefined | {}>(undefined);
-	useEffect(() => {
-		if (Cookies.get('user') === undefined) {
-			Cookies.set('user', null);
-		}
-		getUser();
 		setCurrentUser(JSON.parse(Cookies.get('user')));
 	}, []);
 

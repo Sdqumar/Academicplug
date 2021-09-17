@@ -11,7 +11,7 @@ const PDFViewer = ({ data }) => {
 				<Viewer
 					fileUrl={data}
 					renderLoader={(percentages: number) => (
-						<div>
+						<div style={{ width: '240px', margin: 'auto' }}>
 							<ProgressBar progress={Math.round(percentages)} />
 						</div>
 					)}

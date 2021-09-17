@@ -3,7 +3,7 @@ import NextLink from 'next/link';
 import { useContext } from 'react';
 import { Box, Typography } from '@material-ui/core';
 import firebase from 'config/firebase-config';
-import AuthContext from '/components/AuthContext';
+import AuthContext from 'components/AuthContext';
 import dynamic from 'next/dynamic';
 
 const DeleteButton = dynamic(() => import('components/DeleteButton'));
