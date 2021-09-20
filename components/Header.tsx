@@ -2,7 +2,7 @@ import { Box, Button, Grid, makeStyles, Typography } from "@material-ui/core";
 import SchoolIcon from "@material-ui/icons/School";
 import firebase from "../config/firebase-config";
 import AuthContext from "../components/AuthContext";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import Cookies from "js-cookie";
 
 import NextLink from "next/link";
@@ -82,7 +82,7 @@ const Header = () => {
   const classes = useStyles();
   return (
     <Grid component="header" className={classes.header}>
-      <NextLink href="/">
+      <NextLink href="/" prefetch={false}>
         <Box className={classes.academicplug}>
           <Box>
             <SchoolIcon />
@@ -99,11 +99,15 @@ const Header = () => {
           (currentUser === null ? (
             <Box className={classes.logReg}>
               <Button>
-                <NextLink href="/Signin">Login</NextLink>
+                <NextLink href="/Signin" prefetch={false}>
+                  Login
+                </NextLink>
               </Button>
 
               <Button variant="outlined">
-                <NextLink href="/Signup">Sign Up</NextLink>
+                <NextLink href="/Signup" prefetch={false}>
+                  Sign Up
+                </NextLink>
               </Button>
             </Box>
           ) : (

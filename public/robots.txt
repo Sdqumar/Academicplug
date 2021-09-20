@@ -11,4 +11,8 @@ Host: https://www.academicplug.com/
 
 # Sitemaps
 Sitemap: https://www.academicplug.com/sitemap.xml
-Sitemap: https://www.academicplug.com/schoolSiteMaps
+Sitemap: https://www.academicplug.com/schools-sitemap.xml
+Sitemap: https://www.academicplug.com/facultySiteMaps/
+Sitemap: https://www.academicplug.com/facultySiteMaps/Futminna-sitemap.xml
+Sitemap: https://www.academicplug.com/coursesSiteMap/
+Sitemap: https://www.academicplug.com/coursesSiteMap/Health-Education-sitemap.xml
