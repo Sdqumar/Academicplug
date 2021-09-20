@@ -15,22 +15,22 @@ export async function getStaticProps() {
   const q = await getDocs(collection(firestore, "schools"));
   const data = q.docs.map((doc) => doc.data());
 
-  const fs = await import("fs");
-  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-      ${data
-        .map((item) => {
-          const route = item.name.replace(/\s/g, "-");
-          return `<url>
-    <loc>${`https://www.academicplug.com/${route}`}</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-</url>`;
-        })
-        .join("")}
-  </urlset>
-`;
+  //   const fs = await import("fs");
+  //   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+  // <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  //       ${data
+  //         .map((item) => {
+  //           const route = item.name.replace(/\s/g, "-");
+  //           return `<url>
+  //     <loc>${`https://www.academicplug.com/${route}`}</loc>
+  //     <lastmod>${new Date().toISOString()}</lastmod>
+  // </url>`;
+  //         })
+  //         .join("")}
+  //   </urlset>
+  // `;
 
-  fs.writeFileSync(`public/schools-sitemap.xml`, sitemap);
+  //   fs.writeFileSync(`public/schools-sitemap.xml`, sitemap);
 
   return {
     props: {

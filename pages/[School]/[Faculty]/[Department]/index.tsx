@@ -50,27 +50,27 @@ export async function getStaticProps(context) {
 
   // createSiteMap
 
-  const schoolUrl = `/${school.replace(/\s/g, "-")}`;
-  const facultyUrl = `/${faculty.replace(/\s/g, "-")}`;
-  const departmentUrl = `/${department.replace(/\s/g, "-")}`;
+  // const schoolUrl = `/${school.replace(/\s/g, "-")}`;
+  // const facultyUrl = `/${faculty.replace(/\s/g, "-")}`;
+  // const departmentUrl = `/${department.replace(/\s/g, "-")}`;
 
-  const url = schoolUrl + facultyUrl + departmentUrl;
-  const fs = await import("fs");
-  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-   <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-         ${data
-           .map((item) => {
-             const route = item.replace(/\s/g, "-");
-             return `<url>
-       <loc>${`https://www.academicplug.com/${url}/${route}`}</loc>
-       <lastmod>${new Date().toISOString()}</lastmod>
-   </url>`;
-           })
-           .join("")}
-     </urlset>
-   `;
+  // const url = schoolUrl + facultyUrl + departmentUrl;
+  // const fs = await import("fs");
+  // const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+  //  <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  //        ${data
+  //          .map((item) => {
+  //            const route = item.replace(/\s/g, "-");
+  //            return `<url>
+  //      <loc>${`https://www.academicplug.com/${url}/${route}`}</loc>
+  //      <lastmod>${new Date().toISOString()}</lastmod>
+  //  </url>`;
+  //          })
+  //          .join("")}
+  //    </urlset>
+  //  `;
 
-  fs.writeFileSync(`public/coursesSiteMap/${department}-sitemap.xml`, sitemap);
+  // fs.writeFileSync(`public/coursesSiteMap/${department}-sitemap.xml`, sitemap);
 
   // if (data === [] && !admins) {
   // return {
