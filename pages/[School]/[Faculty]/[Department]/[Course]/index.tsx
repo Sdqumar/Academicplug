@@ -28,6 +28,8 @@ export async function getStaticPaths() {
 export async function getStaticProps(context) {
   const school = context.params.School;
   const course = context.params.Course;
+  const faculty = context.params.Faculty;
+  const department = context.params.Department;
 
   const { doc, getDoc, getFirestore } = await import("firebase/firestore");
   const firestore = getFirestore(firebase);
@@ -35,7 +37,6 @@ export async function getStaticProps(context) {
   const docRef = doc(firestore, "schools", school, "courses", course);
   const dataRef = await getDoc(docRef);
   const data = dataRef.data();
-
   const adminRef = await getDoc(
     doc(firestore, "schools", school, "admin", "admin")
   );

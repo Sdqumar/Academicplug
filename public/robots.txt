@@ -1,3 +1,14 @@
+# *
 User-agent: *
-Disallow: /*?
 Disallow: /AddSchool
+
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://www.academicplug.com/
+
+# Sitemaps
+Sitemap: https://www.academicplug.com/sitemap.xml
+Sitemap: https://www.academicplug.com/schoolSiteMaps

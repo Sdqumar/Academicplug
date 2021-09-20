@@ -5,7 +5,13 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 });
 
 module.exports = withBundleAnalyzer({
-
+	webpack: (config, { isServer }) => {
+		if (isServer) {
+		  require('./generateSiteMap')
+		}
+	
+		return config
+	  },
 	experimental: { esmExternals: true },
 	images: {
 		domains: ['firebasestorage.googleapis.com'],
