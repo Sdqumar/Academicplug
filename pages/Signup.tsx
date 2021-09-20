@@ -99,10 +99,10 @@ function RegistrationForm() {
   return (
     <>
       <Head>
-        <title>Sign U | Academic Plug </title>
+        <title>Sign Up | Academic Plug </title>
       </Head>
 
-      <Box width="50vw" m="2rem auto">
+      <Box maxWidth="17rem" m="2rem auto" textAlign="center">
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}

@@ -28,8 +28,6 @@ export async function getStaticPaths() {
 export async function getStaticProps(context) {
   const school = context.params.School;
   const course = context.params.Course;
-  const faculty = context.params.Faculty;
-  const department = context.params.Department;
 
   const { doc, getDoc, getFirestore } = await import("firebase/firestore");
   const firestore = getFirestore(firebase);
@@ -91,7 +89,7 @@ const School = ({ data, admins }) => {
         </Typography>
       </Box>
       <Box>
-        <Star school={school} course={course} data={data} user={user} />
+        <Star school={school} course={course} user={user} />
       </Box>
       <PDFViewer data={data?.pdfRef} />
     </Box>

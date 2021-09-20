@@ -1,13 +1,15 @@
 import { Box, Typography } from "@material-ui/core";
-export interface FooterProps {}
-import { getAnalytics, logEvent } from "firebase/analytics";
 import { useEffect } from "react";
 
-const Footer: React.FC<FooterProps> = () => {
+const Footer = () => {
   useEffect(() => {
-    const analytics = getAnalytics();
-    logEvent(analytics, "notification_received");
+    window.onload = async function () {
+      const { getAnalytics, logEvent } = await import("firebase/analytics");
+      const analytics = getAnalytics();
+      logEvent(analytics, "notification_received");
+    };
   });
+
   return (
     <Box
       maxWidth="100%"
