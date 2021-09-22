@@ -5,7 +5,6 @@ import "../styles/globals.css";
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 import { Box } from "@material-ui/core";
 import Cookies from "js-cookie";
-// import { getAuth, onAuthStateChanged } from "firebase/auth";
 import "@fontsource/roboto";
 import dynamic from "next/dynamic";
 import Header from "components/Header";

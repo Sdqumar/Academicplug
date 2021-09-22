@@ -53,7 +53,10 @@ const Index = ({ data }) => {
         m="auto"
         display="block"
       >
-        <BannerHome />
+        <BannerHome
+          src="/banner.webp"
+          heading=" Courses for Nigerian Students"
+        />
         <SchoolGridList schools={data} />
       </Box>
     </>

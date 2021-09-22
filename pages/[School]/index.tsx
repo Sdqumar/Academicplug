@@ -2,11 +2,12 @@ import { GetStaticPaths } from "next";
 import { useRouter } from "next/router";
 import firebase from "config/firebase-config";
 import { Box, Typography } from "@material-ui/core";
-import { useRef, useContext } from "react";
+import { useContext } from "react";
 import AuthContext from "components/AuthContext";
 import dynamic from "next/dynamic";
 import Head from "next/head";
-
+import Image from "next/image";
+const Banner = dynamic(() => import("components/Banner"));
 const AddFaculty = dynamic(() => import("components/AddFaculty"));
 const CoursesGrid = dynamic(() => import("components/CoursesGrid"));
 
@@ -61,28 +62,28 @@ const School = ({ data, admin }) => {
 
   const list = data.map((item) => item?.name);
 
-  const boxRef = useRef(null);
-
   let isAdmin = admin === currentUser?.uid;
 
-  const onClick = () => {
-    boxRef.current.style.display = "block";
-  };
-  const closeBox = () => {
-    boxRef.current.style.display = "none";
-  };
   return (
     <>
       <Head>
         <title>{school} | Academic Plug </title>
       </Head>
 
-      <Box mt="1rem" pl="1rem">
-        {isAdmin && <AddFaculty school={School} />}
-
-        <Typography variant="h3" className="heading">
-          {school ? school : School}
-        </Typography>
+      {isAdmin && <AddFaculty school={School} />}
+      <Box
+        width={{ xs: "100%", md: "80%" }}
+        mt={{ xs: "0", md: "1rem" }}
+        m="auto"
+      >
+        <Banner
+          src={`/schoolCover/${School}.png`}
+          heading={school ? school : School}
+          school={school}
+        />
+      </Box>
+      <Box ml="2%">
+        {" "}
         <CoursesGrid list={list} url={`/${School}`} />
       </Box>
     </>

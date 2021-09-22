@@ -10,13 +10,13 @@ const useStyles = makeStyles((theme) => ({
     },
     "& h2": {
       fontWeight: 450,
-
+      marginLeft: "10px",
       fontSize: "3rem",
     },
   },
 }));
 
-const BannerHome: React.FC<BannerHomeProps> = () => {
+const BannerHome = ({ src, heading }) => {
   const classes = useStyles();
   return (
     <Box
@@ -29,7 +29,7 @@ const BannerHome: React.FC<BannerHomeProps> = () => {
       <Image
         layout="fill"
         objectFit="cover"
-        src="/banner.webp"
+        src={src}
         alt="Home-Banner"
         priority
         quality="20"
@@ -42,7 +42,7 @@ const BannerHome: React.FC<BannerHomeProps> = () => {
         marginTop={{ xs: "4rem", sm: "6rem" }}
       >
         <Typography component="h2" variant="h3">
-          Courses for Nigerian Students
+          {heading}
         </Typography>
       </Box>
     </Box>
