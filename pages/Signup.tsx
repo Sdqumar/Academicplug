@@ -81,7 +81,7 @@ function RegistrationForm() {
 
           setDoc(doc(firestore, "users", uid), { email, displayName });
           setCurrentUser({ displayName, uid });
-          Cookies.set("user", JSON.stringify({ displayName, uid }));
+          Cookies.set("user", JSON.stringify(auth.currentUser));
         })
         .then(() => {
           toast.success("SignUp Sucessfully!");

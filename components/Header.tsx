@@ -52,11 +52,12 @@ const useStyles = makeStyles((theme) => ({
   welcome: {
     justifyContent: "space-between",
     alignItems: "center",
-    width: "9rem",
+    maxWidth: "15rem",
     marginRight: "1rem",
 
     "& span": {
-      fontWeight: 500,
+      fontWeight: 600,
+      marginLeft: "5px",
     },
   },
 }));
@@ -82,7 +83,7 @@ const Header = () => {
   const classes = useStyles();
   return (
     <Grid component="header" className={classes.header}>
-      <NextLink href="/" prefetch={false}>
+      <NextLink href="/">
         <Box className={classes.academicplug}>
           <Box>
             <SchoolIcon />
@@ -99,15 +100,11 @@ const Header = () => {
           (currentUser === null ? (
             <Box className={classes.logReg}>
               <Button>
-                <NextLink href="/Signin" prefetch={false}>
-                  Login
-                </NextLink>
+                <NextLink href="/Signin">Login</NextLink>
               </Button>
 
               <Button variant="outlined">
-                <NextLink href="/Signup" prefetch={false}>
-                  Sign Up
-                </NextLink>
+                <NextLink href="/Signup">Sign Up</NextLink>
               </Button>
             </Box>
           ) : (
@@ -117,7 +114,7 @@ const Header = () => {
                 className={classes.welcome}
               >
                 <Typography>Welcome</Typography>
-                <Typography component="span">
+                <Typography component="span" noWrap>
                   {currentUser?.displayName}
                 </Typography>
               </Box>

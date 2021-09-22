@@ -1,6 +1,8 @@
 import { Box, Typography, makeStyles, Link } from "@material-ui/core";
 import Image from "next/image";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
+
 export interface SchoolGridListProps {
   schools: [
     {
@@ -33,6 +35,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SchoolGridList: React.FC<SchoolGridListProps> = ({ schools }) => {
+  const router = useRouter();
+
   const classes = useStyles();
   return (
     <Box maxWidth="55rem" m="auto" mt="2rem">
@@ -58,6 +62,12 @@ const SchoolGridList: React.FC<SchoolGridListProps> = ({ schools }) => {
                   m="0 10px"
                   mb="2rem"
                   className={classes.schoolItem}
+                  onClick={() =>
+                    router.push({
+                      pathname: "/" + school?.slug,
+                      query: { school: school?.name },
+                    })
+                  }
                 >
                   <Image
                     src={imgSrc}
@@ -65,6 +75,8 @@ const SchoolGridList: React.FC<SchoolGridListProps> = ({ schools }) => {
                     height="200%"
                     objectFit="contain"
                     alt={`${school?.name} logo`}
+                    priority
+                    quality={5}
                   />
                   <Typography variant="h6">{school?.name}</Typography>
                 </Box>

@@ -8,7 +8,7 @@
 		"start": "next start",
 		"analyze": "source-map-explorer .next/static/**/*.js .next/static/**/*.map",
 		"build:analyze": "npm run build && npm run analyze",
-		"postbuild" : "next-sitemap"
+		"postbuild": "next-sitemap"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.4.1",

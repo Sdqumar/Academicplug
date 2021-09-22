@@ -1,6 +1,5 @@
 import { Box, Typography, makeStyles } from "@material-ui/core";
 import Image from "next/image";
-import "../public/banner.webp";
 export interface BannerHomeProps {}
 
 const useStyles = makeStyles((theme) => ({
@@ -30,8 +29,10 @@ const BannerHome: React.FC<BannerHomeProps> = () => {
       <Image
         layout="fill"
         objectFit="cover"
-        src="/banner.jpg"
+        src="/banner.webp"
         alt="Home-Banner"
+        priority
+        quality="20"
       />
       <Box
         position="absolute"

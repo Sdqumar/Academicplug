@@ -70,11 +70,9 @@ function SignIn() {
     actions.setSubmitting(true);
 
     signInWithEmailAndPassword(auth, values.email, values.password)
-      .then(({ user }) => {
-        const displayName = user.displayName;
-        const uid = user.uid;
-        setCurrentUser({ displayName, uid });
-        Cookies.set("user", JSON.stringify({ displayName, uid }));
+      .then(() => {
+        setCurrentUser(auth.currentUser);
+        Cookies.set("user", JSON.stringify(auth.currentUser));
         toast.success("Login Sucessfully!");
         router.push("/");
       })

@@ -5,7 +5,7 @@ import "../styles/globals.css";
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 import { Box } from "@material-ui/core";
 import Cookies from "js-cookie";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+// import { getAuth, onAuthStateChanged } from "firebase/auth";
 import "@fontsource/roboto";
 import dynamic from "next/dynamic";
 import Header from "components/Header";
@@ -35,16 +35,6 @@ function MyApp({ Component, pageProps }) {
     if (Cookies.get("user") === undefined) {
       Cookies.set("user", null);
     }
-
-    const auth = getAuth();
-
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        Cookies.set("user", JSON.stringify(user));
-      } else {
-        Cookies.set("user", JSON.stringify(user));
-      }
-    });
     setCurrentUser(JSON.parse(Cookies.get("user")));
   }, []);
 
