@@ -99,7 +99,7 @@ const School = ({ data, admins }) => {
           -{course}
         </Typography>
       </Box>
-      <Box display='flex' width='100%' m='1rem' >
+      <Box display='flex' width='fit-content' m='1rem' >
         <Star school={school} course={course} user={user} />
       <Button variant='outlined' onClick={download}>
         <Box mb='-5px' mr='5px'>

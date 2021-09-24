@@ -59,10 +59,10 @@ function SignIn() {
     email: string;
     password: string;
   };
-  const [, setCurrentUser] = useContext(AuthContext);
+  const [currentUser, setCurrentUser] = useContext(AuthContext);
 
   const onSubmit = async (values: values, actions) => {
-    const { getAuth, signInWithEmailAndPassword } = await import(
+    const { getAuth, signInWithEmailAndPassword,onAuthStateChanged } = await import(
       "firebase/auth"
     );
     const auth = getAuth(firebase);
@@ -71,10 +71,14 @@ function SignIn() {
 
     signInWithEmailAndPassword(auth, values.email, values.password)
       .then(() => {
+        const auth = getAuth(firebase);
         setCurrentUser(auth.currentUser);
-        Cookies.set("user", JSON.stringify(auth.currentUser));
+        // onAuthStateChanged(auth, user=>{
+        //   setCurrentUser(user);
+        //   Cookies.set("user", JSON.stringify(user));
+        // })
         toast.success("Login Sucessfully!");
-        router.push("/");
+         router.push("/");
       })
       .catch((error) => {
         toast.error("Invalid Username or Password!");

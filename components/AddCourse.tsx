@@ -15,6 +15,8 @@ import toast, { Toaster } from "react-hot-toast";
 
 function AddCourse({ School, Faculty, Department }) {
   let [currentUser] = useContext(AuthContext);
+let {displayName,uid} = currentUser
+
 
   const [pdfurl, setPdfurl] = useState(null);
 
@@ -39,6 +41,7 @@ function AddCourse({ School, Faculty, Department }) {
     );
 
     const Course = values.Course.trim();
+    const Code = values.Code.trim();
 
     actions.setSubmitting(true);
     const path = `${School}/${Faculty}/${Department}/${Course}`;
@@ -54,11 +57,12 @@ function AddCourse({ School, Faculty, Department }) {
       doc(firestore, "schools", School, "courses", Course.replace(/\s/g, "-")),
       {
         Course,
+Code,
         School,
         Faculty,
         Department,
         pdfRef,
-        by: currentUser,
+        by: {displayName,uid},
       }
     )
       .then(() => {

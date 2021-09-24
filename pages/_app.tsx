@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import "@fontsource/roboto";
 import dynamic from "next/dynamic";
 import Header from "components/Header";
+import firebase from "config/firebase-config";
 
 const Footer = dynamic(() => import("components/Footer"));
 
@@ -27,6 +28,17 @@ const theme = createTheme({
   },
 });
 
+const getUser = async( setCurrentUser)=>{
+  const { getAuth,onAuthStateChanged } = await import(
+    "firebase/auth"
+  );
+  const auth = getAuth(firebase);
+onAuthStateChanged(auth, user=>{
+  setCurrentUser(user);
+
+})
+}
+
 function MyApp({ Component, pageProps }) {
   const [currentUser, setCurrentUser] = useState<undefined | {}>(undefined);
 
@@ -35,6 +47,9 @@ function MyApp({ Component, pageProps }) {
       Cookies.set("user", null);
     }
     setCurrentUser(JSON.parse(Cookies.get("user")));
+    
+    getUser( setCurrentUser)
+    
   }, []);
 
   return (
