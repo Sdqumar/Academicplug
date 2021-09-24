@@ -54,8 +54,8 @@ const Star = ({ user, school, course }) => {
     <Tooltip title={user ? "" : "You must signed in to star a material"} arrow>
       <Box
         border="1px solid lightgray"
-        m="1rem"
         width="fit-content"
+        mr='1rem'
         borderRadius="10px"
         fontSize="1.1rem"
         fontWeight="600"

@@ -72,11 +72,12 @@ function AddDepartment() {
                             md: '2rem'
                         }
                 }>
-                    <Typography className="heading">Add Department</Typography>
-                    <button className='closeBtn'
+					 <button className='closeBtn'
                         onClick={handleClose}>
                         Close
                     </button>
+                    <Typography className="heading">Add Department</Typography>
+                   
                 </Box>
 				<Box
 			alignItems="center"

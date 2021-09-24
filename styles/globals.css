@@ -10,11 +10,14 @@ body {
 	font-size: clamp(1rem, 10vw, 3rem) !important;
 	font-weight: 600 !important;
 }
-
-a {
+a{
 	text-decoration: none !important;
 	color: #000;
 }
+.heading a:hover {
+	color: rgb(191 155 84);
+}
+
 
 .closeBtn {
 	background: #e53e3e;

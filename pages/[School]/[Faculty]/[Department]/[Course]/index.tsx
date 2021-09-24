@@ -1,11 +1,15 @@
 import { useRouter } from "next/router";
 import NextLink from "next/link";
 import { useContext } from "react";
-import { Box, Typography } from "@material-ui/core";
+import { Box, Button, Typography } from "@material-ui/core";
 import firebase from "config/firebase-config";
 import AuthContext from "components/AuthContext";
 import dynamic from "next/dynamic";
 import Head from "next/head";
+import fileDownload from 'js-file-download';
+import Axios from 'axios';
+import CloudDownloadOutlinedIcon from '@material-ui/icons/CloudDownloadOutlined';
+
 
 const DeleteButton = dynamic(() => import("components/DeleteButton"));
 const PDFViewer = dynamic(() => import("components/PDFViewer"));
@@ -66,8 +70,15 @@ const School = ({ data, admins }) => {
   const schoolUrl = `/${school.replace(/\s/g, "-")}`;
   const facultyUrl = `/${faculty.replace(/\s/g, "-")}`;
   const departmentUrl = `/${department.replace(/\s/g, "-")}`;
-  const courseUrl = `/${course.replace(/\s/g, "-")}`;
 
+
+  function download() {
+    Axios.get(data?.pdfRef, {
+      responseType: 'blob',
+    }).then(res => {
+      fileDownload(res.data, `${course}.pdf`);
+    });
+  }
   return (
     <Box>
       <Head>
@@ -88,8 +99,15 @@ const School = ({ data, admins }) => {
           -{course}
         </Typography>
       </Box>
-      <Box>
+      <Box display='flex' width='100%' m='1rem' >
         <Star school={school} course={course} user={user} />
+      <Button variant='outlined' onClick={download}>
+        <Box mb='-5px' mr='5px'>
+        <CloudDownloadOutlinedIcon/>
+        </Box>
+        Download
+        </Button>
+
       </Box>
       <PDFViewer data={data?.pdfRef} />
     </Box>

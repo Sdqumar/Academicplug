@@ -8,6 +8,7 @@ const useStyles = makeStyles((theme) => ({
     "& img": {
       filter: "brightness(40%) grayscale(100%)",
     },
+   
     "& h2": {
       fontWeight: 450,
       marginLeft: "10px",

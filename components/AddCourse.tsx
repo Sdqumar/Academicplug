@@ -26,9 +26,11 @@ function AddCourse({ School, Faculty, Department }) {
 
   const initialValues = {
     Course: "",
+    Code:""
   };
   const validationSchema = Yup.object().shape({
     Course: Yup.mixed().required("Required"),
+    Code: Yup.mixed().required("Required"),
   });
 
   const onSubmit = async (values, actions) => {
@@ -92,16 +94,17 @@ function AddCourse({ School, Faculty, Department }) {
       >
         <Box
           justifyContent="space-between"
-          mt="1rem"
+         mt='1rem'
           ml={{
             xs: "10px",
             md: "2rem",
           }}
         >
-          <Typography className="heading">Add Course</Typography>
-          <button className="closeBtn" onClick={handleClose}>
+            <button className="closeBtn" onClick={handleClose}>
             Close
           </button>
+          <Typography className="heading">Add Course</Typography>
+        
         </Box>
         <Box
           alignItems="center"
@@ -125,6 +128,14 @@ function AddCourse({ School, Faculty, Department }) {
                         type="name"
                         label="Course Name"
                         name="Course"
+                      />
+                    </Box>
+                    <Box width="15rem" mt={2}>
+                      <FormikControl
+                        control="chakraInput"
+                        type="name"
+                        label="Course Code"
+                        name="Code"
                       />
                     </Box>
                   </Form>

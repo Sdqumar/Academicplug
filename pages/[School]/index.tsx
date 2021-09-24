@@ -6,8 +6,9 @@ import { useContext } from "react";
 import AuthContext from "components/AuthContext";
 import dynamic from "next/dynamic";
 import Head from "next/head";
-import Image from "next/image";
-const Banner = dynamic(() => import("components/Banner"));
+import Banner from "@/components/Banner";
+
+// const Banner = dynamic(() => import("components/Banner"));
 const AddFaculty = dynamic(() => import("components/AddFaculty"));
 const CoursesGrid = dynamic(() => import("components/CoursesGrid"));
 
@@ -67,7 +68,7 @@ const School = ({ data, admin }) => {
   return (
     <>
       <Head>
-        <title>{school} | Academic Plug </title>
+        <title>{school ? school : School} | Academic Plug </title>
       </Head>
 
       {isAdmin && <AddFaculty school={School} />}
@@ -83,7 +84,7 @@ const School = ({ data, admin }) => {
         />
       </Box>
       <Box ml="2%">
-        {" "}
+       
         <CoursesGrid list={list} url={`/${School}`} />
       </Box>
     </>
