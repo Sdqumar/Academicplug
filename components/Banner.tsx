@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const BannerHome = ({ src, heading, school }) => {
+const Banner = ({ src, heading, school }) => {
   const classes = useStyles();
   return (
     <Box
@@ -35,7 +35,6 @@ const BannerHome = ({ src, heading, school }) => {
         src={src}
         alt={`${school} cover`}
         priority
-        quality="20"
       />
       <Box
         position="absolute"
@@ -53,4 +52,4 @@ const BannerHome = ({ src, heading, school }) => {
   );
 };
 
-export default BannerHome;
+export default Banner;
