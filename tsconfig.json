@@ -12,17 +12,22 @@
 		"moduleResolution": "node",
 		"resolveJsonModule": true,
 		"isolatedModules": true,
+		"types": ["cypress", "@testing-library/cypress"],
 		"jsx": "preserve",
 		"baseUrl": ".",
 		"paths": {
-			"@/components/*": ["components/*"]
+			"@/components/*": ["components/*"],
+			"@/pages/*": ["pages/*"],
+			"@/config/*": ["config/*"]
 		}
 	},
 	"include": [
 		"pages/**/*.ts",
 		"pages/**/*.tsx",
 		"components/**/*.tsx",
-		"components/**/*.ts"
+		"pages/**/*.tsx",
+		"config/**/*.tsx",
+		"components/**/*.ts",
 	],
 	"exclude": ["node_modules"]
 }

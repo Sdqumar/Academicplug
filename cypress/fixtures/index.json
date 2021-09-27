@@ -1,0 +1,27 @@
+{
+  "pageProps": {
+    "data": [
+      {
+        "logourl": "https://firebasestorage.googleapis.com/v0/b/sdqumar007.appspot.com/o/school%20logo%2FUniversity%20of%20Nigeria?alt=media&token=ca097fdf-509b-4e64-84ca-fef5875a8dc2",
+        "slug": "Nsukka",
+        "name": "University of Nigeria"
+      },
+      {
+        "name": "University of Ibadan",
+        "slug": "UI",
+        "logourl": "https://firebasestorage.googleapis.com/v0/b/sdqumar007.appspot.com/o/school%20logo%2FUniversity%20of%20Ibadan?alt=media&token=39a5ac00-517b-44e7-835c-27ef350b28e2"
+      },
+      {
+        "logourl": "https://firebasestorage.googleapis.com/v0/b/sdqumar007.appspot.com/o/school%20logo%2FNnamdi%20Azikiwe%20University?alt=media&token=aec34c8e-a6e4-4eb4-b8e2-d1490c451c94",
+        "name": "Nnamdi Azikiwe University",
+        "slug": "UNIZIK"
+      },
+      {
+        "logourl": "https://firebasestorage.googleapis.com/v0/b/sdqumar007.appspot.com/o/school%20logo%2FUniversity%20of%20Ilorin?alt=media&token=56466f8f-0118-4c0a-8113-e7720b00b7d7",
+        "name": "University of Ilorin",
+        "slug": "UniIorin"
+      }
+    ]
+  },
+  "__N_SSG": true
+}

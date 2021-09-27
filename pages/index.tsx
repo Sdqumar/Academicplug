@@ -1,5 +1,5 @@
 import { Box } from "@material-ui/core";
-import firebase from "config/firebase-config";
+import firebase from "../config/firebase-config";
 import Head from "next/head";
 
 import dynamic from "next/dynamic";
@@ -58,6 +58,7 @@ const Index = ({ data }) => {
           heading=" Courses for Nigerian Students"
         />
         <SchoolGridList schools={data} />
+
       </Box>
     </>
   );

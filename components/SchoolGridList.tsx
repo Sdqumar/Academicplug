@@ -40,8 +40,8 @@ const SchoolGridList: React.FC<SchoolGridListProps> = ({ schools }) => {
   const classes = useStyles();
   return (
     <Box maxWidth="55rem" m="auto" mt="2rem">
-      <Box display="flex" flexWrap="wrap" justifyContent="center">
-        {schools.map((school) => {
+      <Box display="flex" flexWrap="wrap" justifyContent="center" role='schoolGridList'>
+        {schools.map((school,index) => {
           const imgSrc = `/logo/${school.slug}.png`;
 
           return (
@@ -53,8 +53,9 @@ const SchoolGridList: React.FC<SchoolGridListProps> = ({ schools }) => {
               passHref
               key={school?.slug}
             >
-              <Link>
+              <Link >
                 <Box
+                data-testid={`schoolitem-${school.name}`}
                   width={{ xs: "9rem", md: "11rem" }}
                   height={{ xs: "12rem", md: "12rem" }}
                   padding="4px 0"

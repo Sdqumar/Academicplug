@@ -5,8 +5,8 @@ import { Box, Button, makeStyles, Typography, Paper } from "@material-ui/core";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import { useContext } from "react";
-import AuthContext from "components/AuthContext";
-import firebase from "config/firebase-config";
+import AuthContext from "@/components/AuthContext";
+import firebase from "../config/firebase-config";
 import dynamic from "next/dynamic";
 import toast, { Toaster } from "react-hot-toast";
 import FormikControl from "@/components/Formik/FormikControl";
@@ -59,9 +59,9 @@ function SignIn() {
     email: string;
     password: string;
   };
-  const [,setCurrentUser] = useContext(AuthContext);
-
+  
   const onSubmit = async (values: values, actions) => {
+    const [,setCurrentUser] = useContext(AuthContext);
     const { getAuth, signInWithEmailAndPassword } = await import(
       "firebase/auth"
     );
@@ -135,6 +135,7 @@ function SignIn() {
                   <Button
                     variant="outlined"
                     type="submit"
+                    name='submit'
                     disabled={!formik.isValid}
                   >
                     Submit
