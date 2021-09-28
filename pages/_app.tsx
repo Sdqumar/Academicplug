@@ -28,16 +28,6 @@ const theme = createTheme({
   },
 });
 
-const getUser = async( setCurrentUser)=>{
-  const { getAuth,onAuthStateChanged } = await import(
-    "firebase/auth"
-  );
-  const auth = getAuth(firebase);
-onAuthStateChanged(auth, user=>{
-  setCurrentUser(user);
-
-})
-}
 
 function MyApp({ Component, pageProps }) {
   const [currentUser, setCurrentUser] = useState<undefined | {}>(undefined);
@@ -48,7 +38,6 @@ function MyApp({ Component, pageProps }) {
     }
     setCurrentUser(JSON.parse(Cookies.get("user")));
     
-    getUser( setCurrentUser)
     
   }, []);
 

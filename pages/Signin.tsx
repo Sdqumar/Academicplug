@@ -59,9 +59,9 @@ function SignIn() {
     email: string;
     password: string;
   };
+  const [,setCurrentUser] = useContext(AuthContext);
   
   const onSubmit = async (values: values, actions) => {
-    const [,setCurrentUser] = useContext(AuthContext);
     const { getAuth, signInWithEmailAndPassword } = await import(
       "firebase/auth"
     );
@@ -70,9 +70,10 @@ function SignIn() {
     actions.setSubmitting(true);
 
     signInWithEmailAndPassword(auth, values.email, values.password)
-      .then(() => {
-        const auth = getAuth(firebase);
-        setCurrentUser(auth.currentUser);
+      .then((user) => {
+        
+        Cookies.set("user",JSON.stringify(user.user));
+        setCurrentUser(user.user);
         toast.success("Login Sucessfully!");
          router.push("/");
       })

@@ -26,6 +26,11 @@ function AddSchool() {
   };
 
   const onSubmit = async (values, actions) => {
+    const { getAuth } = await import(
+      "firebase/auth"
+    );
+   getAuth(firebase);
+   
     actions.setSubmitting(true);
     const school = values.SchoolName.trim();
     let slug = values.Slug.trim();

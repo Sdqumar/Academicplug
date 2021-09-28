@@ -18,7 +18,11 @@ function AddFaculty({ school }) {
 
   const onSubmit = async (values, actions) => {
     actions.setSubmitting(true);
-
+    const { getAuth } = await import(
+      "firebase/auth"
+    );
+   getAuth(firebase);
+      
     const { doc, setDoc, getFirestore } = await import("firebase/firestore");
     const firestore = getFirestore(firebase);
 

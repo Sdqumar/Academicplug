@@ -1,18 +1,15 @@
-import React, { useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import FormikControl from '../components/Formik/FormikControl';
 import {
 	Box,
 	Button,
-	Grid,
-	makeStyles,
 	Typography,
-	Link,
 } from '@material-ui/core';
 import firebase from '../config/firebase-config';
 import { useRouter } from 'next/router';
 import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
+import toast, { Toaster } from "react-hot-toast";
 
 //initialize firestore
 
@@ -30,8 +27,9 @@ function ForgetPassword() {
 		const auth = getAuth(firebase);
 		actions.setSubmitting(true);
 
-		sendPasswordResetEmail(auth, values.email)
+		sendPasswordResetEmail(auth, values.Email)
 			.then(() => {
+				toast.success("Check Your MailBox!");
 				actions.resetForm();
 				actions.setSubmitting(false);
 				setTimeout(() => router.reload(), 5000);
@@ -61,7 +59,7 @@ function ForgetPassword() {
 									width="30rem"
 								/>
 							</Box>
-
+							<Toaster position="top-center" />
 							<Box mt={2} textAlign="center">
 								<Button
 									variant="outlined"

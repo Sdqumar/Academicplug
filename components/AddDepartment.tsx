@@ -23,6 +23,11 @@ function AddDepartment() {
 	const faculty = router.query.Faculty.toString();
 
 	const onSubmit = async (values, actions) => {
+		const { getAuth } = await import(
+			"firebase/auth"
+		  );
+		 getAuth(firebase);
+		 
 		const department = values.department;
 		actions.setSubmitting(true);
 

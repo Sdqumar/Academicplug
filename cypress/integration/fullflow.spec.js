@@ -8,7 +8,7 @@ describe('full user happy path', ()=>{
         cy.findByRole('button', {  name: /sign up/i})
         cy.findByRole('button', {  name: /login/i}).click()
         cy.login('Admintest@1.com','Admintest@1.com')
-         cy.url().should('include', 'academicplug.com')
+        cy.url().should('include', 'academicplug.com')
         cy.contains('Courses for Nigerian Students')
 
     })
@@ -22,10 +22,4 @@ describe('full user happy path', ()=>{
        cy.contains(/211/i).click()
       })
 
-      // it('user should be able to sign out',()=>{
-      //   cy.findByRole('button', {  name: /sign out/i}).click()
-      //   cy.findByRole('button', {  name: /login/i})
-      //   cy.findByRole('button', {  name: /sign up/i})
-        
-      // })
 })

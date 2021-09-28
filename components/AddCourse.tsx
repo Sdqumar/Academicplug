@@ -36,6 +36,12 @@ let {displayName,uid} = currentUser
   });
 
   const onSubmit = async (values, actions) => {
+
+    const { getAuth } = await import(
+      "firebase/auth"
+    );
+   getAuth(firebase);
+   
     const { getStorage, ref, uploadBytes, getDownloadURL } = await import(
       "firebase/storage"
     );
