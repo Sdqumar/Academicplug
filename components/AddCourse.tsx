@@ -154,8 +154,8 @@ Code,
                       getfile={getfile}
                       label="pdf"
                       size={{
-                        byte: "20000000",
-                        mb: "20mb",
+                        byte: "60000000",
+                        mb: "60mb",
                       }}
                       type="application/pdf"
                     />

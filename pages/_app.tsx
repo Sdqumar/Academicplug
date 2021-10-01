@@ -8,7 +8,6 @@ import Cookies from "js-cookie";
 import "@fontsource/roboto";
 import dynamic from "next/dynamic";
 import Header from "components/Header";
-import firebase from "../config/firebase-config";
 
 const Footer = dynamic(() => import("components/Footer"));
 
@@ -30,13 +29,14 @@ const theme = createTheme({
 
 
 function MyApp({ Component, pageProps }) {
-  const [currentUser, setCurrentUser] = useState<undefined | {}>(undefined);
+  const [currentUser, setCurrentUser] = useState<null | {}>(null);
 
   useEffect(() => {
-    if (Cookies.get("user") === undefined) {
-      Cookies.set("user", null);
+    if (Cookies.get("user") !== undefined) {
+      setCurrentUser(JSON.parse(Cookies.get("user")));
+
     }
-    setCurrentUser(JSON.parse(Cookies.get("user")));
+
     
     
   }, []);

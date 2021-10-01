@@ -11,6 +11,7 @@ const Footer = () => {
   });
 
   return (
+<footer>
     <Box
       maxWidth="100%"
       bgcolor="#000"
@@ -21,6 +22,7 @@ const Footer = () => {
     >
       <Typography> {"ACADEMIC PLUG 2021\u00A9 "}</Typography>
     </Box>
+    </footer>
   );
 };
 

@@ -71,7 +71,7 @@ const Header = () => {
 
     signOut(auth)
       .then(() => {
-        Cookies.set("user", null);
+        Cookies.remove("user");
         setCurrentUser(null);
         toast.success("Successfully Signout!");
       })
