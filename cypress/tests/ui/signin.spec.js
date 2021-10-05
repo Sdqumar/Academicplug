@@ -1,4 +1,3 @@
-///<reference types='cypress'/>
 
 
 describe('e2e for signin', ()=>{

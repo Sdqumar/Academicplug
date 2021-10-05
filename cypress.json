@@ -2,5 +2,4 @@
   "baseUrl": "http://localhost:3000",
   "projectId": "v8idi1",
   "integrationFolder": "cypress/tests"
-
 }

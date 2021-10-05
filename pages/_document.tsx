@@ -12,6 +12,7 @@ export default class MyDocument extends Document {
             name="description"
             content="Get all kinds of academic course material"
           />
+           <link rel="manifest" href="/manifest.json" />
         </Head>
         <body>
           <Main />

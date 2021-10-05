@@ -1,4 +1,5 @@
 import { initializeApp } from 'firebase/app';
+// import { enableIndexedDbPersistence,getFirestore } from "firebase/firestore"; 
 
 const config = {
 	apiKey: 'AIzaSyBuX9Tg0LK7EnFZGkoXDPwm6mDeKOJyVJE',
@@ -12,6 +13,10 @@ const config = {
 
     
 // connectFirestoreEmulator(firestore,'http://localhost:4000/',8080)
-  
 let firebase = initializeApp(config);
+// if (process.browser) {
+// 	console.log('this code will only run on the browser')
+// 	const firestore = getFirestore(firebase)
+// 	// enableIndexedDbPersistence(firestore)
+//   }
 export default firebase;
