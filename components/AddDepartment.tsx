@@ -36,7 +36,7 @@ function AddDepartment() {
 		);
 		const firestore = getFirestore(firebase);
 		updateDoc(doc(firestore, 'schools', school, 'faculty', faculty), {
-			department: arrayUnion(department),
+			department: arrayUnion(department.trim()),
 		})
 			.then(() => {
 				toast.success('Department Added!');

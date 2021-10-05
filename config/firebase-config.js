@@ -10,5 +10,8 @@ const config = {
 	measurementId: 'G-EBM1PZ4W6K',
 };
 
+    
+// connectFirestoreEmulator(firestore,'http://localhost:4000/',8080)
+  
 let firebase = initializeApp(config);
 export default firebase;

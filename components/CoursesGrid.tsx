@@ -36,7 +36,7 @@ const CoursesGrid = ({ list, url, flexDir }: CourseGridProps) => {
         return (
           <NextLink
             key={item}
-            href={`${url}/${item.replace(/\s/g, "-")}`}
+            href={`${url}/${item.trim().replace(/\s/g, "-")}`}
             passHref
           >
             <Link>
@@ -49,7 +49,7 @@ const CoursesGrid = ({ list, url, flexDir }: CourseGridProps) => {
                 maxWidth="24rem"
                 mb="0.8rem"
               >
-                <Typography variant="h5">{item}</Typography>
+                <Typography variant="h5">{item.trim()}</Typography>
               </Box>
             </Link>
           </NextLink>

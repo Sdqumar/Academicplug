@@ -60,7 +60,7 @@ let {displayName,uid} = currentUser
     const firestore = getFirestore(firebase);
 
     await setDoc(
-      doc(firestore, "schools", School, "courses", Course.replace(/\s/g, "-")),
+      doc(firestore, "schools", School, "courses", Course.replace(/\s/g, "-").trim()),
       {
         Course,
 Code,

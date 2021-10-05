@@ -41,6 +41,8 @@ export async function getStaticProps() {
 }
 
 const Index = ({ data }) => {
+
+
   return (
     <>
       <Head>
