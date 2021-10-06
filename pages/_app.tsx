@@ -34,13 +34,11 @@ function MyApp({ Component, pageProps }) {
   useEffect(() => {
     if (Cookies.get("user") !== undefined) {
       setCurrentUser(JSON.parse(Cookies.get("user")));
-
+      
     }
-
-    
-    
   }, []);
-
+  
+  
   return (
     <AuthContext.Provider value={[currentUser, setCurrentUser]}>
       <ThemeProvider theme={theme}>

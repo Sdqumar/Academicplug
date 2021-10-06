@@ -36,7 +36,7 @@ let {displayName,uid} = currentUser
   });
 
   const onSubmit = async (values, actions) => {
-
+    
     const { getAuth } = await import(
       "firebase/auth"
     );
@@ -51,7 +51,8 @@ let {displayName,uid} = currentUser
 
     actions.setSubmitting(true);
     const path = `${School}/${Faculty}/${Department}/${Course}`;
-
+      
+      
     const pdfUpload = await uploadBytes(ref(getStorage(), path), pdfurl);
 
     const pdfRef = await getDownloadURL(pdfUpload.ref);
@@ -63,11 +64,12 @@ let {displayName,uid} = currentUser
       doc(firestore, "schools", School, "courses", Course.replace(/\s/g, "-").trim()),
       {
         Course,
-Code,
+        Code,
         School,
         Faculty,
         Department,
         pdfRef,
+        size:pdfurl.size,
         by: {displayName,uid},
       }
     )

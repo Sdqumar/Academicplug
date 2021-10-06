@@ -3,10 +3,14 @@ import StarIcon from "@material-ui/icons/Star";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
 import { Box, Typography } from "@material-ui/core";
 import { useState, useEffect } from "react";
-
+import firebase from "../config/firebase-config";
 import { getDatabase, update, ref, onValue } from "firebase/database";
+import { getAuth } from  
+  "firebase/auth"
 
 const Star = ({ user, school, course }) => {
+  getAuth(firebase);
+
   const [star, setStar] = useState([]);
   const [isStared, setIsStared] = useState<boolean>();
 
@@ -29,11 +33,11 @@ const Star = ({ user, school, course }) => {
   useEffect(() => {
     if (user != undefined) {
       setIsStared(star?.includes(user));
-      console.log(isStared);
     }
   }, [star]);
-
   const handleStar = async () => {
+ 
+   
     if (isStared && user) {
       setIsStared(false);
       const updates = {};

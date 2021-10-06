@@ -4,7 +4,8 @@ const withPWA = require("next-pwa");
 // 	enabled: process.env.ANALYZE === 'true',
 // });
 
-module.exports =  withPWA({
+module.exports = 
+ withPWA({
 	pwa: {
 	  dest: "public",
 	  register: true,

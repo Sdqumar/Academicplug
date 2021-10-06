@@ -1,15 +1,14 @@
 import { useRouter } from "next/router";
 import NextLink from "next/link";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Box, Button, Typography } from "@material-ui/core";
 import firebase from "config/firebase-config";
 import AuthContext from "components/AuthContext";
 import dynamic from "next/dynamic";
 import Head from "next/head";
-import fileDownload from 'js-file-download';
-import Axios from 'axios';
-import CloudDownloadOutlinedIcon from '@material-ui/icons/CloudDownloadOutlined';
-
+import fileDownload from "js-file-download";
+import Axios from "axios";
+import CloudDownloadOutlinedIcon from "@material-ui/icons/CloudDownloadOutlined";
 
 const DeleteButton = dynamic(() => import("components/DeleteButton"));
 const PDFViewer = dynamic(() => import("components/PDFViewer"));
@@ -71,11 +70,24 @@ const School = ({ data, admins }) => {
   const facultyUrl = `/${faculty.replace(/\s/g, "-")}`;
   const departmentUrl = `/${department.replace(/\s/g, "-")}`;
 
+  const [isLarge, setIsLager] = useState(data?.size > 1000000);
+  
+  const [fileSize, setFileSize] = useState(data?.size );
+useEffect(()=>{
+
+  if(fileSize < 1000000){
+   const size = Math.round(fileSize / 100000)
+    setFileSize(size+'kb')
+  }else{
+    const size = Math.round(fileSize / 1000000)
+    setFileSize(size+'MB')
+  }
+},[])
 
   function download() {
     Axios.get(data?.pdfRef, {
-      responseType: 'blob',
-    }).then(res => {
+      responseType: "blob",
+    }).then((res) => {
       fileDownload(res.data, `${course}.pdf`);
     });
   }
@@ -99,17 +111,27 @@ const School = ({ data, admins }) => {
           -{course}
         </Typography>
       </Box>
-      <Box display='flex' width='fit-content' m='1rem' >
+      <Box display="flex" width="fit-content" m="1rem">
         <Star school={school} course={course} user={user} />
-      <Button variant='outlined' onClick={download}>
-        <Box mb='-5px' mr='5px'>
-        <CloudDownloadOutlinedIcon/>
-        </Box>
-        Download
+        <Button variant="outlined" onClick={download}>
+          <Box mb="-5px" mr="5px">
+            <CloudDownloadOutlinedIcon />
+          </Box>
+          Download
         </Button>
-
       </Box>
-      <PDFViewer data={data?.pdfRef} />
+      <Box textAlign='left' ml='1rem' fontSize='1rem' >Size: ~{fileSize}</Box>
+      {isLarge && (
+        <Box textAlign="center" fontSize="1.5rem" m='2rem 0'>
+          File size is more than 1mb
+          <br/>
+          If you want to still view the pdf, click here
+          <br/>
+          <Button variant='outlined' onClick={()=>setIsLager(false)}>view pdf</Button>
+          
+        </Box>
+      )}
+      {!isLarge && <PDFViewer data={data?.pdfRef} />}{" "}
     </Box>
   );
 };
