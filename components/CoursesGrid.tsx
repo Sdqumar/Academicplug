@@ -26,7 +26,7 @@ const CoursesGrid = ({ list, url, flexDir }: CourseGridProps) => {
   return (
     <Box
       mt="1rem"
-      flexDirection={flexDir ? flexDir : "column"}
+      flexDirection="column"
       maxWidth="fit-content"
       height="fit-content"
       justifyContent={{ base: "center", md: "flex-start" }}

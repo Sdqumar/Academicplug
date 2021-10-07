@@ -38,6 +38,15 @@ export async function getStaticProps(context) {
   const docRef = doc(firestore, "schools", school, "courses", course);
   const dataRef = await getDoc(docRef);
   const data = dataRef.data();
+
+  if(data == undefined){
+    return {
+      redirect: {
+        destination: '/404',
+        permanent: false,
+      },
+  }
+}
   const adminRef = await getDoc(
     doc(firestore, "schools", school, "admin", "admin")
   );
@@ -125,7 +134,8 @@ useEffect(()=>{
         <Box textAlign="center" fontSize="1.5rem" m='2rem 0'>
           File size is more than 1mb
           <br/>
-          If you want to still view the pdf, click here
+          To view the pdf, click here
+          <br/>
           <br/>
           <Button variant='outlined' onClick={()=>setIsLager(false)}>view pdf</Button>
           

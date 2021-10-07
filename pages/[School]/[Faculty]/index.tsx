@@ -37,6 +37,15 @@ export async function getStaticProps(context) {
   const dataRef = await getDoc(docRef);
 
   const data = dataRef.data();
+  
+  if(data == undefined){
+    return {
+      redirect: {
+        destination: '/404',
+        permanent: false,
+      },
+  }
+}
 
   const adminRef = await getDoc(
     doc(firestore, "schools", school, "admin", "admin")

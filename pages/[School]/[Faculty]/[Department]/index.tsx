@@ -48,6 +48,24 @@ export async function getStaticProps(context) {
 
   let data = schoolRef.docs.map((item) => item.id.replace(/-/g, " "));
 
+
+
+  const docRef = doc(firestore, "schools", school, "faculty", faculty);
+  const dataRef = await getDoc(docRef);
+
+  const departmentRef = dataRef.data().department
+  
+  const departmentExist =departmentRef.includes(department.replace(/-/g, " ").toString());
+
+
+    if(!departmentExist){
+    return {
+      redirect: {
+        destination: '/404',
+        permanent: false,
+      },
+  }
+}
   // createSiteMap
 
   // const schoolUrl = `/${school.replace(/\s/g, "-")}`;

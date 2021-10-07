@@ -5,7 +5,7 @@ import FormikControl from "../components/Formik/FormikControl";
 import firebase from "../config/firebase-config";
 import { useRouter } from "next/router";
 import Dialog from "@material-ui/core/Dialog";
-import { Box, Button, Typography } from "@material-ui/core";
+import { Box, Button, Typography,CircularProgress } from "@material-ui/core";
 
 import UploadInput from "./UploadPdf";
 import { useContext } from "react";
@@ -17,11 +17,15 @@ function AddCourse({ School, Faculty, Department }) {
   let [currentUser] = useContext(AuthContext);
 let {displayName,uid} = currentUser
 
+const [progress, setProgress] = React.useState(0);
 
-  const [pdfurl, setPdfurl] = useState(null);
+
+  const [pdf, setPdf] = useState(null);
+  const [pdfUrl, setPdfUrl] = useState(null);
+
 
   const getfile = (url) => {
-    setPdfurl(url);
+    setPdf(url);
   };
 
   const router = useRouter();
@@ -42,25 +46,39 @@ let {displayName,uid} = currentUser
     );
    getAuth(firebase);
    
-    const { getStorage, ref, uploadBytes, getDownloadURL } = await import(
+    const { getStorage, ref, uploadBytesResumable, getDownloadURL } = await import(
       "firebase/storage"
     );
+    const { doc, setDoc, getFirestore } = await import("firebase/firestore");
+    const firestore = getFirestore(firebase);
 
     const Course = values.Course.trim();
     const Code = values.Code.trim();
 
     actions.setSubmitting(true);
+   
     const path = `${School}/${Faculty}/${Department}/${Course}`;
       
+
+    const storage = getStorage();
+    const storageRef = ref(storage, path);
+    
+    const uploadTask = uploadBytesResumable(storageRef, pdf);
+    
+    uploadTask.on('state_changed', 
+    (snapshot) => {
+
+      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      setProgress(progress)
       
-    const pdfUpload = await uploadBytes(ref(getStorage(), path), pdfurl);
-
-    const pdfRef = await getDownloadURL(pdfUpload.ref);
-
-    const { doc, setDoc, getFirestore } = await import("firebase/firestore");
-    const firestore = getFirestore(firebase);
-
-    await setDoc(
+    }, 
+    (error) => {
+      // Handle unsuccessful uploads
+    }, 
+   async () => {
+      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+       
+     setDoc(
       doc(firestore, "schools", School, "courses", Course.replace(/\s/g, "-").trim()),
       {
         Course,
@@ -68,8 +86,8 @@ let {displayName,uid} = currentUser
         School,
         Faculty,
         Department,
-        pdfRef,
-        size:pdfurl.size,
+        pdfRef:downloadURL,
+        size:pdf.size,
         by: {displayName,uid},
       }
     )
@@ -82,7 +100,13 @@ let {displayName,uid} = currentUser
       .catch((error) => {
         console.error("Error writing document: ", error);
       });
+      });
+    }
+  );
+
   };
+
+
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -163,12 +187,14 @@ let {displayName,uid} = currentUser
                     />
                   </Box>
                   <Toaster position="top-center" />
+                  {progress > 1 && 
+                   <CircularProgressWithLabel value={progress} />}
                   <Box mt={2} textAlign="center">
                     <Button
                       variant="outlined"
                       type="submit"
                       disabled={
-                        pdfurl === null ||
+                        pdf === null ||
                         !formik.isValid ||
                         formik.isSubmitting
                       }
@@ -187,3 +213,29 @@ let {displayName,uid} = currentUser
   );
 }
 export default AddCourse;
+
+function CircularProgressWithLabel(props) {
+  return (
+    <Box display='flex' alignItems='center'>
+    Uploading Material ...
+<Box position="relative" ml='10px'display="inline-flex">
+      <CircularProgress variant="determinate" {...props} />
+      <Box
+        top={0}
+        left={0}
+        bottom={0}
+        right={0}
+        position="absolute"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Typography variant="caption" component="div" color="textSecondary">{`${Math.round(
+          props.value,
+        )}%`}</Typography>
+      </Box>
+    </Box>
+    </Box>
+
+  );
+}

@@ -26,9 +26,9 @@ function AddFaculty({ school }) {
     const { doc, setDoc, getFirestore } = await import("firebase/firestore");
     const firestore = getFirestore(firebase);
 
-    const faculty = values.faculty.trim().replace(/\s/g, "-");
+    const faculty = values.faculty.trim();
 
-    setDoc(doc(firestore, "schools", school, "faculty", faculty), {
+    setDoc(doc(firestore, "schools", school, "faculty", faculty.replace(/\s/g, "-")), {
       name: faculty,
     }, { merge: true })
       .then(() => {

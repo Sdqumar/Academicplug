@@ -9,9 +9,9 @@ const offline =()=>{
     }
     return(
         <Box textAlign='center'>
-            {/* <h2>No Internet Connection</h2>
+            <h2>No Internet Connection</h2>
             <p>check your conntection </p>
-            <Button variant='outlined' onClick={reload}>Retry</Button> */}
+            <Button variant='outlined' onClick={reload}>Retry</Button>
             </Box>
 
     )
