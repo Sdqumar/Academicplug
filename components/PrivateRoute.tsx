@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import AuthContext from '../components/AuthContext';
 
 const PrivateRoute = (WrappedComponent) => {
@@ -8,14 +8,13 @@ const PrivateRoute = (WrappedComponent) => {
 		const [currentUser] = useContext(AuthContext);
 
 		// checks whether we are on client / browser or server.
-
-		if (typeof window !== 'undefined' && currentUser !== undefined) {
+		if (typeof window !== undefined && currentUser?.uid !== undefined ) {
 			const isAdmin = currentUser?.uid == 'n49a6ko1tKdhuIIs30uft1eeBwO2';
-			console.log(isAdmin);
-			if (currentUser == null) {
-				Router.replace('/Signin');
-				return null;
-			}
+			
+			// if (currentUser == null) {
+			// 	Router.replace('/Signin');
+			// 	return null;
+			// }
 			if (!isAdmin) {
 				Router.replace('/404');
 				return null;

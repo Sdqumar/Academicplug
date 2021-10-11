@@ -30,7 +30,8 @@ export async function getStaticProps(context) {
   const school = context.params.School;
   const q = await getDocs(collection(firestore, "schools", school, "faculty"));
   const data = q.docs.map((doc) => doc.data());
-    if(data.length === 0){
+   
+  if(data.length === 0){
         return {
           redirect: {
             destination: '/404',

@@ -1,5 +1,5 @@
 {
-    "name": "Academic plug",
+    "name": "Academicplug",
     "short_name": "Academic plug",
     "icons": [
       {
@@ -56,8 +56,8 @@
       }
       
     ],
-    "theme_color": "#FFFFFF",
-    "background_color": "#FFFFFF",
+    "theme_color": "#000",
+    "background_color": "#fff",
     "start_url": "/",
     "display": "standalone",
     "orientation": "portrait"

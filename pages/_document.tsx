@@ -13,6 +13,7 @@ export default class MyDocument extends Document {
             content="Get all kinds of academic course material"
           />
            <link rel="manifest" href="/manifest.json" />
+           <link rel='apple-touch-icon' sizes='180x180'href='./icons/apple-touch-icon-180x180.png' />
         </Head>
         <body>
           <Main />
