@@ -42,6 +42,7 @@ export async function getStaticProps(context) {
   const adminRef = await getDoc(doc(firestore, "SuperUser", "Admin"));
 
   let admin = adminRef?.data()?.SuperAdmin;
+console.log(data);
 
   return {
     props: {
@@ -59,7 +60,7 @@ const School = ({ data, admin }) => {
   const School = router.query.School;
 
   const list = data.map((item) => item?.name);
-
+    
   let isAdmin = admin === currentUser?.uid;
 
   return (
