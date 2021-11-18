@@ -1,32 +1,45 @@
 {
-	"compilerOptions": {
-		"target": "es5",
-		"lib": ["dom", "dom.iterable", "esnext"],
-		"allowJs": true,
-		"skipLibCheck": true,
-		"strict": false,
-		"forceConsistentCasingInFileNames": true,
-		"noEmit": true,
-		"esModuleInterop": true,
-		"module": "esnext",
-		"moduleResolution": "node",
-		"resolveJsonModule": true,
-		"isolatedModules": true,
-		"jsx": "preserve",
-		"baseUrl": ".",
-		"paths": {
-			"@/components/*": ["components/*"],
-			"@/pages/*": ["pages/*"],
-			"@/config/*": ["config/*"]
-		}
-	},
-	"include": [
-		"pages/**/*.ts",
-		"pages/**/*.tsx",
-		"components/**/*.tsx",
-		"pages/**/*.tsx",
-		"config/**/*.tsx",
-		"components/**/*.ts",
-	],
-	"exclude": ["node_modules"]
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@/components/*": [
+        "components/*"
+      ],
+      "@/pages/*": [
+        "pages/*"
+      ],
+      "@/config/*": [
+        "config/*"
+      ]
+    },
+    "incremental": true
+  },
+  "include": [
+    "pages/**/*.ts",
+    "pages/**/*.tsx",
+    "components/**/*.tsx",
+    "pages/**/*.tsx",
+    "config/**/*.tsx",
+    "components/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
