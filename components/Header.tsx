@@ -1,4 +1,4 @@
-import { Box, Button, Grid, makeStyles, Typography } from "@material-ui/core";
+import { Box, Button, Grid, Link, makeStyles, Typography } from "@material-ui/core";
 import SchoolIcon from "@material-ui/icons/School";
 import firebase from "../config/firebase-config";
 import AuthContext from "../components/AuthContext";
@@ -55,10 +55,11 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "15rem",
     marginRight: "1rem",
 
-    "& span": {
-      fontWeight: 600,
+    "& a":{
+      fontWeight:700,
       marginLeft: "5px",
-    },
+      marginTop: "-2px",
+    }
   },
 }));
 
@@ -114,9 +115,11 @@ const Header = () => {
                 className={classes.welcome}
               >
                 <Typography>Welcome</Typography>
-                <Typography component="span" noWrap>
+              <NextLink href={"/profile?id="+currentUser.uid} >
+                <a >
                   {currentUser?.displayName}
-                </Typography>
+                </a>
+                </NextLink>
               </Box>
               <Button variant="outlined" onClick={handleSignOut}>
                 Sign Out
