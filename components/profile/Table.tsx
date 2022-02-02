@@ -15,6 +15,7 @@ import TableRow from "@material-ui/core/TableRow";
 import { Box, Button, FormControl, MenuItem, Select } from "@material-ui/core";
 import { GlobalFilter } from "./GlobalFilter";
 import { Checkbox } from "./Checkbox";
+import ActionButton from "./ActionButton";
 
 export default function AdminTable({ TableData, COLUMNS }) {
   const columns = useMemo(() => COLUMNS, []);
@@ -61,48 +62,25 @@ export default function AdminTable({ TableData, COLUMNS }) {
   const { globalFilter } = state;
   const { pageIndex, pageSize } = state;
 
-  const handleDelete = async () => {
-    const values = selectedFlatRows.map((row) => row.original);
-
-    try {
-      const res = await fetch("/api/student", {
-        method: "DELETE",
-        body: JSON.stringify(values),
-        headers: { "Content-Type": "application/json" },
-      });
-      const data = await res.json();
-      console.log(data);
-      if (data.errors) {
-        console.log(data.errors);
-      } else {
-        // location.assign("/");
-        console.log(data);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   return (
     <div>
-      <FormControl variant="outlined" >
-
+      <FormControl variant="outlined">
         <Select
-        value={pageSize}
-        onChange={(e) => setPageSize(Number(e.target.value))}
-      >
-        {[10, 20, 50].map((pageSize) => (
-          <MenuItem   key={pageSize} value={pageSize}>
-            Show {pageSize}
-          </MenuItem>
-        ))}
-      </Select>
+          value={pageSize}
+          onChange={(e) => setPageSize(Number(e.target.value))}
+        >
+          {[10, 20, 50].map((pageSize) => (
+            <MenuItem key={pageSize} value={pageSize}>
+              Show {pageSize}
+            </MenuItem>
+          ))}
+        </Select>
       </FormControl>
 
       <Box display="flex" justifyContent="center">
-      <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
+        <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       </Box>
-      
+
       <Table {...getTableProps()}>
         <TableHead>
           {headerGroups.map((headerGroup) => (
@@ -119,13 +97,15 @@ export default function AdminTable({ TableData, COLUMNS }) {
           ))}
         </TableHead>
         <TableBody {...getTableBodyProps()}>
-        {page.map((row) => {
+          {page.map((row) => {
             prepareRow(row);
             return (
               <TableRow {...row.getRowProps()}>
                 {row.cells.map((cell) => {
                   return (
-                    <TableCell {...cell.getCellProps()}>{cell.render("Cell")}</TableCell>
+                    <TableCell {...cell.getCellProps()}>
+                      {cell.render("Cell")}
+                    </TableCell>
                   );
                 })}
               </TableRow>
@@ -134,28 +114,58 @@ export default function AdminTable({ TableData, COLUMNS }) {
         </TableBody>
       </Table>
 
-
-      <Box mt='20px' display='flex' alignItems='center'>
-        <Box mr="20px" >
+      <Box mt="20px" display="flex" alignItems="center">
+        <Box mr="20px">
           Page{" "}
           <strong>
             {pageIndex + 1} of {pageOptions.length}
           </strong>
         </Box>
-        <Button variant="outlined" style={{marginRight:'10px'}} onClick={() => previousPage()} disabled={!canPreviousPage}>
+        <Button
+          variant="outlined"
+          style={{ marginRight: "10px" }}
+          onClick={() => previousPage()}
+          disabled={!canPreviousPage}
+        >
           Previous
         </Button>
-        <Button variant="outlined" onClick={() => nextPage()} disabled={!canNextPage}>
+        <Button
+          variant="outlined"
+          onClick={() => nextPage()}
+          disabled={!canNextPage}
+        >
           Next
         </Button>
       </Box>
-      <Box width='30%' mt='20px' display='flex' justifyContent='space-around' alignItems='center'>
-        <Button variant="contained" style={{backgroundColor:'green',color:'#fff'}} onClick={handleDelete}>Approve</Button>
-        <Button variant="contained" style={{backgroundColor:'red',color:'#fff'}} onClick={handleDelete}>Reject</Button>
-        <Button variant="contained" onClick={handleDelete}>Pending</Button>
-        <Button variant="contained" style={{backgroundColor:'red',color:'#fff'}} onClick={handleDelete}>Delete</Button>
+      <Box
+        width="30%"
+        mt="20px"
+        display="flex"
+        justifyContent="space-around"
+        alignItems="center"
+      >
+        <ActionButton
+          text="approve"
+          style={{ backgroundColor: "green", color: "#fff" }}
+          selected={selectedFlatRows}
+        />
+        <ActionButton
+          text="reject"
+          style={{ backgroundColor: "red", color: "#fff" }}
+          selected={selectedFlatRows}
+        />
+        <ActionButton
+          text="pending"
+          style={{ backgroundColor: "gray", color: "#fff" }}
+          selected={selectedFlatRows}
+        />
+        <ActionButton
+          text="delete"
+          style={{ backgroundColor: "red", color: "#fff" }}
+          selected={selectedFlatRows}
+        />
+   
       </Box>
     </div>
   );
 }
-
