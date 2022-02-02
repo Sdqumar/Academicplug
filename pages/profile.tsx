@@ -47,7 +47,10 @@ export default function Profile({ data }) {
       <h1>Hello {currentUser?.displayName}</h1>
 
       <h3>List of Materials</h3>
-      {data && <BasicTable TableData={data} COLUMNS={COLUMNS} />}
+      {data && <BasicTable TableData={data.materials} COLUMNS={COLUMNS} />}
+      <br/>
+      <br/>
+      {data && <BasicTable TableData={data.userMaterials} COLUMNS={COLUMNS} />}
     </Box>
   );
 }
@@ -56,18 +59,37 @@ export async function getServerSideProps(ctx) {
   const { id } = ctx.query;
 
   const db = getFirestore(firebase);
-  const materials = query(
-    collectionGroup(db, "courses"),
-    where("uid", "==", id)
-  );
-  const querySnapshot = await getDocs(materials);
-  let data = [];
-  querySnapshot.forEach((doc) => {
-    data.push(doc.data());
-  });
+
+  const getUserMaterials = async () => {
+    const ref = query(collectionGroup(db, "courses"), where("uid", "==", id));
+    const querySnapshot = await getDocs(ref);
+    let materials = [];
+    querySnapshot.forEach((doc) => {
+      materials.push(doc.data());
+    });
+    return materials;
+  };
+  const getMaterials = async () => {
+    const ref = query(collectionGroup(db, "courses"));
+    const querySnapshot = await getDocs(ref);
+    let materials = [];
+    querySnapshot.forEach((doc) => {
+      materials.push(doc.data());
+    });
+    return materials;
+  };
+
+
+  const userMaterials  = await  getUserMaterials()
+  const materials = await getMaterials()
+
+
   return {
     props: {
-      data,
+      data: {
+        userMaterials,
+        materials
+      },
     },
   };
 }
