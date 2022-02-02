@@ -12,7 +12,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 
-import { Box } from "@material-ui/core";
+import { Box, Button, FormControl, MenuItem, Select } from "@material-ui/core";
 import { GlobalFilter } from "./GlobalFilter";
 import { Checkbox } from "./Checkbox";
 
@@ -25,7 +25,6 @@ export default function AdminTable({ TableData, COLUMNS }) {
     getTableBodyProps,
     headerGroups,
     page,
-    rows,
     nextPage,
     previousPage,
     canNextPage,
@@ -86,16 +85,19 @@ export default function AdminTable({ TableData, COLUMNS }) {
 
   return (
     <div>
-        <select
+      <FormControl variant="outlined" >
+
+        <Select
         value={pageSize}
         onChange={(e) => setPageSize(Number(e.target.value))}
       >
         {[10, 20, 50].map((pageSize) => (
-          <option key={pageSize} value={pageSize}>
+          <MenuItem   key={pageSize} value={pageSize}>
             Show {pageSize}
-          </option>
+          </MenuItem>
         ))}
-      </select>
+      </Select>
+      </FormControl>
 
       <Box display="flex" justifyContent="center">
       <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
@@ -133,24 +135,24 @@ export default function AdminTable({ TableData, COLUMNS }) {
       </Table>
 
 
-      <div>
-        <span >
+      <Box mt='20px' display='flex' alignItems='center'>
+        <Box mr="20px" >
           Page{" "}
           <strong>
             {pageIndex + 1} of {pageOptions.length}
           </strong>
-        </span>
-        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+        </Box>
+        <Button variant="outlined" style={{marginRight:'10px'}} onClick={() => previousPage()} disabled={!canPreviousPage}>
           Previous
-        </button>
-        <button onClick={() => nextPage()} disabled={!canNextPage}>
+        </Button>
+        <Button variant="outlined" onClick={() => nextPage()} disabled={!canNextPage}>
           Next
-        </button>
-      </div>
+        </Button>
+      </Box>
       <div >
         {/* <button onClick={handleDelete}>Promote</button> */}
         {/* <button onClick={handleDelete}>Demote</button> */}
-        <button onClick={handleDelete}>Delete</button>
+        <Button variant="outlined" onClick={handleDelete}>Delete</Button>
       </div>
     </div>
   );

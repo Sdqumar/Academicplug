@@ -11,11 +11,21 @@ import {
 } from "firebase/firestore";
 import BasicTable from "@/components/profile/BasicTable";
 import AdminTable from "@/components/profile/Table";
+import NextLink from "next/link";
 
 const COLUMNS = [
   {
     Header: "Course",
-    accessor: "Course",
+    accessor: row =>{
+      
+      const {School, Faculty,Department,Course} = row
+      
+      return(
+        <NextLink href={`/${School}/${Faculty.replace(/\s/g, "-")}/${Department.replace(/\s/g, "-")}/${Course.replace(/\s/g, "-")}`} passHref>
+          <a style={{fontWeight:700}}>{Course}</a>
+          </NextLink>
+      )
+    }
   },
   {
     Header: "Code",
