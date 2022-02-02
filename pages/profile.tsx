@@ -9,7 +9,8 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
-import BasicTable from "@/components/profile/Table";
+import BasicTable from "@/components/profile/BasicTable";
+import AdminTable from "@/components/profile/Table";
 
 const COLUMNS = [
   {
@@ -47,10 +48,10 @@ export default function Profile({ data }) {
       <h1>Hello {currentUser?.displayName}</h1>
 
       <h3>List of Materials</h3>
-      {data && <BasicTable TableData={data.materials} COLUMNS={COLUMNS} />}
+      {data && <AdminTable TableData={data.materials} COLUMNS={COLUMNS} />}
       <br/>
       <br/>
-      {data && <BasicTable TableData={data.userMaterials} COLUMNS={COLUMNS} />}
+      {/* {data && <BasicTable TableData={data.userMaterials} COLUMNS={COLUMNS} />} */}
     </Box>
   );
 }
