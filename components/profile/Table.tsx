@@ -149,11 +149,12 @@ export default function AdminTable({ TableData, COLUMNS }) {
           Next
         </Button>
       </Box>
-      <div >
-        {/* <button onClick={handleDelete}>Promote</button> */}
-        {/* <button onClick={handleDelete}>Demote</button> */}
-        <Button variant="outlined" onClick={handleDelete}>Delete</Button>
-      </div>
+      <Box width='30%' mt='20px' display='flex' justifyContent='space-around' alignItems='center'>
+        <Button variant="contained" style={{backgroundColor:'green',color:'#fff'}} onClick={handleDelete}>Approve</Button>
+        <Button variant="contained" style={{backgroundColor:'red',color:'#fff'}} onClick={handleDelete}>Reject</Button>
+        <Button variant="contained" onClick={handleDelete}>Pending</Button>
+        <Button variant="contained" style={{backgroundColor:'red',color:'#fff'}} onClick={handleDelete}>Delete</Button>
+      </Box>
     </div>
   );
 }
