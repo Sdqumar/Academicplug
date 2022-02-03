@@ -1,34 +1,46 @@
-import firebase from '../../config/firebase-config';
+import firebase from "../../config/firebase-config";
 
-export const handleAction = async (action,selectedFlatRows) => {
-    const values = selectedFlatRows.map((row) => row.original);
-    const { doc, deleteDoc, getFirestore } = await import('firebase/firestore');
-    const firestore = getFirestore(firebase);
+export const handleAction = async (action, selectedFlatRows) => {
+  const values = selectedFlatRows.map((row) => row.original);
+  const { doc, getFirestore, updateDoc, deleteDoc } = await import(
+    "firebase/firestore"
+  );
+  const db = getFirestore(firebase);
 
-    console.log(values);
-    
-    // const docRef = await doc(
-    //     firestore,
-    //     'schools',
-    //     school.replace(/\s/g, '-'),
-    //     'courses',
-    //     course.replace(/\s/g, '-')
-    // );
+  const docRefs = [];
 
-    // deleteDoc(docRef)
-    //     .then(() => {
-    //         setTimeout(() => router.back(), 1500);
-    //         toast.success('Material Removed Sucessful!');
-    //     })
-    //     .catch((error) => {
-    //         console.error('Error removing document: ', error);
-    //     });
-if(action === 'delete'){
-    console.log('is delete');
+  values.forEach((item) => {
+    const docRef = doc(
+      db,
+      "schools",
+      item.School.replace(/\s/g, "-"),
+      "courses",
+      item.Course.replace(/\s/g, "-")
+    );
+    docRefs.push(docRef);
+  });
+try {
+    if (action === "delete") {
+        Promise.all(
+          docRefs.map((docRef) => {
+            deleteDoc(docRef);
+          })
+        );
+      }
+      if (action != "delete") {
+        Promise.all(
+          docRefs.map((docRef) => {
+            updateDoc(docRef, {
+              Approve: action,
+            });
+          })
+        );
+      }
+      return "success"
+} catch (error) {
+    console.log(error);
+    return "error"
     
 }
-if(action != 'delete'){
-console.log(action);
-    
-}
+  
 };

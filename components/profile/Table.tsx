@@ -138,29 +138,28 @@ export default function AdminTable({ TableData, COLUMNS }) {
         </Button>
       </Box>
       <Box
-        width="30%"
         mt="20px"
+        width={500}
         display="flex"
-        justifyContent="space-around"
         alignItems="center"
       >
         <ActionButton
-          text="approve"
+          text="Approve"
           style={{ backgroundColor: "green", color: "#fff" }}
           selected={selectedFlatRows}
         />
         <ActionButton
-          text="reject"
+          text="Reject"
           style={{ backgroundColor: "red", color: "#fff" }}
           selected={selectedFlatRows}
         />
         <ActionButton
-          text="pending"
+          text="Pending"
           style={{ backgroundColor: "gray", color: "#fff" }}
           selected={selectedFlatRows}
         />
         <ActionButton
-          text="delete"
+          text="Delete"
           style={{ backgroundColor: "red", color: "#fff" }}
           selected={selectedFlatRows}
         />
