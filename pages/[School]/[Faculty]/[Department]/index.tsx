@@ -36,7 +36,8 @@ export async function getStaticProps(context) {
 
   const q = query(
     collection(firestore, "schools", school, "courses"),
-    where("Department", "==", department.replace(/-/g, " "))
+    where("Department", "==", department.replace(/-/g, " ")),
+    where("Approve", "==", "Approve")
   );
   const schoolRef = await getDocs(q);
 
