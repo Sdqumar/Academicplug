@@ -7,27 +7,7 @@ import { handleAction } from "./utils";
 import Alert from "@material-ui/lab/Alert";
 import { useRouter } from "next/router";
 export default function ActionButton({ text, style, selected }) {
-  // const handleDelete = async () => {
-  // 	const { doc, deleteDoc, getFirestore } = await import('firebase/firestore');
-  // 	const firestore = getFirestore(firebase);
-  // 	const docRef = await doc(
-  // 		firestore,
-  // 		'schools',
-  // 		school.replace(/\s/g, '-'),
-  // 		'courses',
-  // 		course.replace(/\s/g, '-')
-  // 	);
-
-  // 	deleteDoc(docRef)
-  // 		.then(() => {
-  // 			setTimeout(() => router.back(), 1500);
-  // 			toast.success('Material Removed Sucessful!');
-  // 		})
-  // 		.catch((error) => {
-  // 			console.error('Error removing document: ', error);
-  // 		});
-  // };
-
+ 
   const [openDialog, setOpenDialog] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(null);

@@ -9,28 +9,20 @@ import Head from "next/head";
 import fileDownload from "js-file-download";
 import Axios from "axios";
 import CloudDownloadOutlinedIcon from "@material-ui/icons/CloudDownloadOutlined";
-
-const DeleteButton = dynamic(() => import("components/DeleteButton"));
+const MaterialButton = dynamic(() => import("@/components/MaterialButton"));
 const PDFViewer = dynamic(() => import("components/PDFViewer"));
 const Star = dynamic(() => import("components/Star"));
+import cookie from "cookie";
 
-export async function getStaticPaths() {
-  const paths = [
-    {
-      params: {
-        School: "Futminna",
-        Faculty: "Education",
-        Department: "Health-Education",
-        Course: "HED-211",
-      },
-    },
-  ];
+export async function getServerSideProps({ params, req }) {
+  const school = params.School;
+  const course = params.Course;
+  const { user } = cookie.parse(
+    req ? req.headers.cookie || "" : document.cookie
+  );
 
-  return { paths, fallback: "blocking" };
-}
-export async function getStaticProps(context) {
-  const school = context.params.School;
-  const course = context.params.Course;
+  const { uid } = JSON.parse(user);
+  console.log(uid);
 
   const { doc, getDoc, getFirestore } = await import("firebase/firestore");
   const firestore = getFirestore(firebase);
@@ -39,19 +31,32 @@ export async function getStaticProps(context) {
   const dataRef = await getDoc(docRef);
   const data = dataRef.data();
 
-  if(data == undefined){
+  if (data == undefined) {
     return {
       redirect: {
-        destination: '/404',
+        destination: "/404",
         permanent: false,
       },
+    };
   }
-}
+
+  // if (id) {
+  // }
+
   const adminRef = await getDoc(
     doc(firestore, "schools", school, "admin", "admin")
   );
 
   let admins = adminRef?.data()?.admins;
+
+  // const getUser = async () => {
+  //   const docRef = doc(firestore, "users", id);
+  //   const docSnap = await getDoc(docRef);
+
+  //   if (docSnap.exists()) {
+  //     return docSnap.data();
+  //   }
+  // };
 
   return {
     props: {
@@ -80,18 +85,17 @@ const School = ({ data, admins }) => {
   const departmentUrl = `/${department.replace(/\s/g, "-")}`;
 
   const [isLarge, setIsLager] = useState(data?.size > 1000000);
-  
-  const [fileSize, setFileSize] = useState(data?.size );
-useEffect(()=>{
 
-  if(fileSize < 1000000){
-   const size = Math.round(fileSize / 100000)
-    setFileSize(size+'kb')
-  }else{
-    const size = Math.round(fileSize / 1000000)
-    setFileSize(size+'MB')
-  }
-},[])
+  const [fileSize, setFileSize] = useState(data?.size);
+  useEffect(() => {
+    if (fileSize < 1000000) {
+      const size = Math.round(fileSize / 100000);
+      setFileSize(size + "kb");
+    } else {
+      const size = Math.round(fileSize / 1000000);
+      setFileSize(size + "MB");
+    }
+  }, []);
 
   function download() {
     Axios.get(data?.pdfRef, {
@@ -109,7 +113,14 @@ useEffect(()=>{
       </Head>
       <Box mt="1rem">
         <Box mr="1rem" display={isAdmin ? "flex" : "none"} justifyContent="end">
-          <DeleteButton school={school} course={course} router={router} />
+          <MaterialButton
+            text="Approve"
+            style={{ backgroundColor: "green", color: "#fff" }}
+          />
+          <MaterialButton
+            text="Delete"
+            style={{ backgroundColor: "red", color: "#fff" }}
+          />
         </Box>
         <Typography className="heading">
           <NextLink href={schoolUrl}>{school}</NextLink> -{" "}
@@ -129,16 +140,19 @@ useEffect(()=>{
           Download
         </Button>
       </Box>
-      <Box textAlign='left' ml='1rem' fontSize='1rem' >Size: ~{fileSize}</Box>
+      <Box textAlign="left" ml="1rem" fontSize="1rem">
+        Size: ~{fileSize}
+      </Box>
       {isLarge && (
-        <Box textAlign="center" fontSize="1.5rem" m='2rem 0'>
+        <Box textAlign="center" fontSize="1.5rem" m="2rem 0">
           File size is more than 1mb
-          <br/>
+          <br />
           To view the pdf, click here
-          <br/>
-          <br/>
-          <Button variant='outlined' onClick={()=>setIsLager(false)}>view pdf</Button>
-          
+          <br />
+          <br />
+          <Button variant="outlined" onClick={() => setIsLager(false)}>
+            view pdf
+          </Button>
         </Box>
       )}
       {!isLarge && <PDFViewer data={data?.pdfRef} />}{" "}

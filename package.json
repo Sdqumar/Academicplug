@@ -20,6 +20,7 @@
 		"@material-ui/lab": "^4.0.0-alpha.60",
 		"@react-pdf-viewer/core": "^2.8.0",
 		"axios": "^0.21.4",
+		"cookie": "^0.4.2",
 		"firebase": "^9.0.1",
 		"formik": "^2.2.6",
 		"framer-motion": "^4.1.17",
