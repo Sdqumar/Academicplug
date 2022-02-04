@@ -29,7 +29,7 @@ const COLUMNS = [
           )}/${Course.replace(/\s/g, "-")}`}
           passHref
         >
-          <a style={{ fontWeight: 700 }}>{Course}</a>
+          <a target="_blank" style={{ fontWeight: 700 }}>{Course}</a>
         </NextLink>
       );
     },
