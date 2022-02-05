@@ -21,7 +21,6 @@ export async function getServerSideProps({ params, req }) {
     req ? req.headers.cookie || "" : document.cookie
   );
 
-  const { uid } = JSON.parse(user);
 
   const { doc, getDoc, getFirestore } = await import("firebase/firestore");
   const firestore = getFirestore(firebase);
@@ -39,7 +38,9 @@ export async function getServerSideProps({ params, req }) {
     };
   }
 let admin = {}
-  if (uid) {
+  if (user) {
+  const { uid } = JSON.parse(user);
+
     const adminRef = await getDoc(
       doc(firestore, "schools", school, "admin", "admin")
     );
