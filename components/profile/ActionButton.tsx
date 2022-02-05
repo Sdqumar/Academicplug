@@ -59,11 +59,15 @@ const router =useRouter()
         aria-describedby="alert-dialog-description"
       >
         <Box fontSize="1.5rem" padding="1.5rem" fontWeight="500">
-          {text} Material?
+        {text === "Pending"?
+					`set material to ${text} ?` 
+					:
+					`Are you sure you want to ${text} Material ?` 
+				}
         </Box>
 
         <DialogActions>
-          <Button onClick={handleDialogClose}>Disagree</Button>
+          <Button onClick={handleDialogClose}>No</Button>
 
           <button
             className="closeBtn"
@@ -71,7 +75,7 @@ const router =useRouter()
             onClick={handleSubmit}
             color="primary"
           >
-            Agree
+            Yes
           </button>
         </DialogActions>
       </Dialog>
