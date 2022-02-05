@@ -22,7 +22,6 @@ export async function getServerSideProps({ params, req }) {
   );
 
   const { uid } = JSON.parse(user);
-  console.log(uid);
 
   const { doc, getDoc, getFirestore } = await import("firebase/firestore");
   const firestore = getFirestore(firebase);
@@ -39,37 +38,40 @@ export async function getServerSideProps({ params, req }) {
       },
     };
   }
+let admin = {}
+  if (uid) {
+    const adminRef = await getDoc(
+      doc(firestore, "schools", school, "admin", "admin")
+    );
 
-  // if (id) {
-  // }
+    let admins = adminRef?.data()?.admins;
+    let isAdmin = admins?.some((item) => item == uid);
 
-  const adminRef = await getDoc(
-    doc(firestore, "schools", school, "admin", "admin")
-  );
+    const isSuperAdmin = async () => {
+      const docRef = doc(firestore, "users", uid);
+      const docSnap = await getDoc(docRef);
 
-  let admins = adminRef?.data()?.admins;
-
-  // const getUser = async () => {
-  //   const docRef = doc(firestore, "users", id);
-  //   const docSnap = await getDoc(docRef);
-
-  //   if (docSnap.exists()) {
-  //     return docSnap.data();
-  //   }
-  // };
+      if (docSnap.exists()) {
+        return docSnap.data()?.admin;
+      }
+    };
+    admin = {
+      isAdmin,
+      isSuperAdmin: await isSuperAdmin()
+    }
+  }
 
   return {
     props: {
       data,
-      admins,
+      admin
     },
   };
 }
 
-const School = ({ data, admins }) => {
+const School = ({ data, admin }) => {
   const [currentUser] = useContext(AuthContext);
 
-  let isAdmin = admins?.some((item) => item == currentUser?.uid);
 
   const user = currentUser?.uid;
 
@@ -112,11 +114,26 @@ const School = ({ data, admins }) => {
         </title>
       </Head>
       <Box mt="1rem">
-        <Box mr="1rem" display={isAdmin ? "flex" : "none"} justifyContent="end">
+      <Box mr="1rem" display={admin.isSuperAdmin ? "flex" : "none"}  justifyContent="end">
           <MaterialButton
             text="Approve"
             style={{ backgroundColor: "green", color: "#fff" }}
           />
+          <MaterialButton
+            text="Reject"
+            style={{ backgroundColor: "red", color: "#fff" }}
+          />
+          <MaterialButton
+            text="Pending"
+            style={{ backgroundColor: "gray", color: "#fff" }}
+          />
+          <MaterialButton
+            text="Delete"
+            style={{ backgroundColor: "red", color: "#fff" }}
+          />
+        </Box>
+        <Box mr="1rem" display={admin.isAdmin && !admin.isSuperAdmin ? "flex" : "none"} justifyContent="end">
+         
           <MaterialButton
             text="Delete"
             style={{ backgroundColor: "red", color: "#fff" }}

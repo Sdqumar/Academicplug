@@ -51,9 +51,11 @@ export default function AlertDialogExample({text,style}) {
 
 	return (
 		<div>
+			<Box marginX={2}>
 			<Button style={style} variant="contained"  onClick={handleClickOpen}>
 				{text}
 			</Button>
+			</Box>
 			<Dialog
 				maxWidth="sm"
 				open={open}
@@ -62,16 +64,20 @@ export default function AlertDialogExample({text,style}) {
 				aria-describedby="alert-dialog-description"
 			>
 				<Box fontSize="1.5rem" padding="1.5rem"  fontWeight="500">
-					Are you sure you want to {text} Material ? 
+				{text === "Pending"?
+					`set material to ${text} ?` 
+					:
+					`Are you sure you want to ${text} Material ?` 
+				}
 				</Box>
 				<Toaster position="top-center" />
 
 				<DialogActions>
 					<Button onClick={handleClose} color="primary">
-						Disagree
+						No
 					</Button>
 					<button onClick={handleDelete} className="closeBtn" autoFocus>
-						Agree
+						Yes
 					</button>
 				</DialogActions>
 			</Dialog>
