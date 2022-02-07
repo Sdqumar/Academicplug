@@ -1,14 +1,20 @@
-import { Box, Button, Grid, Link, makeStyles, Typography } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  Grid,
+  makeStyles,
+  Snackbar,
+  Typography,
+} from "@material-ui/core";
 import SchoolIcon from "@material-ui/icons/School";
 import firebase from "../config/firebase-config";
 import AuthContext from "../components/AuthContext";
-import { useContext } from "react";
+import React, { useContext } from "react";
 import Cookies from "js-cookie";
-
 import NextLink from "next/link";
+import { Alert } from "@material-ui/lab";
 
-import toast, { Toaster } from "react-hot-toast";
-
+type Color = "success" | "info" | "warning" | "error";
 const useStyles = makeStyles((theme) => ({
   header: {
     backgroundColor: theme.palette.secondary.main,
@@ -55,17 +61,25 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "15rem",
     marginRight: "1rem",
 
-    "& a":{
-      fontWeight:700,
+    "& a": {
+      fontWeight: 700,
       marginLeft: "5px",
       marginTop: "-2px",
-    }
+    },
   },
 }));
 
 const Header = () => {
   const [currentUser, setCurrentUser] = useContext(AuthContext);
+  const [open, setOpen] = React.useState(false);
+  const [alert, setAlert] = React.useState<Color>("success");
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
 
+    setOpen(false);
+  };
   const handleSignOut = async () => {
     const { getAuth, signOut } = await import("firebase/auth");
     const auth = getAuth(firebase);
@@ -74,16 +88,26 @@ const Header = () => {
       .then(() => {
         Cookies.remove("user");
         setCurrentUser(null);
-        toast.success("Successfully Signout!");
+        setOpen(true);
+        setAlert("success");
       })
       .catch((error) => {
-        toast.error("error!");
+        setOpen(true);
+        setAlert("error");
       });
   };
 
   const classes = useStyles();
   return (
     <Grid component="header" className={classes.header}>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={open}
+        autoHideDuration={4000}
+        onClose={handleClose}
+      >
+        <Alert severity={alert}>{alert=== "success"?"Successfully Signout!": "Error Signout!"}</Alert>
+      </Snackbar>
       <NextLink href="/">
         <Box className={classes.academicplug}>
           <Box>
@@ -115,10 +139,8 @@ const Header = () => {
                 className={classes.welcome}
               >
                 <Typography>Welcome</Typography>
-              <NextLink href={"/profile?id="+currentUser.uid} >
-                <a >
-                  {currentUser?.displayName}
-                </a>
+                <NextLink href={"/profile?id=" + currentUser.uid}>
+                  <a>{currentUser?.displayName}</a>
                 </NextLink>
               </Box>
               <Button variant="outlined" onClick={handleSignOut}>
@@ -127,7 +149,6 @@ const Header = () => {
             </Box>
           ))}
 
-        <Toaster position="top-center" />
       </Box>
     </Grid>
   );

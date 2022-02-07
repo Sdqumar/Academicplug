@@ -2,16 +2,16 @@ import React from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import firebase from "config/firebase-config";
-
 import { useRouter } from "next/router";
-import { Box, Button, Typography } from "@material-ui/core";
+import { Box, Button, Snackbar, Typography } from "@material-ui/core";
 import Cookies from "js-cookie";
 import { useContext } from "react";
-import toast, { Toaster } from "react-hot-toast";
-
 import AuthContext from "components/AuthContext";
 import FormikControl from "@/components/Formik/FormikControl";
 import Head from "next/head";
+import { Alert } from "@material-ui/lab";
+
+type Color =  "success" | "info" | "warning" | "error"
 
 function RegistrationForm() {
   const initialValues = {
@@ -47,7 +47,15 @@ function RegistrationForm() {
     username: string;
   };
   const [, setCurrentUser] = useContext(AuthContext);
+  const [open, setOpen] = React.useState(false);
+  const [alert, setAlert] = React.useState<Color>("success");
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
 
+    setOpen(false);
+  };
   const onSubmit = async (values: values, actions) => {
     actions.setSubmitting(true);
 
@@ -65,8 +73,8 @@ function RegistrationForm() {
     const querySnapshot = await getDocs(q);
 
     if (querySnapshot.docs.length !== 0) {
-      toast.error("Username has Already been taken!");
-
+      setOpen(true);
+      setAlert("error")
       actions.setSubmitting(false);
     } else {
       const { getAuth, createUserWithEmailAndPassword, updateProfile } =
@@ -84,13 +92,13 @@ function RegistrationForm() {
           Cookies.set("user", JSON.stringify(auth.currentUser));
         })
         .then(() => {
-          toast.success("SignUp Sucessfully!");
-
+          setOpen(true);
+          setAlert("success")
           actions.setSubmitting(false);
         })
         .catch((error) => {
-          toast.error("Email has Already been taken!");
-
+          setOpen(true);
+          setAlert("error")
           actions.setSubmitting(false);
         });
     }
@@ -101,7 +109,14 @@ function RegistrationForm() {
       <Head>
         <title>Sign Up | Academic Plug </title>
       </Head>
-
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={open}
+        autoHideDuration={4000}
+        onClose={handleClose}
+      >
+        <Alert severity={alert}>{alert=== "success"?"Signup Sucessfully!": "Email has Already been taken!"}</Alert>
+      </Snackbar>
       <Box maxWidth="17rem" m="2rem auto" textAlign="center">
         <Formik
           initialValues={initialValues}
@@ -137,7 +152,6 @@ function RegistrationForm() {
                     label="Confirm Password"
                     name="confirmPassword"
                   />
-                  <Toaster position="top-center" />
 
                   <Box m="10px 0" textAlign="center">
                     {" "}
