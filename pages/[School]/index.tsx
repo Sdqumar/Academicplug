@@ -42,7 +42,6 @@ export async function getStaticProps(context) {
   const adminRef = await getDoc(doc(firestore, "SuperUser", "Admin"));
 
   let admin = adminRef?.data()?.SuperAdmin;
-console.log(data);
 
   return {
     props: {

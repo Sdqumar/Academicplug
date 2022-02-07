@@ -3,44 +3,46 @@ import firebase from "../config/firebase-config";
 import Head from "next/head";
 
 import dynamic from "next/dynamic";
-const BannerHome = dynamic(() => import("components/BannerHome"));
-const SchoolGridList = dynamic(() => import("components/SchoolGridList"));
+import RecentCourses from "@/components/Home/RecentCourses";
+const BannerHome = dynamic(() => import("@/components/Home/BannerHome"));
+const SchoolGridList = dynamic(
+  () => import("@/components/Home/SchoolGridList")
+);
 
-export async function getStaticProps() {
-  const { getDocs, getFirestore, collection, } = await import(
-    "firebase/firestore"
-    );
-    const firestore = await getFirestore(firebase);
-  //  enableIndexedDbPersistence(firestore)
-  //   .catch((err) => {
-  //       if (err.code == 'failed-precondition') {
-  //           // Multiple tabs open, persistence can only be enabled
-  //           // in one tab at a a time.
-  //           // ...
-  //       } else if (err.code == 'unimplemented') {
-  //           // The current browser does not support all of the
-  //           // features required to enable persistence
-  //           // ...
-  //       }
-  //   });
-  // // Su  
-  
+export async function getServerSideProps() {
+  const { getDocs, getFirestore, collection, query, collectionGroup, where } =
+    await import("firebase/firestore");
+  const firestore = await getFirestore(firebase);
 
   const q = await getDocs(collection(firestore, "schools"));
-  const data = q.docs.map((doc) => doc.data());
+  const schools = q.docs.map((doc) => doc.data());
 
-  
+  const getUserMaterials = async () => {
+    const ref = query(
+      collectionGroup(firestore, "courses"),
+      where("Approve", "==", "Approve")
+    );
+    const querySnapshot = await getDocs(ref);
+    let materials = [];
+    querySnapshot.forEach((doc) => {
+      materials.push(doc.data());
+    });
+    return materials;
+  };
+
+  const materials = await getUserMaterials();
+
   return {
     props: {
-      data,
+      schools,
+      materials,
     },
-    revalidate: 100000,
   };
 }
 
-const Index = ({ data }) => {
-
-
+const Index = ({ schools, materials }) => {
+  console.log(materials);
+  
   return (
     <>
       <Head>
@@ -57,8 +59,8 @@ const Index = ({ data }) => {
           src="/banner.webp"
           heading=" Courses for Nigerian Students"
         />
-        <SchoolGridList schools={data} />
-
+        <SchoolGridList schools={schools} />
+        <RecentCourses list={materials}/>
       </Box>
     </>
   );
