@@ -60,7 +60,7 @@ const Index = ({ schools, materials }) => {
           heading=" Courses for Nigerian Students"
         />
         <SchoolGridList schools={schools} />
-        {/* <RecentCourses list={materials}/> */}
+        <RecentCourses list={materials}/>
       </Box>
     </>
   );
