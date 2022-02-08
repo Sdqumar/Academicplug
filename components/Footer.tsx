@@ -23,7 +23,7 @@ const Footer = () => {
       >
         <Typography> {"ACADEMIC PLUG 2022\u00A9 "}</Typography>
         <a
-          style={{ color: "#fbae17" }}
+          style={{ color: "#fbae17",fontWeight:600 }}
           href="https://github.com/Sdqumar/Academicplug"
           target="_blank"
         >
