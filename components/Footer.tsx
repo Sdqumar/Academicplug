@@ -11,17 +11,25 @@ const Footer = () => {
   });
 
   return (
-<footer>
-    <Box
-      maxWidth="100%"
-      bgcolor="#000"
-      color="secondary.main"
-      justifyContent="space-around"
-      alignItems="center"
-      p="0.7rem"
-    >
-      <Typography> {"ACADEMIC PLUG 2021\u00A9 "}</Typography>
-    </Box>
+    <footer>
+      <Box
+        maxWidth="100%"
+        bgcolor="#000"
+        color="secondary.main"
+        justifyContent="space-around"
+        alignItems="center"
+        p="0.7rem"
+        display="flex"
+      >
+        <Typography> {"ACADEMIC PLUG 2022\u00A9 "}</Typography>
+        <a
+          style={{ color: "#fbae17" }}
+          href="https://github.com/Sdqumar/Academicplug"
+          target="_blank"
+        >
+          GitHub
+        </a>
+      </Box>
     </footer>
   );
 };
