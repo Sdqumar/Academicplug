@@ -1,4 +1,5 @@
-import { initializeApp } from 'firebase/app';
+import { initializeApp, } from 'firebase/app';
+import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
 // import { enableIndexedDbPersistence,getFirestore } from "firebase/firestore"; 
 
 const config = {
@@ -12,11 +13,13 @@ const config = {
 };
 
     
-// connectFirestoreEmulator(firestore,'http://localhost:4000/',8080)
 let firebase = initializeApp(config);
 // if (process.browser) {
 // 	console.log('this code will only run on the browser')
 // 	const firestore = getFirestore(firebase)
 // 	// enableIndexedDbPersistence(firestore)
 //   }
+const firestore = getFirestore(firebase);
+// connectFirestoreEmulator(firestore,'localhost',8080)
+
 export default firebase;

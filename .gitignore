@@ -30,7 +30,7 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
-
+.env
 # vercel
 .vercel
 
@@ -38,7 +38,6 @@ yarn-error.log*
 /public/sitemap.xml
 
 #firebase
-/config
 /functions
 .firebaserc
 firebase.json
