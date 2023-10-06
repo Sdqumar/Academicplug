@@ -31,7 +31,7 @@
 		"next-pwa": "^5.3.1",
 		"next-sitemap": "^1.6.168",
 		"pdfjs-dist": "^2.6.347",
-		"postcss": "^8.3.6",
+		"postcss": "^8.4.31",
 		"preact": "^10.5.14",
 		"react": "17.0.2",
 		"react-dom": "17.0.2",
