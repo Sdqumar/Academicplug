@@ -6,7 +6,7 @@ import '@react-pdf-viewer/core/lib/styles/index.css';
 
 const PDFViewer = ({ data }) => {
 	return (
-		<Worker workerUrl="https://unpkg.com/pdfjs-dist@2.6.347/build/pdf.worker.min.js">
+		<Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
 			<div >
 				<Viewer
 					fileUrl={data}
